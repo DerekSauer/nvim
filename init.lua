@@ -1,3 +1,60 @@
+-- Map leader
+vim.g.mapleader      = ","
+vim.g.maplocalleader = " "
+
+-- Neovim Options
+vim.opt.clipboard = "unnamedplus"
+vim.opt.encoding = "utf-8"
+vim.opt.matchpairs = { '(:)', '{:}', '[:]', '<:>' }
+vim.opt.syntax = "enable"
+vim.opt.expandtab = true
+vim.opt.shiftround = true
+vim.opt.shiftwidth = 4
+vim.opt.tabstop = 4
+vim.opt.softtabstop = 4
+vim.opt.smarttab = true
+vim.opt.wrap = false
+vim.opt.scrolloff = 9999
+vim.opt.sidescrolloff = 5
+vim.opt.cursorline = true
+vim.opt.number = true
+vim.opt.relativenumber = true
+vim.opt.signcolumn = "auto"
+vim.opt.title = true
+vim.opt.termguicolors = true
+vim.opt.splitbelow = true
+vim.opt.splitright = true
+vim.opt.showbreak = "↪ "
+vim.opt.list = true
+vim.opt.listchars = {
+  tab      = "→ ",
+  nbsp     = "␣",
+  trail    = "•",
+  extends  = "⟩",
+  precedes = "⟨",
+}
+vim.opt.backup = false
+vim.opt.swapfile = false
+vim.opt.writebackup = false
+vim.opt.pumblend = 15
+vim.opt.winblend = 15
+
+-- Use ripgrep if available
+if vim.fn.executable("rg") == 1 then
+  vim.opt.grepprg = "rg --vimgrep --no-heading --smart-case --hidden"
+  vim.opt.grepformat = "%f:%l:%c:%m"
+end
+
+-- On Windows use Powershell for terminal commands
+if vim.fn.has "win32" == 1 then
+  vim.opt.shell = "pwsh.exe"
+  vim.opt.shellcmdflag = "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command "
+  vim.opt.shellxquote = ""
+  vim.opt.shellquote = ""
+  vim.opt.shellredir = "2>&1 | Out-File -Encoding UTF8 %s"
+  vim.opt.shellpipe = "2>&1 | Out-File -Encoding UTF8 %s"
+end
+
 -- Disable remote plugin providers we will probably never use
 vim.g.loaded_python3_provider = 0
 vim.g.loaded_python_provider  = 0
@@ -20,10 +77,15 @@ vim.g.loaded_tarPlugin        = 1
 vim.g.loaded_vimballPlugin    = 1
 vim.g.loaded_zipPlugin        = 1
 
--- Map leader
-vim.g.mapleader      = ","
-vim.g.maplocalleader = " "
-
 -- Set LSP logging level to errors only
 lsp_log = require("vim.lsp.log")
 lsp_log.set_level(lsp_log.levels.ERROR)
+
+-- Biefly highlight yanked text
+vim.api.nvim_exec(
+  [[
+  augroup YankHighlight
+    autocmd!
+    autocmd TextYankPost * silent! lua vim.highlight.on_yank{higroup="IncSearch", timeout=500, on_visual=true}
+  augroup end
+]], false)
