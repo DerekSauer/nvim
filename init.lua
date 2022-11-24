@@ -1,11 +1,12 @@
 -- Map leader
 vim.g.mapleader      = ","
-vim.g.maplocalleader = " "
 
 -- Neovim Options
 vim.opt.clipboard = "unnamedplus"
 vim.opt.encoding = "utf-8"
-vim.opt.matchpairs = { '(:)', '{:}', '[:]', '<:>' }
+vim.opt.fileencoding = "utf-8"
+vim.opt.updatetime = 300
+vim.opt.timeoutlen = 500
 vim.opt.syntax = "enable"
 vim.opt.expandtab = true
 vim.opt.shiftround = true
@@ -14,13 +15,14 @@ vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
 vim.opt.smarttab = true
 vim.opt.wrap = false
-vim.opt.scrolloff = 9999
+vim.opt.breakindent = true
+vim.opt.scrolloff = 5
 vim.opt.sidescrolloff = 5
 vim.opt.cursorline = true
 vim.opt.number = true
 vim.opt.relativenumber = true
-vim.opt.signcolumn = "auto"
-vim.opt.title = true
+vim.opt.signcolumn = "yes"
+vim.opt.laststatus = 3
 vim.opt.termguicolors = true
 vim.opt.splitbelow = true
 vim.opt.splitright = true
@@ -33,6 +35,8 @@ vim.opt.listchars = {
   extends  = "⟩",
   precedes = "⟨",
 }
+vim.opt.fillchars:append("eob: ")
+vim.opt.whichwrap:append("h,l,<,>,[,]")
 vim.opt.backup = false
 vim.opt.swapfile = false
 vim.opt.writebackup = false
