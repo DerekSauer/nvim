@@ -1,5 +1,5 @@
 -- Map leader
-vim.g.mapleader      = ","
+vim.g.mapleader = ","
 
 -- Neovim Options
 vim.opt.clipboard = "unnamedplus"
@@ -93,3 +93,5 @@ vim.api.nvim_exec(
     autocmd TextYankPost * silent! lua vim.highlight.on_yank{higroup="IncSearch", timeout=500, on_visual=true}
   augroup end
 ]], false)
+
+require("plugins")
