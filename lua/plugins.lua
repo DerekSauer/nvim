@@ -1,9 +1,6 @@
 local packer = require("packer")
 local globals = require("globals")
 
--- Remove depricated legacy commands from neo-tree prior to loading it
-vim.cmd([[ let g:neo_tree_remove_legacy_commands = 1 ]])
-
 -- Install Packer if needed
 local packer_bootstrap = require("bootstrap").ensure_packer()
 
@@ -28,19 +25,6 @@ packer.startup({
             "EdenEast/nightfox.nvim",
             after = "packer.nvim",
             config = function() require("plugin-config/nightfox") end
-        }
-
-        -- Neo-tree file drawer
-        -- https://github.com/nvim-neo-tree/neo-tree.nvim
-        use {
-            "nvim-neo-tree/neo-tree.nvim",
-            branch = "v2.x",
-            requires = { 
-                "nvim-lua/plenary.nvim",
-                "nvim-tree/nvim-web-devicons",
-                "MunifTanjim/nui.nvim",
-            },
-            config = function() require("plugin-config/neo-tree") end
         }
 
         -- Treesitter configurations and abstraction layer
