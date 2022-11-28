@@ -27,6 +27,19 @@ packer.startup({
             config = function() require("plugin-config/nightfox") end
         }
 
+        -- Neo-tree file drawer
+        -- https://github.com/nvim-neo-tree/neo-tree.nvim
+        use {
+            "nvim-neo-tree/neo-tree.nvim",
+            branch = "v2.x",
+            requires = { 
+                "nvim-lua/plenary.nvim",
+                "nvim-tree/nvim-web-devicons",
+                "MunifTanjim/nui.nvim",
+            },
+            config = function() require("plugin-config/neo-tree") end
+        }
+
         -- Treesitter configurations and abstraction layer
         -- https://github.com/nvim-treesitter/nvim-treesitter
         use {
