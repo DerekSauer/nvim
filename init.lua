@@ -6,8 +6,7 @@ vim.opt.clipboard = "unnamedplus"
 vim.opt.encoding = "utf-8"
 vim.opt.fileencoding = "utf-8"
 vim.opt.updatetime = 300
-vim.opt.timeoutlen = 500
-vim.opt.syntax = "enable"
+vim.opt.timeoutlen = 300
 vim.opt.expandtab = true
 vim.opt.shiftround = true
 vim.opt.shiftwidth = 4
@@ -93,5 +92,8 @@ vim.api.nvim_exec(
     autocmd TextYankPost * silent! lua vim.highlight.on_yank{higroup="IncSearch", timeout=500, on_visual=true}
   augroup end
 ]], false)
+
+-- Install Packer if needed
+PACKER_BOOTSTRAP = require("bootstrap").ensure_packer()
 
 require("plugins")

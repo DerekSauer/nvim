@@ -1,8 +1,5 @@
-local packer = require("packer")
 local globals = require("globals")
-
--- Install Packer if needed
-local packer_bootstrap = require("bootstrap").ensure_packer()
+local packer = require("packer")
 
 -- Configure and initialize Packer
 packer.startup({
@@ -19,12 +16,12 @@ packer.startup({
             config = function() require("impatient") end
         }
 
-        -- Nightfox colorscheme
-        -- https://github.com/EdenEast/nightfox.nvim
+        -- Catppuccin colorscheme
+        -- https://github.com/catppuccin/nvim
         use {
-            "EdenEast/nightfox.nvim",
+            "catppuccin/nvim",
             after = "packer.nvim",
-            config = function() require("plugin-config/nightfox") end
+            config = function() require("plugin-config/colorscheme") end
         }
 
         -- Neo-tree file drawer
@@ -62,6 +59,6 @@ packer.startup({
 })
 
 -- If Packer was installed by ensure_packer(), sync our plugins
-if packer_bootstrap then
+if PACKER_BOOTSTRAP then
     packer.sync()
 end
