@@ -9,6 +9,10 @@ require("neo-tree").setup({
     use_libuv_file_watcher = true,
     source_selector = {
         winbar = true
+    },
+    window = {
+        position = "left",
+        width = 40
     }
 })
 

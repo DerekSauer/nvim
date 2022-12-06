@@ -97,3 +97,4 @@ vim.api.nvim_exec(
 PACKER_BOOTSTRAP = require("bootstrap").ensure_packer()
 
 require("plugins")
+require("mappings")
