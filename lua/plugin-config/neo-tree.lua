@@ -4,7 +4,7 @@ local globals = require("globals")
 vim.cmd([[ let g:neo_tree_remove_legacy_commands = 1 ]])
 
 require("neo-tree").setup({
-    close_if_last_window = true,
+    close_if_last_window = false,
     popup_border_style = globals.border_style,
     use_libuv_file_watcher = true,
     source_selector = {
