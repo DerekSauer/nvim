@@ -42,6 +42,13 @@ packer.startup({
         use {
             "nvim-treesitter/nvim-treesitter",
             run = function() vim.cmd("TSUpdate<CR>") end,
+            requires = {
+                -- Rainbow parens highlighting
+                -- https://github.com/p00f/nvim-ts-rainbow
+                {
+                    "p00f/nvim-ts-rainbow"
+                }
+            },
             config = function() require("plugin-config/treesitter") end
         }
     end,
