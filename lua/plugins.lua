@@ -45,16 +45,20 @@ packer.startup({
             requires = {
                 -- Rainbow parens highlighting
                 -- https://github.com/p00f/nvim-ts-rainbow
-                {
-                    "p00f/nvim-ts-rainbow"
-                },
+                "p00f/nvim-ts-rainbow",
+
                 -- Autoclose HTML,CSS tags
                 -- https://github.com/windwp/nvim-ts-autotag
-                {
-                    "windwp/nvim-ts-autotag"
-                }
+                "windwp/nvim-ts-autotag"
             },
             config = function() require("plugin-config/treesitter") end
+        }
+
+        -- Keybinding hint popup window
+        -- https://github.com/folke/which-key.nvim
+        use {
+            "https://github.com/folke/which-key.nvim",
+            config = function() require("plugin-config/which-key") end
         }
     end,
 
