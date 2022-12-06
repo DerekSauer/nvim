@@ -47,6 +47,11 @@ packer.startup({
                 -- https://github.com/p00f/nvim-ts-rainbow
                 {
                     "p00f/nvim-ts-rainbow"
+                },
+                -- Autoclose HTML,CSS tags
+                -- https://github.com/windwp/nvim-ts-autotag
+                {
+                    "windwp/nvim-ts-autotag"
                 }
             },
             config = function() require("plugin-config/treesitter") end

@@ -18,6 +18,11 @@ require("nvim-treesitter.configs").setup({
         enable = true,
         extended_mode = true,
         max_file_lines = 1000
+    },
+
+    -- Enable auto-closing HTMl tags
+    autotag = {
+        enable = true
     }
 })
 
