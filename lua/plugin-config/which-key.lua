@@ -22,4 +22,5 @@ whichkey.setup(config)
 -- We'll define the name of keymap groups for the which-key window here.
 whichkey.register({
     e = { name = "File Explorer" },
+    b = { name = "Buffers" },
 }, { prefix = "<leader>" })
