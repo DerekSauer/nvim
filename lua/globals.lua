@@ -3,6 +3,27 @@ local M = {}
 -- Prefered border style for float windows
 M.border_style = "single"
 
+-- Configure nvim's diagnostics interface
+vim.diagnostic.config({
+    underline = true,
+    virtual_text = true,
+    signs = true,
+    update_in_insert = false,
+    severity_sort = true,
+    float = {
+        border = M.border_style,
+        format = function(diagnostic)
+            return string.format(
+                    "%s (%s) [%s]", 
+                    diagnostic.message,
+                    diagnostic.source,
+                    diagnostic.code or
+                    diagnostic.user_data.lsp.code
+            )
+        end
+    }
+})
+
 -- Define icons for diagnostics
 vim.fn.sign_define("DiagnosticSignError", {text = " ", texthl = "DiagnosticSignError"})
 vim.fn.sign_define("DiagnosticSignWarn",  {text = " ", texthl = "DiagnosticSignWarn"})
