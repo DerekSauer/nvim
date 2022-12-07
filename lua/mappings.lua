@@ -24,3 +24,10 @@ vim.keymap.set('n', "<C-S-Down>", "<C-w>2-", { silent = true, desc = "Decrease w
 
 -- Clear search highlighting
 vim.keymap.set('n', "<ESC>", function() vim.cmd("noh") end, { silent = true, desc = "Clear search highlighting" })
+
+-- Save file if changed
+vim.keymap.set('n', "<C-s>", function() vim.cmd("update") end, { silent = true, desc = "Save file changes" })
+
+-- Buffer management
+vim.keymap.set('n', "<leader>bl", function() vim.cmd("ls") end, { silent = true, desc = "List buffers" })
+
