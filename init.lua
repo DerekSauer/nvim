@@ -84,17 +84,9 @@ vim.g.loaded_zipPlugin        = 1
 lsp_log = require("vim.lsp.log")
 lsp_log.set_level(lsp_log.levels.ERROR)
 
--- Biefly highlight yanked text
-vim.api.nvim_exec(
-  [[
-  augroup YankHighlight
-    autocmd!
-    autocmd TextYankPost * silent! lua vim.highlight.on_yank{higroup="IncSearch", timeout=500, on_visual=true}
-  augroup end
-]], false)
-
 -- Install Packer if needed
 PACKER_BOOTSTRAP = require("bootstrap").ensure_packer()
 
 require("plugins")
+require("globals")
 require("mappings")
