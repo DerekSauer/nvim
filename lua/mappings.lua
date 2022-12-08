@@ -40,3 +40,11 @@ vim.keymap.set('n', "<leader>b]", ":bnext<CR>", { silent = true, desc = "Switch 
 vim.keymap.set('n', "<leader>b[", ":bprev<CR>", { silent = true, desc = "Switch previous buffer" })
 vim.keymap.set('n', "<leader>bv", ":ls<CR>:vertical sb<space>", { desc = "Pick & vert. split buffer" })
 vim.keymap.set('n', "<leader>bh", ":ls<CR>:horizontal sb<space>", { desc = "Pick & horz. split buffer" })
+
+-- Text Navigation
+vim.keymap.set({'n', 'x', 'o'}, "<leader>h", "^", { silent = true, desc = "Jump to line start" })
+vim.keymap.set({'n', 'x', 'o'}, "<leader>l", "g_", { silent = true, desc = "Jump to line end" })
+
+-- Selections
+vim.keymap.set('n', "<leader><C-a>", ":keepjumps normal! ggVG<CR>", { silent = true, desc = "Select all" })
+vim.keymap.set('n', "<C-a>", ":keepjumps normal! ggVG<CR>", { silent = true, desc = "Select all" })
