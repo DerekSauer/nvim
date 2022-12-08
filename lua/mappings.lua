@@ -25,9 +25,18 @@ vim.keymap.set('n', "<C-S-Down>", "<C-w>2-", { silent = true, desc = "Decrease w
 -- Clear search highlighting
 vim.keymap.set('n', "<ESC>", function() vim.cmd("noh") end, { silent = true, desc = "Clear search highlighting" })
 
--- Save file if changed
-vim.keymap.set('n', "<C-s>", function() vim.cmd("update") end, { silent = true, desc = "Save file changes" })
+-- Save file(s)
+vim.keymap.set('n', "<C-s>", ":update<CR>", { silent = true, desc = "Save file" })
+vim.keymap.set('n', "<leader><C-s>", ":update<CR>", { silent = true, desc = "Save file" })
+vim.keymap.set('n', "<C-S-s>", ":wa<CR>", { silent = true, desc = "Save all files" })
+vim.keymap.set('n', "<leader><C-S-s>", ":wa<CR>", { silent = true, desc = "Save all files" })
 
 -- Buffer management
-vim.keymap.set('n', "<leader>bl", function() vim.cmd("ls") end, { silent = true, desc = "List buffers" })
-
+vim.keymap.set('n', "<leader>bl", ":buffers<CR>", { silent = true, desc = "List buffers" })
+vim.keymap.set('n', "<leader>bs", "<C-^>", { silent = true, desc = "Toggle current & previous" })
+vim.keymap.set('n', "<BS>", "<C-^>", { silent = true, desc = "Toggle current & previous" })
+vim.keymap.set('n', "<leader>bb", ":ls<CR>:b<space>", { desc = "Pick buffer" })
+vim.keymap.set('n', "<leader>b]", ":bnext<CR>", { silent = true, desc = "Switch next buffer" })
+vim.keymap.set('n', "<leader>b[", ":bprev<CR>", { silent = true, desc = "Switch previous buffer" })
+vim.keymap.set('n', "<leader>bv", ":ls<CR>:vertical sb<space>", { desc = "Pick & vert. split buffer" })
+vim.keymap.set('n', "<leader>bh", ":ls<CR>:horizontal sb<space>", { desc = "Pick & horz. split buffer" })
