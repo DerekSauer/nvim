@@ -63,8 +63,16 @@ if packer then
             -- Keybinding hint popup window
             -- https://github.com/folke/which-key.nvim
             use {
-                "https://github.com/folke/which-key.nvim",
+                "folke/which-key.nvim",
                 config = function() require("plugin-config/which-key") end
+            }
+
+            -- Git diffs and signs in gutter
+            -- https://github.com/lewis6991/gitsigns.nvim
+            use {
+                "lewis6991/gitsigns.nvim",
+                event = "BufEnter",
+                config = function() require("plugin-config/gitsigns") end
             }
         end,
 
