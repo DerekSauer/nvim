@@ -79,7 +79,7 @@ if loaded then
                 vim.schedule(function() gitsigns.prev_hunk() end)
 
                 return '<Ignore>'
-            end, {expr=truei, desc = "Jump to previous hunk"})
+            end, {expr=true, desc = "Jump to previous hunk"})
 
             map({'n', 'v'}, '<leader>gs', ':Gitsigns stage_hunk<CR>', { desc = "Stage hunk"})
             map({'n', 'v'}, '<leader>gr', ':Gitsigns reset_hunk<CR>', { desc = "Reset hunk"})
@@ -97,6 +97,14 @@ if loaded then
             map('n', '<leader>gtn', gitsigns.toggle_numhl, { desc = "Toggle number highlighting" })
             map('n', '<leader>gtl', gitsigns.toggle_linehl, { desc = "Toggle line highlighting" })
             map('n', '<leader>gts', gitsigns.toggle_signs, { desc = "Toggle sign highlighting" })
+
+            local telescope_loaded, _ = pcall(require, "telescope")
+            if telescope_loaded then
+                vim.keymap.set('n', "<leader>gb", function() require("telescope.builtin").git_branches() end, { silent = true, desc = "List branches" })
+                vim.keymap.set('n', "<leader>gc", function() require("telescope.builtin").git_commits() end, { silent = true, desc = "List commits" })
+                vim.keymap.set('n', "<leader>gC", function() require("telescope.builtin").git_bcommits() end, { silent = true, desc = "List buffer commits" })
+                vim.keymap.set('n', "<leader>gg", function() require("telescope.builtin").git_status() end, { silent = true, desc = "Git status" })
+            end
 
             -- Add which-key categories
             local loaded, whichkey = pcall(require, "which-key")

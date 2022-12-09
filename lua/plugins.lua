@@ -27,6 +27,22 @@ if loaded then
                     config = function() require("plugin-config/colorscheme") end
                 }
 
+                -- Telescope fuzzy finder
+                -- https://github.com/nvim-telescope/telescope.nvim
+                use {
+                    "nvim-telescope/telescope.nvim",
+                    requires = {
+                        "nvim-lua/plenary.nvim",
+                        "nvim-telescope/telescope-frecency.nvim",
+                        "nvim-telescope/telescope-project.nvim",
+                        "nvim-telescope/telescope-ui-select.nvim",
+                        "nvim-telescope/telescope-dap.nvim",
+                        "nvim-tree/nvim-web-devicons",
+                        "kkharji/sqlite.lua"
+                    },
+                    config = function() require("plugin-config/telescope") end
+                }
+
                 -- Neo-tree file drawer
                 -- https://github.com/nvim-neo-tree/neo-tree.nvim
                 use {
