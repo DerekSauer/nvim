@@ -87,6 +87,14 @@ if loaded then
                     event = "BufEnter",
                     config = function() require("plugin-config/gitsigns") end
                 }
+
+                -- Indent guides
+                -- https://github.com/lukas-reineke/indent-blankline.nvim
+                use {
+                    "lukas-reineke/indent-blankline.nvim",
+                    event = "BufEnter",
+                    config = function() require("plugin-config/indentline") end
+                }
             end,
 
             config = {

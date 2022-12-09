@@ -34,6 +34,10 @@ if loaded then
             custom_highlights = {},
             integrations = {
                 -- https://github.com/catppuccin/nvim#integrations
+                indent_blankline = {
+                    enabled = true,
+                    colored_indent_levels = true
+                }
             },
         }
 
