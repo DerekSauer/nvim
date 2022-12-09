@@ -41,6 +41,14 @@ vim.keymap.set('n', "<leader>b[", ":bprev<CR>", { silent = true, desc = "Switch 
 vim.keymap.set('n', "<leader>bv", ":ls<CR>:vertical sb<space>", { desc = "Pick & vert. split buffer" })
 vim.keymap.set('n', "<leader>bh", ":ls<CR>:horizontal sb<space>", { desc = "Pick & horz. split buffer" })
 
+-- If which-key is present add a Buffers category
+local loaded, whichkey = pcall(require, "which-key")
+if loaded then
+    whichkey.register({
+        b = { name = "Buffers" },
+    }, { prefix = "<leader>" })
+end
+
 -- Text Navigation
 vim.keymap.set({'n', 'x', 'o'}, "<leader>h", "^", { silent = true, desc = "Jump to line start" })
 vim.keymap.set({'n', 'x', 'o'}, "<leader>l", "g_", { silent = true, desc = "Jump to line end" })

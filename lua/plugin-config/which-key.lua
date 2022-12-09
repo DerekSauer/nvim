@@ -24,10 +24,4 @@ if whichkey then
     }
 
     whichkey.setup(config)
-
-    -- Most mappings are defined using the lower level vim.keymap.set() function.
-    -- We'll define the name of keymap groups for non-plugin keymaps here
-    whichkey.register({
-        b = { name = "Buffers" },
-    }, { prefix = "<leader>" })
 end
