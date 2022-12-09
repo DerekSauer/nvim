@@ -1,7 +1,7 @@
 local loaded, whichkey = pcall(require, "which-key")
 
 if not loaded then 
-    vim.notify("Failed to load plugin: which-key", vim.log.levels.ERROR)
+    vim.notify("Failed to load plugin: which-key.", vim.log.levels.ERROR)
     whichkey = nil
 end
 

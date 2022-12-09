@@ -1,7 +1,7 @@
 local loaded, neo_tree = pcall(require, "neo-tree")
 
 if not loaded then
-    vim.notify("Failed to load plugin: neo-tree", vim.log.levels.ERROR)
+    vim.notify("Failed to load plugin: neo-tree.", vim.log.levels.ERROR)
     neo_tree = nil
 end
 

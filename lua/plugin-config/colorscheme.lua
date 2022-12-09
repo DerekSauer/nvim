@@ -1,7 +1,7 @@
 local loaded, catppuccin = pcall(require, "catppuccin")
 
 if not loaded then
-    vim.notify("Failed to load plugin: catppuccin", vim.log.levels.ERROR)
+    vim.notify("Failed to load plugin: catppuccin.", vim.log.levels.ERROR)
     catppuccin = nil
 end
 

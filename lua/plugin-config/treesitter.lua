@@ -1,7 +1,7 @@
 local loaded, treesitter = pcall(require, "nvim-treesitter")
 
 if not loaded then
-    vim.notify("Failed to load plugin: tree-sitter", vim.log.levels.ERROR)
+    vim.notify("Failed to load plugin: tree-sitter.", vim.log.levels.ERROR)
     treesitter = nil
 end
 
