@@ -1,3 +1,6 @@
+-- Install Packer if needed
+local packer_bootstrap = require("bootstrap").ensure_packer()
+
 local loaded, packer = pcall(require, "packer")
 
 if loaded then
@@ -9,27 +12,31 @@ if loaded then
             -- List plugins to be managed by Packer
             function(use)
                 -- Packer will manage itself
-                use "wbthomason/packer.nvim"
+                use("wbthomason/packer.nvim")
 
                 -- Impatient - Improve startup time by caching modules
                 -- https://github.com/lewis6991/impatient.nvim
-                use {
+                use({
                     "lewis6991/impatient.nvim",
                     after = "packer.nvim",
-                    config = function() require("impatient") end
-                }
+                    config = function()
+                        require("impatient")
+                    end,
+                })
 
                 -- Catppuccin colorscheme
                 -- https://github.com/catppuccin/nvim
-                use {
+                use({
                     "catppuccin/nvim",
                     after = "packer.nvim",
-                    config = function() require("plugin-config/colorscheme") end
-                }
+                    config = function()
+                        require("plugin-config/colorscheme")
+                    end,
+                })
 
                 -- Telescope fuzzy finder
                 -- https://github.com/nvim-telescope/telescope.nvim
-                use {
+                use({
                     "nvim-telescope/telescope.nvim",
                     requires = {
                         "nvim-lua/plenary.nvim",
@@ -38,14 +45,16 @@ if loaded then
                         "nvim-telescope/telescope-ui-select.nvim",
                         "nvim-telescope/telescope-dap.nvim",
                         "nvim-tree/nvim-web-devicons",
-                        "kkharji/sqlite.lua"
+                        "kkharji/sqlite.lua",
                     },
-                    config = function() require("plugin-config/telescope") end
-                }
+                    config = function()
+                        require("plugin-config/telescope")
+                    end,
+                })
 
                 -- Neo-tree file drawer
                 -- https://github.com/nvim-neo-tree/neo-tree.nvim
-                use {
+                use({
                     "nvim-neo-tree/neo-tree.nvim",
                     branch = "v2.x",
                     requires = {
@@ -53,14 +62,18 @@ if loaded then
                         "nvim-tree/nvim-web-devicons",
                         "MunifTanjim/nui.nvim",
                     },
-                    config = function() require("plugin-config/neo-tree") end
-                }
+                    config = function()
+                        require("plugin-config/neo-tree")
+                    end,
+                })
 
                 -- Treesitter configurations and abstraction layer
                 -- https://github.com/nvim-treesitter/nvim-treesitter
-                use {
+                use({
                     "nvim-treesitter/nvim-treesitter",
-                    run = function() vim.cmd("TSUpdate<CR>") end,
+                    run = function()
+                        vim.cmd("TSUpdate<CR>")
+                    end,
                     requires = {
                         -- Rainbow parens highlighting
                         -- https://github.com/p00f/nvim-ts-rainbow
@@ -68,59 +81,76 @@ if loaded then
 
                         -- Autoclose HTML,CSS tags
                         -- https://github.com/windwp/nvim-ts-autotag
-                        "windwp/nvim-ts-autotag"
+                        "windwp/nvim-ts-autotag",
                     },
-                    config = function() require("plugin-config/treesitter") end
-                }
+                    config = function()
+                        require("plugin-config/treesitter")
+                    end,
+                })
 
                 -- Keybinding hint popup window
                 -- https://github.com/folke/which-key.nvim
-                use {
+                use({
                     "folke/which-key.nvim",
-                    config = function() require("plugin-config/which-key") end
-                }
+                    config = function()
+                        require("plugin-config/which-key")
+                    end,
+                })
 
                 -- Git diffs and signs in gutter
                 -- https://github.com/lewis6991/gitsigns.nvim
-                use {
+                use({
                     "lewis6991/gitsigns.nvim",
                     event = "BufEnter",
-                    config = function() require("plugin-config/gitsigns") end
-                }
+                    config = function()
+                        require("plugin-config/gitsigns")
+                    end,
+                })
 
                 -- Indent guides
                 -- https://github.com/lukas-reineke/indent-blankline.nvim
-                use {
+                use({
                     "lukas-reineke/indent-blankline.nvim",
                     event = "BufEnter",
-                    config = function() require("plugin-config/indentline") end
-                }
+                    config = function()
+                        require("plugin-config/indentline")
+                    end,
+                })
 
                 -- Lsp Setup and completions
-                --
-                use {
-                    'VonHeikemen/lsp-zero.nvim',
+                -- https://github.com/VonHeikemen/lsp-zero.nvim
+                use({
+                    "VonHeikemen/lsp-zero.nvim",
                     requires = {
                         -- LSP Support
-                        { 'neovim/nvim-lspconfig' },
-                        { 'williamboman/mason.nvim' },
-                        { 'williamboman/mason-lspconfig.nvim' },
-                        { 'jose-elias-alvarez/null-ls.nvim' },
+                        { "neovim/nvim-lspconfig" },
+                        { "williamboman/mason.nvim" },
+                        { "williamboman/mason-lspconfig.nvim" },
+                        {
+                            "jose-elias-alvarez/null-ls.nvim",
+                            requires = "nvim-lua/plenary.nvim",
+                            after = "nvim-lspconfig",
+                            config = function()
+                                require("plugin-config.null_ls")
+                            end,
+                        },
 
                         -- Autocompletion
-                        { 'hrsh7th/nvim-cmp' },
-                        { 'hrsh7th/cmp-buffer' },
-                        { 'hrsh7th/cmp-path' },
-                        { 'saadparwaiz1/cmp_luasnip' },
-                        { 'hrsh7th/cmp-nvim-lsp' },
-                        { 'hrsh7th/cmp-nvim-lua' },
+                        { "hrsh7th/nvim-cmp" },
+                        { "hrsh7th/cmp-buffer" },
+                        { "hrsh7th/cmp-path" },
+                        { "saadparwaiz1/cmp_luasnip" },
+                        { "hrsh7th/cmp-nvim-lsp" },
+                        { "hrsh7th/cmp-nvim-lua" },
 
                         -- Snippets
-                        { 'L3MON4D3/LuaSnip' },
-                        { 'rafamadriz/friendly-snippets' },
+                        { "L3MON4D3/LuaSnip" },
+                        { "rafamadriz/friendly-snippets" },
                     },
-                    config = function() require("plugin-config/lsp") end
-                }
+                    config = function()
+                        require("plugin-config/lsp")
+                    end,
+                })
             end,
 
             config = {
@@ -129,10 +159,10 @@ if loaded then
                     open_fn = function()
                         return require("packer.util").float({ border = globals.border_style })
                     end,
-                    prompt_border = globals.border_style
+                    prompt_border = globals.border_style,
                 },
-                log = { level = "error" }
-            }
+                log = { level = "error" },
+            },
         })
     end
 else
@@ -141,6 +171,8 @@ else
 end
 
 -- If Packer was installed by ensure_packer(), sync our plugins
-if PACKER_BOOTSTRAP then
-    packer.sync()
+if packer_bootstrap then
+    if packer ~= nil then
+        packer.sync()
+    end
 end

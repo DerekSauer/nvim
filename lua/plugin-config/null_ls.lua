@@ -4,8 +4,8 @@ if loaded then
     local null_ls_config = {
         sources = {
             null_ls.builtins.formatting.stylua,
-            null_ls.builtins.diagnostics.selene
-        }
+            null_ls.builtins.diagnostics.selene,
+        },
     }
 
     null_ls.setup(null_ls_config)

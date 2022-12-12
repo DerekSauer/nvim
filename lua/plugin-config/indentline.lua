@@ -19,5 +19,4 @@ if loaded then
     indent_blankline.setup(config)
 else
     vim.notify("Failed to load plugin: indent_blankline.", vim.log.levels.ERROR)
-    indent_blankline = nil
 end

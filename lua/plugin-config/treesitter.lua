@@ -9,7 +9,7 @@ if loaded then
             -- Enable the syntax highlighting module
             highlight = {
                 enable = true,
-                additional_vim_regex_highlighting = false
+                additional_vim_regex_highlighting = false,
             },
 
             -- Enable the indent helper module
@@ -21,13 +21,13 @@ if loaded then
             rainbow = {
                 enable = true,
                 extended_mode = true,
-                max_file_lines = 1000
+                max_file_lines = 1000,
             },
 
             -- Enable auto-closing HTMl tags
             autotag = {
-                enable = true
-            }
+                enable = true,
+            },
         })
 
         vim.opt.foldmethod = "expr"
@@ -36,5 +36,4 @@ if loaded then
     end
 else
     vim.notify("Failed to load plugin: tree-sitter.", vim.log.levels.ERROR)
-    treesitter = nil
 end
