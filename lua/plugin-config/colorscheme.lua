@@ -35,16 +35,43 @@ if loaded then
             integrations = {
                 -- https://github.com/catppuccin/nvim#integrations
                 gitsigns = true,
-                indent_blankline = {
-                    enabled = true,
-                    colored_indent_levels = true,
-                },
                 mason = true,
                 cmp = true,
                 treesitter = true,
                 ts_rainbow = true,
                 telescope = true,
-                which_key = true
+                which_key = true,
+
+                dap = {
+                    enabled = true,
+                    enable_ui = true, -- enable nvim-dap-ui
+                },
+
+                indent_blankline = {
+                    enabled = true,
+                    colored_indent_levels = true,
+                },
+
+                native_lsp = {
+                    enabled = true,
+                    virtual_text = {
+                        errors = { "italic" },
+                        hints = { "italic" },
+                        warnings = { "italic" },
+                        information = { "italic" },
+                    },
+                    underlines = {
+                        errors = { "underline" },
+                        hints = { "underline" },
+                        warnings = { "underline" },
+                        information = { "underline" },
+                    },
+                },
+
+                navic = {
+                    enable = true,
+                    custom_bg = "NONE",
+                },
             },
         }
 
