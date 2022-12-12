@@ -129,10 +129,6 @@ if loaded then
                         {
                             "jose-elias-alvarez/null-ls.nvim",
                             requires = "nvim-lua/plenary.nvim",
-                            after = "nvim-lspconfig",
-                            config = function()
-                                require("plugin-config.null_ls")
-                            end,
                         },
 
                         -- Autocompletion
@@ -142,6 +138,7 @@ if loaded then
                         { "saadparwaiz1/cmp_luasnip" },
                         { "hrsh7th/cmp-nvim-lsp" },
                         { "hrsh7th/cmp-nvim-lua" },
+                        { "onsails/lspkind.nvim" },
 
                         -- Snippets
                         { "L3MON4D3/LuaSnip" },
