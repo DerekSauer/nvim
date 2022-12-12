@@ -24,13 +24,13 @@ if loaded then
                     end,
                 })
 
-                -- Catppuccin colorscheme
-                -- https://github.com/catppuccin/nvim
+                -- Status line
+                -- https://github.com/nvim-lualine/lualine.nvim
                 use({
-                    "catppuccin/nvim",
-                    after = "packer.nvim",
+                    "nvim-lualine/lualine.nvim",
+                    requires = { "nvim-tree/nvim-web-devicons" },
                     config = function()
-                        require("plugin-config/colorscheme")
+                        require("plugin-config/lualine")
                     end,
                 })
 
@@ -145,10 +145,19 @@ if loaded then
                         { "rafamadriz/friendly-snippets" },
 
                         -- Code context
-                        { "SmiteshP/nvim-navic" }
+                        { "SmiteshP/nvim-navic" },
                     },
                     config = function()
                         require("plugin-config/lsp")
+                    end,
+                })
+
+                -- Catppuccin colorscheme
+                -- https://github.com/catppuccin/nvim
+                use({
+                    "catppuccin/nvim",
+                    config = function()
+                        require("plugin-config/colorscheme")
                     end,
                 })
             end,
