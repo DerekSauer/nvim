@@ -6,6 +6,8 @@ if loaded then
     local config = {
         defaults = {
             layout_strategy = 'flex',
+            border = true,
+            borderchars = { "═", "│", "═", "│", "╒", "╕", "╛", "╘" },
         },
 
         extensions = {
