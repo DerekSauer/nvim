@@ -143,6 +143,9 @@ if loaded then
                         -- Snippets
                         { "L3MON4D3/LuaSnip" },
                         { "rafamadriz/friendly-snippets" },
+
+                        -- Code context
+                        { "SmiteshP/nvim-navic" }
                     },
                     config = function()
                         require("plugin-config/lsp")

@@ -44,7 +44,6 @@ if loaded then
     })
 
     -- Setup nvim-cmp
-    local lspkind = require("lspkind")
     local nvim_cmp_config = {
         window = {
             completion = {
@@ -74,6 +73,15 @@ if loaded then
         },
     }
     lsp.setup_nvim_cmp(nvim_cmp_config)
+
+    -- Setup navic
+    local navic = require("nvim-navic")
+    navic.setup({ highlight = true })
+    lsp.on_attach(function(client, bufnr)
+        if client.server_capabilities.documentSymbolProvider then
+            navic.attach(client, bufnr)
+        end
+    end)
 
     lsp.setup()
 
