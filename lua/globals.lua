@@ -4,32 +4,6 @@ local M = {}
 M.border_style = "none"
 --M.border_style = { "╒", "═", "╕", "│", "╛", "═", "╘", "│" }
 
--- Configure nvim's diagnostics interface
-vim.diagnostic.config({
-    underline = true,
-    virtual_text = true,
-    signs = true,
-    update_in_insert = false,
-    severity_sort = true,
-    float = {
-        border = M.border_style,
-        format = function(diagnostic)
-            return string.format(
-                "%s (%s) [%s]",
-                diagnostic.message,
-                diagnostic.source,
-                diagnostic.code or diagnostic.user_data.lsp.code
-            )
-        end,
-    },
-})
-
--- Define icons for diagnostics
-vim.fn.sign_define("DiagnosticSignError", { text = " ", texthl = "DiagnosticSignError" })
-vim.fn.sign_define("DiagnosticSignWarn", { text = " ", texthl = "DiagnosticSignWarn" })
-vim.fn.sign_define("DiagnosticSignInfo", { text = " ", texthl = "DiagnosticSignInfo" })
-vim.fn.sign_define("DiagnosticSignHint", { text = "", texthl = "DiagnosticSignHint" })
-
 -- Auto command group for our own commands
 M.user_au_group = vim.api.nvim_create_augroup("user_cmds", { clear = true })
 

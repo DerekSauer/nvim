@@ -60,7 +60,7 @@ if loaded then
             { name = "buffer", keyword_length = 3 },
             { name = "luasnip", keyword_length = 2 },
         },
-   
+
         formatting = {
             fields = { "kind", "abbr", "menu" },
             format = function(entry, vim_item)
@@ -76,6 +76,32 @@ if loaded then
     lsp.setup_nvim_cmp(nvim_cmp_config)
 
     lsp.setup()
+
+    -- Configure nvim's diagnostics interface
+    vim.diagnostic.config({
+        underline = true,
+        virtual_text = true,
+        signs = true,
+        update_in_insert = false,
+        severity_sort = true,
+        float = {
+            border = globals.border_style,
+            format = function(diagnostic)
+                return string.format(
+                    "%s (%s) [%s]",
+                    diagnostic.message,
+                    diagnostic.source,
+                    diagnostic.code or diagnostic.user_data.lsp.code
+                )
+            end,
+        },
+    })
+
+    -- Define icons for diagnostics
+    vim.fn.sign_define("DiagnosticSignError", { text = " ", texthl = "DiagnosticSignError" })
+    vim.fn.sign_define("DiagnosticSignWarn", { text = " ", texthl = "DiagnosticSignWarn" })
+    vim.fn.sign_define("DiagnosticSignInfo", { text = " ", texthl = "DiagnosticSignInfo" })
+    vim.fn.sign_define("DiagnosticSignHint", { text = "", texthl = "DiagnosticSignHint" })
 
     -- Setup null-ls
     local null_ls_loaded, null_ls = pcall(require, "null-ls")
