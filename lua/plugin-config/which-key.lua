@@ -1,6 +1,6 @@
 local loaded, whichkey = pcall(require, "which-key")
 
-if loaded then 
+if loaded then
     if whichkey then
         local globals = require("globals")
 
@@ -25,4 +25,3 @@ else
     vim.notify("Failed to load plugin: which-key.", vim.log.levels.ERROR)
     whichkey = nil
 end
-

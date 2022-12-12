@@ -38,4 +38,3 @@ else
     vim.notify("Failed to load plugin: tree-sitter.", vim.log.levels.ERROR)
     treesitter = nil
 end
-

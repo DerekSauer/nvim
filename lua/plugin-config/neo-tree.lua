@@ -19,10 +19,10 @@ if loaded then
 
         neo_tree.setup(config)
 
-        vim.keymap.set('n', "<leader>e", function() vim.cmd("Neotree toggle") end, { silent = true, desc = "Toggle file explorer" })
+        vim.keymap.set('n', "<leader>e", function() vim.cmd("Neotree toggle") end,
+            { silent = true, desc = "Toggle file explorer" })
     end
 else
     vim.notify("Failed to load plugin: neo-tree.", vim.log.levels.ERROR)
     neo_tree = nil
 end
-

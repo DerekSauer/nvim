@@ -1,5 +1,3 @@
--- https://github.com/VonHeikemen/nvim-starter
-
 -- Map leader
 vim.g.mapleader = ","
 
@@ -30,11 +28,11 @@ vim.opt.splitright = true
 vim.opt.showbreak = "↪ "
 vim.opt.list = true
 vim.opt.listchars = {
-  tab      = "→ ",
-  nbsp     = "␣",
-  trail    = "•",
-  extends  = "⟩",
-  precedes = "⟨",
+    tab      = "→ ",
+    nbsp     = "␣",
+    trail    = "•",
+    extends  = "⟩",
+    precedes = "⟨",
 }
 vim.opt.fillchars:append("eob: ")
 vim.opt.whichwrap:append("h,l,<,>,[,]")
@@ -46,18 +44,18 @@ vim.opt.winblend = 15
 
 -- Use ripgrep if available
 if vim.fn.executable("rg") == 1 then
-  vim.opt.grepprg = "rg --vimgrep --no-heading --smart-case --hidden"
-  vim.opt.grepformat = "%f:%l:%c:%m"
+    vim.opt.grepprg = "rg --vimgrep --no-heading --smart-case --hidden"
+    vim.opt.grepformat = "%f:%l:%c:%m"
 end
 
 -- On Windows use Powershell for terminal commands
 if vim.fn.has "win32" == 1 then
-  vim.opt.shell = "pwsh.exe"
-  vim.opt.shellcmdflag = "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command "
-  vim.opt.shellxquote = ""
-  vim.opt.shellquote = ""
-  vim.opt.shellredir = "2>&1 | Out-File -Encoding UTF8 %s"
-  vim.opt.shellpipe = "2>&1 | Out-File -Encoding UTF8 %s"
+    vim.opt.shell = "pwsh.exe"
+    vim.opt.shellcmdflag = "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command "
+    vim.opt.shellxquote = ""
+    vim.opt.shellquote = ""
+    vim.opt.shellredir = "2>&1 | Out-File -Encoding UTF8 %s"
+    vim.opt.shellpipe = "2>&1 | Out-File -Encoding UTF8 %s"
 end
 
 -- Disable remote plugin providers we will probably never use
@@ -83,7 +81,7 @@ vim.g.loaded_vimballPlugin    = 1
 vim.g.loaded_zipPlugin        = 1
 
 -- Set LSP logging level to errors only
-lsp_log = require("vim.lsp.log")
+local lsp_log = require("vim.lsp.log")
 lsp_log.set_level(lsp_log.levels.ERROR)
 
 -- Install Packer if needed

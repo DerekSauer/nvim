@@ -5,15 +5,15 @@ if loaded then
 
     local config = {
         signs = {
-            add          = { hl = 'GitSignsAdd'   , text = '│', numhl='GitSignsAddNr'   , linehl='GitSignsAddLn'    },
-            change       = { hl = 'GitSignsChange', text = '│', numhl='GitSignsChangeNr', linehl='GitSignsChangeLn' },
-            delete       = { hl = 'GitSignsDelete', text = '_', numhl='GitSignsDeleteNr', linehl='GitSignsDeleteLn' },
-            topdelete    = { hl = 'GitSignsDelete', text = '‾', numhl='GitSignsDeleteNr', linehl='GitSignsDeleteLn' },
-            changedelete = { hl = 'GitSignsChange', text = '~', numhl='GitSignsChangeNr', linehl='GitSignsChangeLn' },
-            untracked    = { hl = 'GitSignsAdd'   , text = '┆', numhl='GitSignsAddNr'   , linehl='GitSignsAddLn'    },
+            add          = { hl = 'GitSignsAdd', text = '│', numhl = 'GitSignsAddNr', linehl = 'GitSignsAddLn' },
+            change       = { hl = 'GitSignsChange', text = '│', numhl = 'GitSignsChangeNr', linehl = 'GitSignsChangeLn' },
+            delete       = { hl = 'GitSignsDelete', text = '_', numhl = 'GitSignsDeleteNr', linehl = 'GitSignsDeleteLn' },
+            topdelete    = { hl = 'GitSignsDelete', text = '‾', numhl = 'GitSignsDeleteNr', linehl = 'GitSignsDeleteLn' },
+            changedelete = { hl = 'GitSignsChange', text = '~', numhl = 'GitSignsChangeNr', linehl = 'GitSignsChangeLn' },
+            untracked    = { hl = 'GitSignsAdd', text = '┆', numhl = 'GitSignsAddNr', linehl = 'GitSignsAddLn' },
         },
 
-        signcolumn = true,  -- Toggle with `:Gitsigns toggle_signs`
+        signcolumn = true, -- Toggle with `:Gitsigns toggle_signs`
         numhl      = false, -- Toggle with `:Gitsigns toggle_numhl`
         linehl     = false, -- Toggle with `:Gitsigns toggle_linehl`
         word_diff  = false, -- Toggle with `:Gitsigns toggle_word_diff`
@@ -61,34 +61,34 @@ if loaded then
 
             -- Jump to next hunk with ]g
             map('n', ']g', function()
-                if vim.wo.diff then 
-                    return ']g' 
+                if vim.wo.diff then
+                    return ']g'
                 end
 
                 vim.schedule(function() gitsigns.next_hunk() end)
 
                 return '<Ignore>'
-            end, {expr=true, desc = "Jump to next hunk"})
+            end, { expr = true, desc = "Jump to next hunk" })
 
             -- Jump to previous hunk with [g
             map('n', '[g', function()
-                if vim.wo.diff then 
+                if vim.wo.diff then
                     return '[g'
                 end
 
                 vim.schedule(function() gitsigns.prev_hunk() end)
 
                 return '<Ignore>'
-            end, {expr=true, desc = "Jump to previous hunk"})
+            end, { expr = true, desc = "Jump to previous hunk" })
 
-            map({'n', 'v'}, '<leader>gs', ':Gitsigns stage_hunk<CR>', { desc = "Stage hunk"})
-            map({'n', 'v'}, '<leader>gr', ':Gitsigns reset_hunk<CR>', { desc = "Reset hunk"})
-            map('n', '<leader>gu', gitsigns.undo_stage_hunk, { desc = "Undo stage hunk"})
+            map({ 'n', 'v' }, '<leader>gs', ':Gitsigns stage_hunk<CR>', { desc = "Stage hunk" })
+            map({ 'n', 'v' }, '<leader>gr', ':Gitsigns reset_hunk<CR>', { desc = "Reset hunk" })
+            map('n', '<leader>gu', gitsigns.undo_stage_hunk, { desc = "Undo stage hunk" })
             map('n', '<leader>gp', gitsigns.preview_hunk, { desc = "Preview hunk" })
-            map({'o', 'x'}, 'ih', ':<C-U>Gitsigns select_hunk<CR>', { desc = "Select hunk"})
+            map({ 'o', 'x' }, 'ih', ':<C-U>Gitsigns select_hunk<CR>', { desc = "Select hunk" })
             map('n', '<leader>gS', gitsigns.stage_buffer, { desc = "Stage buffer" })
             map('n', '<leader>gR', gitsigns.reset_buffer, { desc = "Reset stage buffer" })
-            map('n', '<leader>gb', function() gitsigns.blame_line{full=true} end, { desc = "Blame this line" })
+            map('n', '<leader>gb', function() gitsigns.blame_line { full = true } end, { desc = "Blame this line" })
             map('n', '<leader>gd', gitsigns.diffthis, { desc = "Show diff" })
             map('n', '<leader>gD', function() gitsigns.diffthis('~') end, { desc = "Diff last commit" })
 
@@ -100,20 +100,24 @@ if loaded then
 
             local telescope_loaded, _ = pcall(require, "telescope")
             if telescope_loaded then
-                vim.keymap.set('n', "<leader>gb", function() require("telescope.builtin").git_branches() end, { silent = true, desc = "List branches" })
-                vim.keymap.set('n', "<leader>gc", function() require("telescope.builtin").git_commits() end, { silent = true, desc = "List commits" })
-                vim.keymap.set('n', "<leader>gC", function() require("telescope.builtin").git_bcommits() end, { silent = true, desc = "List buffer commits" })
-                vim.keymap.set('n', "<leader>gg", function() require("telescope.builtin").git_status() end, { silent = true, desc = "Git status" })
+                vim.keymap.set('n', "<leader>gb", function() require("telescope.builtin").git_branches() end,
+                    { silent = true, desc = "List branches" })
+                vim.keymap.set('n', "<leader>gc", function() require("telescope.builtin").git_commits() end,
+                    { silent = true, desc = "List commits" })
+                vim.keymap.set('n', "<leader>gC", function() require("telescope.builtin").git_bcommits() end,
+                    { silent = true, desc = "List buffer commits" })
+                vim.keymap.set('n', "<leader>gg", function() require("telescope.builtin").git_status() end,
+                    { silent = true, desc = "Git status" })
             end
 
             -- Add which-key categories
             local loaded, whichkey = pcall(require, "which-key")
-            if loaded then 
+            if loaded then
                 whichkey.register({
                     g = { name = "Git",
-                             t = { name = "Toggle" }
-                        }
-                    }, { prefix = "<leader>" })
+                        t = { name = "Toggle" }
+                    }
+                }, { prefix = "<leader>" })
             end
         end
     }

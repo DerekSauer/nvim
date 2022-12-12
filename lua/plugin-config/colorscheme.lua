@@ -52,10 +52,11 @@ if loaded then
                 vim.cmd("set background=dark")
             end
         end
-        vim.keymap.set('n', "<leader>c", function() swap_background() end, { silent = true, desc = "Swap light/dark theme" })
+
+        vim.keymap.set('n', "<leader>c", function() swap_background() end,
+            { silent = true, desc = "Swap light/dark theme" })
     end
 else
     vim.notify("Failed to load plugin: catppuccin.", vim.log.levels.ERROR)
     catppuccin = nil
 end
-
