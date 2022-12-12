@@ -69,7 +69,7 @@ if loaded then
                 },
 
                 navic = {
-                    enable = true,
+                    enabled = true,
                     custom_bg = "NONE",
                 },
             },
