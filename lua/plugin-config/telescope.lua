@@ -5,7 +5,8 @@ if loaded then
         defaults = {
             layout_strategy = "flex",
             border = true,
-            borderchars = { "═", "│", "═", "│", "╒", "╕", "╛", "╘" },
+            borderchars = { " ", " ", " ", " ", " ", " ", " ", " " },
+            --borderchars = { "═", "│", "═", "│", "╒", "╕", "╛", "╘" },
         },
 
         extensions = {

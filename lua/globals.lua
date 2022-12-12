@@ -1,7 +1,8 @@
 local M = {}
 
 -- Prefered border style for float windows
-M.border_style = { "╒", "═", "╕", "│", "╛", "═", "╘", "│" }
+M.border_style = "none"
+--M.border_style = { "╒", "═", "╕", "│", "╛", "═", "╘", "│" }
 
 -- Configure nvim's diagnostics interface
 vim.diagnostic.config({

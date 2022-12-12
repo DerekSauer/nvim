@@ -34,10 +34,17 @@ if loaded then
             custom_highlights = {},
             integrations = {
                 -- https://github.com/catppuccin/nvim#integrations
+                gitsigns = true,
                 indent_blankline = {
                     enabled = true,
                     colored_indent_levels = true,
                 },
+                mason = true,
+                cmp = true,
+                treesitter = true,
+                ts_rainbow = true,
+                telescope = true,
+                which_key = true
             },
         }
 
