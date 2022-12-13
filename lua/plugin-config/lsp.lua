@@ -82,12 +82,28 @@ if lsp_ok then
     local navic_ok, navic = pcall(require, "nvim-navic")
     if navic_ok then
         navic.setup({ highlight = true })
-        lsp.on_attach(function(client, bufnr)
-            if client.server_capabilities.documentSymbolProvider then
+    end
+
+    -- Setup lsp-format
+    local lsp_format_ok, lsp_format = pcall(require, "lsp-format")
+    if lsp_format_ok then
+        lsp_format.setup()
+    end
+
+    -- Attach additional LSP unfunctionality
+    lsp.on_attach(function(client, bufnr)
+        -- Feed LSP data to navic if the LSP has a symbol provider
+        if client.server_capabilities.documentSymbolProvider then
+            if navic_ok then
                 navic.attach(client, bufnr)
             end
-        end)
-    end
+        end
+
+        -- Add auto formatting to LSPs that support formatting
+        if client.supports_method("textDocument/formatting") then
+            lsp_format.on_attach(client)
+        end
+    end)
 
     lsp.setup()
 

@@ -142,6 +142,7 @@ if packer_ok then
                     { "neovim/nvim-lspconfig" },
                     { "williamboman/mason.nvim" },
                     { "williamboman/mason-lspconfig.nvim" },
+                    { "lukas-reineke/lsp-format.nvim" },
                     {
                         "jose-elias-alvarez/null-ls.nvim",
                         requires = "nvim-lua/plenary.nvim",
