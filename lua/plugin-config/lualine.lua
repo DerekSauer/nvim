@@ -24,12 +24,10 @@ if lualine_ok then
     end
 
     -- Display an icon if a tree-sitter parser is available for this buffer.
-    -- TODO: Doesn't work, nvim-treesitter.parser is failing
     local treesitter_status = function()
-        local ts_loaded, treesitter = pcall(require, "nvim-treesitter.parser")
+        local ts_loaded, treesitter = pcall(require, "nvim-treesitter.parsers")
         if ts_loaded then
-            local ts_state = treesitter.has_parser() and "" or ""
-            return ts_state
+            return treesitter.has_parser() and "" or ""
         else
             return ""
         end
