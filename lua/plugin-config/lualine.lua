@@ -33,14 +33,6 @@ if lualine_ok then
         end
     end
 
-    -- Get loading and workspace processing status of any LSPs
-    -- attached to the buffer
-    local lsp_status = function()
-        -- TODO: Look up what is in the table returned by this function
-        -- and extract what we need
-        return vim.lsp.util.get_progress_messages()[1]
-    end
-
     -- Get the names of LSP clients attached to this buffer
     -- TODO: This doesn't work at all, ripped it off from Astronvim
     local lsp_clients = function()
@@ -76,7 +68,7 @@ if lualine_ok then
             lualine_a = { "mode" },
             lualine_b = { "branch", "diff", "diagnostics" },
             lualine_c = { treesitter_status, "filename", navic_string },
-            lualine_x = { lsp_status },
+            lualine_x = {},
             lualine_y = { encoding_override, fileformat_override, "filetype", "progress" },
             lualine_z = { "location" },
         },

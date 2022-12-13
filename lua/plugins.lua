@@ -164,6 +164,14 @@ if packer_ok then
 
                     -- Code context
                     { "SmiteshP/nvim-navic" },
+
+                    -- LSP status spinner
+                    {
+                        "j-hui/fidget.nvim",
+                        config = function()
+                            require("fidget").setup()
+                        end,
+                    },
                 },
                 config = function()
                     require("plugin-config/lsp")
