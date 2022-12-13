@@ -48,17 +48,20 @@ if lsp_ok then
 
     -- Setup nvim-cmp
     local nvim_cmp_config = {
-        window = {
-            completion = {
-                winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,Search:None",
-                col_offset = -3,
-                side_padding = 0,
-            },
+        completion = {
+            scrolloff = 3,
+            border = globals.border_style,
+        },
+
+        documentation = {
+            border = globals.border_style,
         },
 
         sources = {
             { name = "path" },
             { name = "nvim_lsp", keyword_length = 3 },
+            { name = "nvim_lsp_signature_help" },
+            { name = "nvim_lua" },
             { name = "buffer", keyword_length = 3 },
             { name = "luasnip", keyword_length = 2 },
         },
