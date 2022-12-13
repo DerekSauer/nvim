@@ -32,6 +32,15 @@ if packer_ok then
                 end,
             })
 
+            -- Dressing, improve default UI
+            -- https://github.com/stevearc/dressing.nvim
+            use({
+                "stevearc/dressing.nvim",
+                config = function()
+                    require("plugin-config/dressing")
+                end,
+            })
+
             -- Status line
             -- https://github.com/nvim-lualine/lualine.nvim
             use({
@@ -50,7 +59,6 @@ if packer_ok then
                     "nvim-lua/plenary.nvim",
                     "nvim-telescope/telescope-frecency.nvim",
                     "nvim-telescope/telescope-project.nvim",
-                    "nvim-telescope/telescope-ui-select.nvim",
                     "nvim-telescope/telescope-dap.nvim",
                     "nvim-tree/nvim-web-devicons",
                     "kkharji/sqlite.lua",
