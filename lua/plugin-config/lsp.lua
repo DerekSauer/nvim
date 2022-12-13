@@ -80,7 +80,7 @@ if lsp_ok then
     -- Setup navic
     local navic_ok, navic = pcall(require, "nvim-navic")
     if navic_ok then
-        navic.setup({ highlight = true })
+        navic.setup({ depth_limit = 6, highlight = true })
     end
 
     -- Setup lsp-format

@@ -1,6 +1,6 @@
-local loaded, lualine = pcall(require, "lualine")
+local lualine_ok, lualine = pcall(require, "lualine")
 
-if loaded then
+if lualine_ok then
     -- Don't show encoding if its utf-8
     local encoding_override = function()
         local ret, _ = (vim.bo.fenc or vim.go.enc):gsub("^utf%-8$", "")
@@ -11,6 +11,16 @@ if loaded then
     local fileformat_override = function()
         local ret, _ = vim.bo.fileformat:gsub("^unix$", "")
         return ret
+    end
+
+    -- Output navic code location string if it is available
+    local navic_ok, navic = pcall(require, "nvim-navic")
+    local navic_string = function()
+        if navic_ok then
+            return navic.is_available() and navic.get_location() or ""
+        else
+            return ""
+        end
     end
 
     -- Display an icon if a tree-sitter parser is available for this buffer.
@@ -67,22 +77,12 @@ if loaded then
         sections = {
             lualine_a = { "mode" },
             lualine_b = { "branch", "diff", "diagnostics" },
-            lualine_c = { "filename", treesitter_status },
+            lualine_c = { treesitter_status, "filename", navic_string },
             lualine_x = { lsp_status },
             lualine_y = { encoding_override, fileformat_override, "filetype", "progress" },
             lualine_z = { "location" },
         },
     }
-
-    -- Add navic to the winbar
-    local navic_loaded, navic = pcall(require, "nvim-navic")
-    if navic_loaded then
-        config.winbar = {
-            lualine_a = {
-                { navic.get_location, cond = navic.is_available },
-            },
-        }
-    end
 
     lualine.setup(config)
 else
