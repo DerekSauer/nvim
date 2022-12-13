@@ -104,6 +104,11 @@ if lualine_ok then
         end
     end
 
+    -- Output trimmed buffer name
+    local function buffer_name()
+        return require("globals").trimmed_buffer_name(0)
+    end
+
     -- Display an icon if a tree-sitter parser is available for this buffer.
     local ts_loaded, treesitter = pcall(require, "nvim-treesitter.parsers")
     local function treesitter_status()
@@ -117,6 +122,7 @@ if lualine_ok then
     local config = {
         options = {
             theme = "catppuccin",
+            disabled_filetypes = { "neo-tree", "telescope", "mason" },
         },
         sections = {
             lualine_a = { "mode" },
@@ -128,8 +134,12 @@ if lualine_ok then
         },
 
         winbar = {
-            lualine_a = { navic_string },
+            lualine_c = { navic_string },
+            lualine_x = { buffer_name },
         },
+        inactive_winbar = {
+            lualine_x = { buffer_name },
+        }, -- TODO: Add trimmed file path
     }
 
     lualine.setup(config)
