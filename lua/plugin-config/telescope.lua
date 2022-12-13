@@ -1,15 +1,15 @@
 local telescope_ok, telescope = pcall(require, "telescope")
 
 if telescope_ok then
+    local globals = require("globals")
     local config = {
         defaults = {
             layout_strategy = "flex",
             border = true,
-            borderchars = { " ", " ", " ", " ", " ", " ", " ", " " },
+            borderchars = globals.border_style,
         },
 
-        extensions = {
-        },
+        extensions = {},
     }
 
     telescope.setup(config)
