@@ -17,7 +17,6 @@ if lsp_ok then
     -- Use recommended LSP settings and add nvim's API
     lsp.preset("recommended")
     lsp.nvim_workspace()
-    lsp.ensure_installed({ "sumneko_lua", "rust_analyzer", "taplo", "cssls", "html", "tsserver" })
 
     -- Setup lua-language-server
     local runtime_path = vim.split(package.path, ";")
