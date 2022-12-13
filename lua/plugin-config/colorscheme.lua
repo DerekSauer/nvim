@@ -1,96 +1,95 @@
-local loaded, catppuccin = pcall(require, "catppuccin")
+local catppuccin_ok, catppuccin = pcall(require, "catppuccin")
 
-if loaded then
-    if catppuccin then
-        local config = {
-            flavour = "mocha", -- latte, frappe, macchiato, mocha
-            background = {
-                light = "latte",
-                dark = "mocha",
-            },
-            transparent_background = false,
-            term_colors = true,
-            dim_inactive = {
+if catppuccin_ok then
+    local config = {
+        flavour = "mocha", -- latte, frappe, macchiato, mocha
+        background = {
+            light = "latte",
+            dark = "mocha",
+        },
+        transparent_background = false,
+        term_colors = true,
+        dim_inactive = {
+            enabled = true,
+            shade = "dark",
+            percentage = 0.25,
+        },
+
+        styles = {
+            comments = { "italic" },
+            conditionals = { "italic" },
+            loops = {},
+            functions = { "bold" },
+            keywords = { "bold" },
+            strings = {},
+            variables = {},
+            numbers = {},
+            booleans = {},
+            properties = {},
+            types = {},
+            operators = {},
+        },
+        color_overrides = {},
+        custom_highlights = {},
+        integrations = {
+            -- https://github.com/catppuccin/nvim#integrations
+            gitsigns = true,
+            mason = true,
+            cmp = true,
+            treesitter = true,
+            ts_rainbow = true,
+            telescope = true,
+            which_key = true,
+
+            dap = {
                 enabled = true,
-                shade = "dark",
-                percentage = 0.25,
+                enable_ui = true, -- enable nvim-dap-ui
             },
 
-            styles = {
-                comments = { "italic" },
-                conditionals = { "italic" },
-                loops = {},
-                functions = { "bold" },
-                keywords = { "bold" },
-                strings = {},
-                variables = {},
-                numbers = {},
-                booleans = {},
-                properties = {},
-                types = {},
-                operators = {},
+            indent_blankline = {
+                enabled = true,
+                colored_indent_levels = true,
             },
-            color_overrides = {},
-            custom_highlights = {},
-            integrations = {
-                -- https://github.com/catppuccin/nvim#integrations
-                gitsigns = true,
-                mason = true,
-                cmp = true,
-                treesitter = true,
-                ts_rainbow = true,
-                telescope = true,
-                which_key = true,
 
-                dap = {
-                    enabled = true,
-                    enable_ui = true, -- enable nvim-dap-ui
+            native_lsp = {
+                enabled = true,
+                virtual_text = {
+                    errors = { "italic" },
+                    hints = { "italic" },
+                    warnings = { "italic" },
+                    information = { "italic" },
                 },
-
-                indent_blankline = {
-                    enabled = true,
-                    colored_indent_levels = true,
-                },
-
-                native_lsp = {
-                    enabled = true,
-                    virtual_text = {
-                        errors = { "italic" },
-                        hints = { "italic" },
-                        warnings = { "italic" },
-                        information = { "italic" },
-                    },
-                    underlines = {
-                        errors = { "underline" },
-                        hints = { "underline" },
-                        warnings = { "underline" },
-                        information = { "underline" },
-                    },
-                },
-
-                navic = {
-                    enabled = true,
-                    custom_bg = "NONE",
+                underlines = {
+                    errors = { "underline" },
+                    hints = { "underline" },
+                    warnings = { "underline" },
+                    information = { "underline" },
                 },
             },
-        }
 
-        catppuccin.setup(config)
-        vim.cmd.colorscheme("catppuccin")
+            navic = {
+                enabled = true,
+                custom_bg = "NONE",
+            },
+        },
+    }
 
-        -- Function and keymap to swap light & dark color schemes
-        local function swap_background()
-            if vim.opt.background._value == "dark" then
-                vim.cmd("set background=light")
-            else
-                vim.cmd("set background=dark")
-            end
+    catppuccin.setup(config)
+    vim.cmd.colorscheme("catppuccin")
+
+    -- Function and keymap to swap light & dark color schemes
+    local function swap_background()
+        if vim.opt.background._value == "dark" then
+            vim.cmd("set background=light")
+        else
+            vim.cmd("set background=dark")
         end
-
-        vim.keymap.set("n", "<leader>c", function()
-            swap_background()
-        end, { silent = true, desc = "Swap light/dark theme" })
     end
+
+    vim.keymap.set("n", "<leader>c", function()
+        swap_background()
+    end, { silent = true, desc = "Swap light/dark theme" })
 else
     vim.notify("Failed to load plugin: catppuccin.", vim.log.levels.ERROR)
+    catppuccin = nil
 end

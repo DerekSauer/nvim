@@ -1,6 +1,6 @@
-local loaded, indent_blankline = pcall(require, "indent_blankline")
+local indent_ok, indent = pcall(require, "indent_blankline")
 
-if loaded then
+if indent_ok then
     local config = {
         char = "┊",
         show_current_context = true,
@@ -16,7 +16,7 @@ if loaded then
         },
     }
 
-    indent_blankline.setup(config)
+    indent.setup(config)
 else
     vim.notify("Failed to load plugin: indent_blankline.", vim.log.levels.ERROR)
 end

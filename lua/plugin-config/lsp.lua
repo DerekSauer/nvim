@@ -1,14 +1,18 @@
-local loaded, lsp = pcall(require, "lsp-zero")
+local lsp_ok, lsp = pcall(require, "lsp-zero")
 
-if loaded then
-    -- Give Mason our global border style
+if lsp_ok then
     local globals = require("globals")
-    local mason_settings = {
-        ui = {
-            border = globals.border_style,
-        },
-    }
-    require("mason.settings").set(mason_settings)
+
+    -- Customize Mason
+    local mason_ok, mason = pcall(require, "mason.settings")
+    if mason_ok then
+        local mason_settings = {
+            ui = {
+                border = globals.border_style,
+            },
+        }
+        mason.set(mason_settings)
+    end
 
     -- Use recommended LSP settings and add nvim's API
     lsp.preset("recommended")
@@ -75,13 +79,15 @@ if loaded then
     lsp.setup_nvim_cmp(nvim_cmp_config)
 
     -- Setup navic
-    local navic = require("nvim-navic")
-    navic.setup({ highlight = true })
-    lsp.on_attach(function(client, bufnr)
-        if client.server_capabilities.documentSymbolProvider then
-            navic.attach(client, bufnr)
-        end
-    end)
+    local navic_ok, navic = pcall(require, "nvim-navic")
+    if navic_ok then
+        navic.setup({ highlight = true })
+        lsp.on_attach(function(client, bufnr)
+            if client.server_capabilities.documentSymbolProvider then
+                navic.attach(client, bufnr)
+            end
+        end)
+    end
 
     lsp.setup()
 
@@ -117,9 +123,9 @@ if loaded then
     vim.fn.sign_define("DiagnosticSignHint", { text = "", texthl = "DiagnosticSignHint" })
 
     -- Setup null-ls
-    local null_ls_loaded, null_ls = pcall(require, "null-ls")
+    local null_ls_ok, null_ls = pcall(require, "null-ls")
     local null_ls_options = lsp.build_options("null-ls", {})
-    if null_ls_loaded then
+    if null_ls_ok then
         local null_ls_config = {
             on_attach = null_ls_options.on_attach,
             sources = {
@@ -131,6 +137,7 @@ if loaded then
         null_ls.setup(null_ls_config)
     else
         vim.notify("Failed to setup plugin: null-ls.", vim.log.levels.ERROR)
+        null_ls = nil
     end
 
     -- Lsp key mappings
@@ -178,4 +185,5 @@ if loaded then
     end
 else
     vim.notify("Failed to load plugin: lsp-zero.", vim.log.levels.ERROR)
+    lsp = nil
 end

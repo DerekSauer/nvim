@@ -87,4 +87,5 @@ if loaded then
     lualine.setup(config)
 else
     vim.notify("Failed to load plugin: lualine.", vim.log.levels.ERROR)
+    lualine = nil
 end

@@ -1,6 +1,6 @@
-local loaded, whichkey = pcall(require, "which-key")
+local whichkey_ok, whichkey = pcall(require, "which-key")
 
-if loaded then
+if whichkey_ok then
     if whichkey then
         local globals = require("globals")
 

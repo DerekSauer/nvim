@@ -1,6 +1,6 @@
-local loaded, telescope = pcall(require, "telescope")
+local telescope_ok, telescope = pcall(require, "telescope")
 
-if loaded then
+if telescope_ok then
     local config = {
         defaults = {
             layout_strategy = "flex",
@@ -63,4 +63,5 @@ if loaded then
     end
 else
     vim.notify("Failed to load plugin: telescope.", vim.log.levels.ERROR)
+    telescope = nil
 end

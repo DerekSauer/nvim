@@ -1,6 +1,6 @@
-local loaded, gitsigns = pcall(require, "gitsigns")
+local gitsigns_ok, gitsigns = pcall(require, "gitsigns")
 
-if loaded then
+if gitsigns_ok then
     local globals = require("globals")
 
     local config = {
@@ -168,4 +168,5 @@ if loaded then
     gitsigns.setup(config)
 else
     vim.notify("Failed to load plugin: gitsigns.", vim.log.levels.ERROR)
+    gitsigns = nil
 end
