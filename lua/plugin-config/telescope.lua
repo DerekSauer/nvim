@@ -6,20 +6,15 @@ if loaded then
             layout_strategy = "flex",
             border = true,
             borderchars = { " ", " ", " ", " ", " ", " ", " ", " " },
-            --borderchars = { "═", "│", "═", "│", "╒", "╕", "╛", "╘" },
         },
 
         extensions = {
-            ["ui-select"] = {
-                require("telescope.themes").get_dropdown(),
-            },
         },
     }
 
     telescope.setup(config)
     telescope.load_extension("frecency")
     telescope.load_extension("project")
-    telescope.load_extension("ui-select")
 
     local dap_loaded, _ = pcall(require, "dap")
     if dap_loaded then
