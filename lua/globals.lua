@@ -18,7 +18,7 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 
 -- Allow closing the following buffer file types by pressing 'q'
 vim.api.nvim_create_autocmd("FileType", {
-    pattern = { "help", "man" },
+    pattern = { "help", "man", "qf" },
     group = M.user_au_group,
     command = "nnoremap <buffer> q <cmd>quit<cr>",
 })
