@@ -123,6 +123,15 @@ if packer_ok then
                 end,
             })
 
+            -- Smart code commenting
+            -- https://github.com/numToStr/Comment.nvim
+            use({
+                "numToStr/Comment.nvim",
+                config = function()
+                    require("plugin-config/comment")
+                end,
+            })
+
             -- Indent guides
             -- https://github.com/lukas-reineke/indent-blankline.nvim
             use({
@@ -164,14 +173,6 @@ if packer_ok then
 
                     -- Code context
                     { "SmiteshP/nvim-navic" },
-
-                    -- LSP status spinner
-                    {
-                        "j-hui/fidget.nvim",
-                        config = function()
-                            require("fidget").setup()
-                        end,
-                    },
                 },
                 config = function()
                     require("plugin-config/lsp")
