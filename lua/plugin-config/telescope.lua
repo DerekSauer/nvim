@@ -1,7 +1,6 @@
 local telescope_ok, telescope = pcall(require, "telescope")
 
 if telescope_ok then
-    local globals = require("globals")
     local config = {
         defaults = {
             layout_strategy = "flex",
