@@ -4,7 +4,7 @@ if indent_ok then
     local config = {
         char = "┊",
         show_current_context = true,
-        show_current_context_start = true,
+        show_current_context_start = false,
         space_char_blankline = " ",
         char_highlight_list = {
             "IndentBlanklineIndent1",
