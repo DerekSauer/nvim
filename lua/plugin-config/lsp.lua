@@ -46,6 +46,20 @@ if lsp_ok then
         },
     })
 
+    -- Setup rust-analyzer
+    lsp.configure("rust_analyzer", {
+        settings = {
+            ["rust-analyzer"] = {
+                checkOnSave = {
+                    command = "clippy",
+                },
+                lens = {
+                    enable = false,
+                },
+            },
+        },
+    })
+
     -- Setup nvim-cmp
     local nvim_cmp_config = {
         completion = {
@@ -97,6 +111,7 @@ if lsp_ok then
         -- Feed LSP data to navic if the LSP has a symbol provider
         if client.server_capabilities.documentSymbolProvider then
             if navic_ok then
+                -- TODO: Make this more intelligent
                 navic.attach(client, bufnr)
             end
         end
