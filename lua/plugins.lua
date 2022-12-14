@@ -88,7 +88,7 @@ if packer_ok then
             use({
                 "nvim-treesitter/nvim-treesitter",
                 run = function()
-                    vim.cmd("TSUpdate<CR>")
+                    vim.cmd("TSUpdate")
                 end,
                 requires = {
                     -- Rainbow parens highlighting
@@ -213,7 +213,7 @@ if packer_ok then
                 },
                 config = function()
                     require("plugin-config/dap")
-                end
+                end,
             })
         end,
 
