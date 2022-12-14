@@ -232,6 +232,19 @@ if dap_ok then
         end, { silent = true, desc = "Toggle debug UI" })
     end
 
+    -- Define icons and colors for breakpoints
+    vim.fn.sign_define("DapBreakpoint", { text = "", texthl = "DapBreakpoint", linehl = "", numhl = "" })
+    vim.fn.sign_define(
+        "DapBreakpointCondition",
+        { text = "ﳁ", texthl = "DapBreakpointCondition", linehl = "", numhl = "" }
+    )
+    vim.fn.sign_define(
+        "DapBreakpointRejected",
+        { text = "", texthl = "DapBreakpointCondition", linehl = "", numhl = "" }
+    )
+    vim.fn.sign_define("DapLogPoint", { text = "", texthl = "DapLogPoint", linehl = "", numhl = "" })
+    vim.fn.sign_define("DapStopped", { text = "", texthl = "DapStopped", linehl = "", numhl = "" })
+
     -- Setup Dap virtual text
     local dap_vt_ok, dap_vt = pcall(require, "nvim-dap-virtual-text")
     if dap_vt_ok then
@@ -258,8 +271,8 @@ if dap_ok then
         dap.toggle_breakpoint()
     end, { silent = true, desc = "Debugger: Toggle breakpoint" })
     vim.keymap.set("n", "<F12>", function()
-        dap.terminate()
         dap.close()
+        dap.terminate()
     end, { silent = true, desc = "Debugger: Stop debugging" })
 
     vim.keymap.set("n", "<leader>ds", function()
@@ -275,8 +288,8 @@ if dap_ok then
         dap.step_out()
     end, { silent = true, desc = "Step out" })
     vim.keymap.set("n", "<leader>dx", function()
-        dap.terminate()
         dap.close()
+        dap.terminate()
     end, { silent = true, desc = "Stop debugging" })
     vim.keymap.set("n", "<leader>db", function()
         dap.toggle_breakpoint()
