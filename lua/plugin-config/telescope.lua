@@ -6,7 +6,7 @@ if telescope_ok then
         defaults = {
             layout_strategy = "flex",
             border = true,
-            borderchars = globals.border_style,
+            borderchars = { "═", "│", "═", "│", "╒", "╕", "╛", "╘" },
         },
 
         extensions = {},
