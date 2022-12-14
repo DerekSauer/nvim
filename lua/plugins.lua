@@ -98,6 +98,10 @@ if packer_ok then
                     -- Autoclose HTML,CSS tags
                     -- https://github.com/windwp/nvim-ts-autotag
                     "windwp/nvim-ts-autotag",
+
+                    -- Automatically add closing operators to textual languages (Lua, Ruby, etc...)
+                    -- https://github.com/RRethy/nvim-treesitter-endwise
+                    "RRethy/nvim-treesitter-endwise",
                 },
                 config = function()
                     require("plugin-config/treesitter")
@@ -139,6 +143,15 @@ if packer_ok then
                 requires = "nvim-treesitter/nvim-treesitter",
                 config = function()
                     require("plugin-config/neogen")
+                end,
+            })
+
+            -- Automatic pair (parens, brackets, etc...) insertion
+            -- https://github.com/windwp/nvim-autopairs
+            use({
+                "windwp/nvim-autopairs",
+                config = function()
+                    require("plugin-config/autopairs")
                 end,
             })
 

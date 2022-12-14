@@ -27,6 +27,11 @@ if treesitter_ok then
         autotag = {
             enable = true,
         },
+
+        -- Enable auto-closing language structures
+        endwise = {
+            enable = true,
+        },
     })
 
     vim.opt.foldmethod = "expr"
