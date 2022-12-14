@@ -189,7 +189,6 @@ if packer_ok then
                     { "hrsh7th/cmp-nvim-lua" },
                     { "hrsh7th/cmp-nvim-lsp-signature-help" },
                     { "onsails/lspkind.nvim" },
-                    { "lvimuser/lsp-inlayhints.nvim" },
 
                     -- Snippets
                     { "L3MON4D3/LuaSnip" },
@@ -201,6 +200,20 @@ if packer_ok then
                 config = function()
                     require("plugin-config/lsp")
                 end,
+            })
+
+            -- Debug adapter
+            -- https://github.com/mfussenegger/nvim-dap
+            use({
+                "mfussenegger/nvim-dap",
+                requires = {
+                    "rcarriga/nvim-dap-ui",
+                    "theHamsta/nvim-dap-virtual-text",
+                    "nvim-treesitter/nvim-treesitter",
+                },
+                config = function()
+                    require("plugin-config/dap")
+                end
             })
         end,
 
