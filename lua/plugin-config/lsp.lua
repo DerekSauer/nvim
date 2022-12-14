@@ -194,6 +194,22 @@ if lsp_ok then
         vim.lsp.buf.signature_help()
     end, { silent = true, desc = "Signature help" })
 
+    vim.keymap.set({ "s", "n" }, "]s", function()
+        require("luasnip").jump(1)
+    end, { silent = true, desc = "Next snippet placeholder" })
+
+    vim.keymap.set({ "s", "n" }, "[s", function()
+        require("luasnip").jump(-1)
+    end, { silent = true, desc = "Next snippet placeholder" })
+
+    vim.keymap.set({ "s", "n" }, "<C-]>", function()
+        require("luasnip").jump(1)
+    end, { silent = true, desc = "Next snippet placeholder" })
+
+    vim.keymap.set({ "s", "n" }, "<C-[>", function()
+        require("luasnip").jump(-1)
+    end, { silent = true, desc = "Next snippet placeholder" })
+
     -- Add to which-key categories
     local whickey_loaded, whichkey = pcall(require, "which-key")
     if whickey_loaded then
