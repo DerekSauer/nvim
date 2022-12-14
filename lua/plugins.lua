@@ -132,6 +132,16 @@ if packer_ok then
                 end,
             })
 
+            -- Easy code annotations.
+            -- https://github.com/danymat/neogen/
+            use({
+                "danymat/neogen",
+                requires = "nvim-treesitter/nvim-treesitter",
+                config = function()
+                    require("plugin-config/neogen")
+                end,
+            })
+
             -- Indent guides
             -- https://github.com/lukas-reineke/indent-blankline.nvim
             use({
