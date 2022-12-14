@@ -1,7 +1,11 @@
 local comment_ok, comment = pcall(require, "Comment")
 
 if comment_ok then
-    comment.setup()
+    local config = {
+        create_mappings = false,
+    }
+
+    comment.setup(config)
 
     vim.keymap.set("n", "<leader>/", function()
         require("Comment.api").toggle.linewise.current()

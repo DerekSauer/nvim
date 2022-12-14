@@ -49,10 +49,6 @@ if loaded then
     }, { prefix = "<leader>" })
 end
 
--- Text Navigation
-vim.keymap.set({ "n", "x", "o" }, "<leader>h", "^", { silent = true, desc = "Jump to line start" })
-vim.keymap.set({ "n", "x", "o" }, "<leader>l", "g_", { silent = true, desc = "Jump to line end" })
-
 -- Selections
 vim.keymap.set("n", "<leader><C-a>", ":keepjumps normal! ggVG<CR>", { silent = true, desc = "Select all" })
 vim.keymap.set("n", "<C-a>", ":keepjumps normal! ggVG<CR>", { silent = true, desc = "Select all" })
