@@ -106,16 +106,6 @@ if lsp_ok then
         lsp_format.setup()
     end
 
-    -- Setup lsp-inlayhints
-    local inlay_ok, inlay = pcall(require, "lsp-inlayhints")
-    if inlay_ok then
-        inlay.setup()
-
-        vim.keymap.set("n", "<leader>ly", function()
-            inlay.toggle()
-        end, { silent = true, desc = "Toggle inlay hints" })
-    end
-
     -- Attach additional LSP functionality
     lsp.on_attach(function(client, bufnr)
         -- Feed LSP data to navic if the LSP has a symbol provider
@@ -129,11 +119,6 @@ if lsp_ok then
         -- Add auto formatting to LSPs that support formatting
         if client.supports_method("textDocument/formatting") then
             lsp_format.on_attach(client)
-        end
-
-        -- Add inlay hints
-        if client.supports_method("textDocument/inlayHint") then
-            inlay.on_attach(client, bufnr, false)
         end
     end)
 
