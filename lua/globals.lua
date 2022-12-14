@@ -23,10 +23,16 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 -- Trim the working directory from a buffer name
+--- Trim the current working directory from a buffer name.
+---@param bufnr number @Buffer number who's name we want trimmed.
+---@return string @The name of the with the current working directory removed.
 function M.trimmed_buffer_name(bufnr)
-    return string.gsub(vim.fn.bufname(bufnr), vim.fn.getcwd(), ".")
+    local trimmed_buffer, _ = string.gsub(vim.fn.bufname(bufnr), vim.fn.getcwd(), ".")
+    return trimmed_buffer
 end
 
+--- Gets a list of "listed" buffers.
+--- @return table @An array of "listed" buffers.
 function M.get_listed_buffers()
     local buffers = {}
     local len = 0
