@@ -13,7 +13,7 @@ if dressing_ok then
             enabled = true,
             backend = { "telescope" },
             telescope = {
-                borderchars = globals.border_style,
+                borderchars = { "═", "│", "═", "│", "╒", "╕", "╛", "╘" },
                 layout_strategy = "cursor",
                 layout_config = {
                     width = 0.40,
