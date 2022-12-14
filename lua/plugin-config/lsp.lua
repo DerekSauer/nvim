@@ -111,7 +111,7 @@ if lsp_ok then
     if inlay_ok then
         inlay.setup()
 
-        vim.keymap.set("n", "<leader>i", function()
+        vim.keymap.set("n", "<leader>ly", function()
             inlay.toggle()
         end, { silent = true, desc = "Toggle inlay hints" })
     end
