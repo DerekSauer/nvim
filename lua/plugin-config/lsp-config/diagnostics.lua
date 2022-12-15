@@ -32,6 +32,14 @@ function M.setup()
     vim.fn.sign_define("DiagnosticSignWarn", { text = " ", texthl = "DiagnosticSignWarn" })
     vim.fn.sign_define("DiagnosticSignInfo", { text = " ", texthl = "DiagnosticSignInfo" })
     vim.fn.sign_define("DiagnosticSignHint", { text = "", texthl = "DiagnosticSignHint" })
+
+    -- Create autocommand to show diagnostics window when hovering over an issue
+    vim.api.nvim_create_autocmd({ "CursorHold" }, {
+        pattern = { "*" },
+        callback = function()
+            vim.diagnostic.open_float({ scope = "line", severity_sort = true, source = "if_many" })
+        end,
+    })
 end
 
 return M
