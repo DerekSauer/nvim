@@ -30,7 +30,12 @@ if catppuccin_ok then
             operators = {},
         },
         color_overrides = {},
-        custom_highlights = {},
+        custom_highlights = function(colors)
+            local options = require("catppuccin").options
+            return {
+                WinBar = { fg = colors.rosewater, bg = options.transparent_background and colors.none or colors.mantle },
+            }
+        end,
         integrations = {
             -- https://github.com/catppuccin/nvim#integrations
             gitsigns = true,

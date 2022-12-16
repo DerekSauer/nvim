@@ -39,6 +39,7 @@ vim.opt.whichwrap:append("h,l,<,>,[,]")
 vim.opt.backup = false
 vim.opt.swapfile = false
 vim.opt.writebackup = false
+vim.opt.winbar = " "
 
 -- Use ripgrep if available
 if vim.fn.executable("rg") == 1 then
