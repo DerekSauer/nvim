@@ -9,7 +9,6 @@ function M.setup(lsp_zero)
             on_attach = null_ls_options.on_attach,
             sources = {
                 null_ls.builtins.formatting.stylua,
-                null_ls.builtins.diagnostics.selene,
             },
         }
 
