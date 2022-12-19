@@ -7,7 +7,7 @@ function M.setup()
         underline = true,
         virtual_text = true,
         signs = true,
-        update_in_insert = false,
+        update_in_insert = true,
         severity_sort = true,
         float = {
             border = globals.border_style,
@@ -22,7 +22,8 @@ function M.setup()
         },
     })
 
-    vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = globals.border_style })
+    vim.lsp.handlers["textDocument/hover"] =
+        vim.lsp.with(vim.lsp.handlers.hover, { border = globals.border_style })
 
     vim.lsp.handlers["textDocument/signatureHelp"] =
         vim.lsp.with(vim.lsp.handlers.signature_help, { border = globals.border_style })
@@ -37,11 +38,14 @@ function M.setup()
     -- https://www.reddit.com/r/neovim/comments/tvy18v/comment/i3cfsr5/?utm_source=share&utm_medium=web2x&context=3
     local function open_diag_float()
         for _, winid in pairs(vim.api.nvim_tabpage_list_wins(0)) do
-            if vim.api.nvim_win_get_config(winid).zindex then
-                return
-            end
+            if vim.api.nvim_win_get_config(winid).zindex then return end
         end
-        vim.diagnostic.open_float({ focusable = false, scope = "line", severity_sort = true, source = "if_many" })
+        vim.diagnostic.open_float({
+            focusable = false,
+            scope = "line",
+            severity_sort = true,
+            source = "if_many",
+        })
     end
 
     -- Create autocommand to show diagnostics window when hovering over an issue
