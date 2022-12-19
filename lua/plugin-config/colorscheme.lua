@@ -1,5 +1,7 @@
-local catppuccin_ok, catppuccin = pcall(require, "catppuccin")
+local default_colorscheme = "ayu"
 
+-- Catppuccin setup
+local catppuccin_ok, catppuccin = pcall(require, "catppuccin")
 if catppuccin_ok then
     local config = {
         flavour = "mocha", -- latte, frappe, macchiato, mocha
@@ -80,21 +82,35 @@ if catppuccin_ok then
     }
 
     catppuccin.setup(config)
-    vim.cmd.colorscheme("catppuccin")
-
-    -- Function and keymap to swap light & dark color schemes
-    local function swap_background()
-        if vim.opt.background._value == "dark" then
-            vim.cmd("set background=light")
-        else
-            vim.cmd("set background=dark")
-        end
-    end
-
-    vim.keymap.set("n", "<leader>c", function()
-        swap_background()
-    end, { silent = true, desc = "Swap light/dark theme" })
 else
     vim.notify("Failed to load plugin: catppuccin.", vim.log.levels.ERROR)
     catppuccin = nil
 end
+
+-- Ayu colorscheme setup
+local ayu_ok, ayu = pcall(require, "ayu")
+if ayu_ok then
+    local config = {
+        mirage = false,
+    }
+
+    ayu.setup(config)
+else
+    vim.notify("Failed to load plugin: ayu.", vim.log.levels.ERROR)
+    ayu = nil
+end
+
+vim.cmd.colorscheme(default_colorscheme)
+
+-- Function and keymap to swap light & dark color schemes
+local function swap_background()
+    if vim.opt.background._value == "dark" then
+        vim.cmd("set background=light")
+    else
+        vim.cmd("set background=dark")
+    end
+end
+
+vim.keymap.set("n", "<leader>c", function()
+    swap_background()
+end, { silent = true, desc = "Swap light/dark theme" })

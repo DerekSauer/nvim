@@ -32,6 +32,15 @@ if packer_ok then
                 end,
             })
 
+            -- Ayu colorscheme
+            -- https://github.com/Shatur/neovim-ayu
+            use({
+                "Shatur/neovim-ayu",
+                config = function()
+                    require("plugin-config/colorscheme")
+                end,
+            })
+
             -- Dressing, improve default UI
             -- https://github.com/stevearc/dressing.nvim
             use({

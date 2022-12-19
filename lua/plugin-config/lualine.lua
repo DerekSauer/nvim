@@ -119,9 +119,19 @@ if lualine_ok then
         end
     end
 
+    -- Select appropriate lualine colorscheme
+    local lualine_theme = ""
+    if vim.g.colors_name == "catppuccin" then
+        lualine_theme = "catppuccin"
+    elseif vim.g.colors_name == "ayu" then
+        lualine_theme = "ayu"
+    else
+        lualine_theme = "auto"
+    end
+
     local config = {
         options = {
-            theme = "catppuccin",
+            theme = lualine_theme,
             disabled_filetypes = { "neo-tree", "telescope", "mason" },
         },
         sections = {
