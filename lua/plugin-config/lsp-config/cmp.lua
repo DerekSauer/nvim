@@ -14,10 +14,12 @@ function M.setup(lsp_zero)
                 border = globals.border_style,
                 col_offset = -3,
                 side_padding = 0,
+                scrollbar = true,
             },
 
             documentation = {
                 border = globals.border_style,
+                scrollbar = true,
             },
         },
 
@@ -30,7 +32,7 @@ function M.setup(lsp_zero)
 
         sources = {
             { name = "path", max_item_count = 5 },
-            { name = "nvim_lsp", max_item_count = 10 },
+            { name = "nvim_lsp" },
             { name = "nvim_lsp_signature_help" },
             { name = "nvim_lua", max_item_count = 5 },
             { name = "buffer", max_item_count = 5 },
