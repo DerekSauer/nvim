@@ -35,7 +35,10 @@ if catppuccin_ok then
         custom_highlights = function(colors)
             local options = require("catppuccin").options
             return {
-                WinBar = { fg = colors.rosewater, bg = options.transparent_background and colors.none or colors.mantle },
+                WinBar = {
+                    fg = colors.rosewater,
+                    bg = options.transparent_background and colors.none or colors.mantle,
+                },
             }
         end,
         integrations = {
@@ -91,7 +94,7 @@ end
 local ayu_ok, ayu = pcall(require, "ayu")
 if ayu_ok then
     local config = {
-        mirage = false,
+        mirage = true,
     }
 
     ayu.setup(config)
@@ -111,6 +114,9 @@ local function swap_background()
     end
 end
 
-vim.keymap.set("n", "<leader>c", function()
-    swap_background()
-end, { silent = true, desc = "Swap light/dark theme" })
+vim.keymap.set(
+    "n",
+    "<leader>c",
+    function() swap_background() end,
+    { silent = true, desc = "Swap light/dark theme" }
+)
