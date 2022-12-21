@@ -1,13 +1,13 @@
-local default_colorscheme = "ayu"
+local default_colorscheme = "catppuccin"
 
 -- Catppuccin setup
 local catppuccin_ok, catppuccin = pcall(require, "catppuccin")
 if catppuccin_ok then
     local config = {
-        flavour = "mocha", -- latte, frappe, macchiato, mocha
+        flavour = "macchiato", -- latte, frappe, macchiato, mocha
         background = {
             light = "latte",
-            dark = "mocha",
+            dark = "macchiato",
         },
         transparent_background = false,
         term_colors = true,
@@ -38,6 +38,10 @@ if catppuccin_ok then
                 WinBar = {
                     fg = colors.rosewater,
                     bg = options.transparent_background and colors.none or colors.mantle,
+                },
+                ["LspInlayHint"] = {
+                    fg = colors.surface0,
+                    bg = colors.base,
                 },
             }
         end,
@@ -88,19 +92,6 @@ if catppuccin_ok then
 else
     vim.notify("Failed to load plugin: catppuccin.", vim.log.levels.ERROR)
     catppuccin = nil
-end
-
--- Ayu colorscheme setup
-local ayu_ok, ayu = pcall(require, "ayu")
-if ayu_ok then
-    local config = {
-        mirage = true,
-    }
-
-    ayu.setup(config)
-else
-    vim.notify("Failed to load plugin: ayu.", vim.log.levels.ERROR)
-    ayu = nil
 end
 
 vim.cmd.colorscheme(default_colorscheme)

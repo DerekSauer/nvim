@@ -75,7 +75,11 @@ if lualine_ok then
                     lsp_message.percentage or ""
                 )
             else
-                return string.format("LSP: %s %s", lsp_message.title or "", lsp_message.message or "")
+                return string.format(
+                    "LSP: %s %s",
+                    lsp_message.title or "",
+                    lsp_message.message or ""
+                )
             end
         else
             return ""
@@ -105,9 +109,7 @@ if lualine_ok then
     end
 
     -- Output trimmed buffer name
-    local function buffer_name()
-        return require("globals").trimmed_buffer_name(0)
-    end
+    local function buffer_name() return require("globals").trimmed_buffer_name(0) end
 
     -- Display an icon if a tree-sitter parser is available for this buffer.
     local ts_loaded, treesitter = pcall(require, "nvim-treesitter.parsers")
@@ -123,8 +125,6 @@ if lualine_ok then
     local lualine_theme = ""
     if vim.g.colors_name == "catppuccin" then
         lualine_theme = "catppuccin"
-    elseif vim.g.colors_name == "ayu" then
-        lualine_theme = "ayu"
     else
         lualine_theme = "auto"
     end
