@@ -24,19 +24,18 @@ function M.setup(lsp_zero)
         },
 
         duplicates = {
+            nvim_lsp = 1,
             buffer = 1,
-            path = 1,
-            nvim_lsp = 0,
             luasnip = 1,
+            path = 1,
         },
 
         sources = {
-            { name = "path", max_item_count = 5 },
-            { name = "nvim_lsp" },
-            { name = "nvim_lsp_signature_help" },
-            { name = "nvim_lua", max_item_count = 5 },
-            { name = "buffer", max_item_count = 5 },
-            { name = "luasnip", max_item_count = 5 },
+            { name = "nvim_lsp", priority = 1 },
+            { name = "nvim_lsp_signature_help", priority = 2 },
+            { name = "buffer", priority = 3 },
+            { name = "luasnip", priority = 4 },
+            { name = "path", priority = 5 },
         },
 
         -- Modify completion menu to show an icon (using 'lspkind') for the completion
