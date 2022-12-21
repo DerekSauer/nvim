@@ -24,6 +24,10 @@ if lsp_ok then
     local lsp_format_ok, lsp_format = pcall(require, "lsp-format")
     if lsp_format_ok then lsp_format.setup() end
 
+    -- Setup lsp-inlayhints
+    local lsp_inlay_ok, lsp_inlay = pcall(require, "lsp-inlayhints")
+    if lsp_inlay_ok then lsp_inlay.setup() end
+
     -- Attach additional LSP functionality
     lsp_zero.on_attach(function(client, bufnr)
         -- Feed LSP data to navic if the LSP has a symbol provider
@@ -34,6 +38,11 @@ if lsp_ok then
         -- Add auto formatting to LSPs that support formatting
         if client.supports_method("textDocument/formatting") and lsp_format_ok then
             lsp_format.on_attach(client)
+        end
+
+        -- Add LSP inlays
+        if client.supports_method("textDocument/inlayHint") and lsp_inlay_ok then
+            lsp_inlay.on_attach(client, bufnr)
         end
     end)
 

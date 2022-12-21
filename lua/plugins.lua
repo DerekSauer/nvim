@@ -18,36 +18,28 @@ if packer_ok then
             use({
                 "lewis6991/impatient.nvim",
                 after = "packer.nvim",
-                config = function()
-                    require("impatient")
-                end,
+                config = function() require("impatient") end,
             })
 
             -- Catppuccin colorscheme
             -- https://github.com/catppuccin/nvim
             use({
                 "catppuccin/nvim",
-                config = function()
-                    require("plugin-config/colorscheme")
-                end,
+                config = function() require("plugin-config/colorscheme") end,
             })
 
             -- Ayu colorscheme
             -- https://github.com/Shatur/neovim-ayu
             use({
                 "Shatur/neovim-ayu",
-                config = function()
-                    require("plugin-config/colorscheme")
-                end,
+                config = function() require("plugin-config/colorscheme") end,
             })
 
             -- Dressing, improve default UI
             -- https://github.com/stevearc/dressing.nvim
             use({
                 "stevearc/dressing.nvim",
-                config = function()
-                    require("plugin-config/dressing")
-                end,
+                config = function() require("plugin-config/dressing") end,
             })
 
             -- Status line
@@ -55,9 +47,7 @@ if packer_ok then
             use({
                 "nvim-lualine/lualine.nvim",
                 requires = { "nvim-tree/nvim-web-devicons" },
-                config = function()
-                    require("plugin-config/lualine")
-                end,
+                config = function() require("plugin-config/lualine") end,
             })
 
             -- Telescope fuzzy finder
@@ -72,9 +62,7 @@ if packer_ok then
                     "nvim-tree/nvim-web-devicons",
                     "kkharji/sqlite.lua",
                 },
-                config = function()
-                    require("plugin-config/telescope")
-                end,
+                config = function() require("plugin-config/telescope") end,
             })
 
             -- Neo-tree file drawer
@@ -87,18 +75,14 @@ if packer_ok then
                     "nvim-tree/nvim-web-devicons",
                     "MunifTanjim/nui.nvim",
                 },
-                config = function()
-                    require("plugin-config/neo-tree")
-                end,
+                config = function() require("plugin-config/neo-tree") end,
             })
 
             -- Treesitter configurations and abstraction layer
             -- https://github.com/nvim-treesitter/nvim-treesitter
             use({
                 "nvim-treesitter/nvim-treesitter",
-                run = function()
-                    vim.cmd("TSUpdate")
-                end,
+                run = function() vim.cmd("TSUpdate") end,
                 requires = {
                     -- Rainbow parens highlighting
                     -- https://github.com/p00f/nvim-ts-rainbow
@@ -112,18 +96,14 @@ if packer_ok then
                     -- https://github.com/RRethy/nvim-treesitter-endwise
                     "RRethy/nvim-treesitter-endwise",
                 },
-                config = function()
-                    require("plugin-config/treesitter")
-                end,
+                config = function() require("plugin-config/treesitter") end,
             })
 
             -- Keybinding hint popup window
             -- https://github.com/folke/which-key.nvim
             use({
                 "folke/which-key.nvim",
-                config = function()
-                    require("plugin-config/which-key")
-                end,
+                config = function() require("plugin-config/which-key") end,
             })
 
             -- Git diffs and signs in gutter
@@ -131,18 +111,14 @@ if packer_ok then
             use({
                 "lewis6991/gitsigns.nvim",
                 event = "BufEnter",
-                config = function()
-                    require("plugin-config/gitsigns")
-                end,
+                config = function() require("plugin-config/gitsigns") end,
             })
 
             -- Smart code commenting
             -- https://github.com/numToStr/Comment.nvim
             use({
                 "numToStr/Comment.nvim",
-                config = function()
-                    require("plugin-config/comment")
-                end,
+                config = function() require("plugin-config/comment") end,
             })
 
             -- Easy code annotations.
@@ -150,18 +126,14 @@ if packer_ok then
             use({
                 "danymat/neogen",
                 requires = "nvim-treesitter/nvim-treesitter",
-                config = function()
-                    require("plugin-config/neogen")
-                end,
+                config = function() require("plugin-config/neogen") end,
             })
 
             -- Automatic pair (parens, brackets, etc...) insertion
             -- https://github.com/windwp/nvim-autopairs
             use({
                 "windwp/nvim-autopairs",
-                config = function()
-                    require("plugin-config/autopairs")
-                end,
+                config = function() require("plugin-config/autopairs") end,
             })
 
             -- Indent guides
@@ -169,9 +141,7 @@ if packer_ok then
             use({
                 "lukas-reineke/indent-blankline.nvim",
                 event = "BufEnter",
-                config = function()
-                    require("plugin-config/indentline")
-                end,
+                config = function() require("plugin-config/indentline") end,
             })
 
             -- Lsp Setup and completions
@@ -188,6 +158,7 @@ if packer_ok then
                         "jose-elias-alvarez/null-ls.nvim",
                         requires = "nvim-lua/plenary.nvim",
                     },
+                    { "lvimuser/lsp-inlayhints.nvim" },
 
                     -- Autocompletion
                     { "hrsh7th/nvim-cmp" },
@@ -206,9 +177,7 @@ if packer_ok then
                     -- Code context
                     { "SmiteshP/nvim-navic" },
                 },
-                config = function()
-                    require("plugin-config/lsp")
-                end,
+                config = function() require("plugin-config/lsp") end,
             })
 
             -- Debug adapter
@@ -220,9 +189,7 @@ if packer_ok then
                     "theHamsta/nvim-dap-virtual-text",
                     "nvim-treesitter/nvim-treesitter",
                 },
-                config = function()
-                    require("plugin-config/dap")
-                end,
+                config = function() require("plugin-config/dap") end,
             })
         end,
 
@@ -244,7 +211,5 @@ end
 
 -- If Packer was installed by ensure_packer(), sync our plugins
 if packer_bootstrap then
-    if packer ~= nil then
-        packer.sync()
-    end
+    if packer ~= nil then packer.sync() end
 end
