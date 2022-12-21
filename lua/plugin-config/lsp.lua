@@ -11,21 +11,18 @@ if lsp_ok then
     -- Setup language servers
     require("plugin-config/lsp-config/sumneko_lua").setup(lsp_zero)
     require("plugin-config/lsp-config/rust_analyzer").setup(lsp_zero)
+    require("plugin-config/lsp-config/wgsl_analyzer").setup(lsp_zero)
 
     -- Setup nvim-cmp
     require("plugin-config/lsp-config/cmp").setup(lsp_zero)
 
     -- Setup navic which shows code context in the winbar
     local navic_ok, navic = pcall(require, "nvim-navic")
-    if navic_ok then
-        navic.setup({ depth_limit = 6, highlight = true })
-    end
+    if navic_ok then navic.setup({ depth_limit = 6, highlight = true }) end
 
     -- Setup lsp-format for easy code formatting on save
     local lsp_format_ok, lsp_format = pcall(require, "lsp-format")
-    if lsp_format_ok then
-        lsp_format.setup()
-    end
+    if lsp_format_ok then lsp_format.setup() end
 
     -- Attach additional LSP functionality
     lsp_zero.on_attach(function(client, bufnr)
