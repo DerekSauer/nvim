@@ -31,11 +31,11 @@ function M.setup(lsp_zero)
         },
 
         sources = {
-            { name = "nvim_lsp", priority = 1 },
-            { name = "nvim_lsp_signature_help", priority = 2 },
-            { name = "buffer", priority = 3 },
-            { name = "luasnip", priority = 4 },
-            { name = "path", priority = 5 },
+            { name = "nvim_lsp_signature_help", priority = 1, group_index = 1 },
+            { name = "nvim_lsp", priority = 2, group_index = 1 },
+            { name = "buffer", priority = 3, group_index = 2 },
+            { name = "luasnip", priority = 4, group_index = 2 },
+            { name = "path", priority = 5, group_index = 2 },
         },
 
         -- Modify completion menu to show an icon (using 'lspkind') for the completion
