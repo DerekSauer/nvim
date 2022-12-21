@@ -66,10 +66,9 @@ function M.setup(lsp_zero)
             end
         end,
     }
-    lsp_zero.setup_nvim_cmp(nvim_cmp_config)
 
-    -- Override the rest of the settings lsp-zero does not merge in
-    require("cmp").setup(nvim_cmp_config)
+    -- Setup nvim-cmp by merging our config with it's defaults
+    lsp_zero.setup_nvim_cmp(lsp_zero.defaults.cmp_config(nvim_cmp_config))
 end
 
 return M
