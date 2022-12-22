@@ -41,6 +41,8 @@ if kanagawa_ok then
         IndentBlanklineIndent4 = { fg = default_colors.waveRed },
         IndentBlanklineIndent5 = { fg = default_colors.springViolet1 },
         IndentBlanklineIndent6 = { fg = default_colors.springGreen },
+
+        LspInlayHint = { fg = default_colors.fujiGray, bg = default_colors.sumiInk1 },
     }
 
     local config = {
