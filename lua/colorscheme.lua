@@ -2,6 +2,40 @@ local default_colorscheme = "kanagawa"
 
 local kanagawa_ok, kanagawa = pcall(require, "kanagawa")
 if kanagawa_ok then
+    local default_colors = require("kanagawa.colors").setup()
+
+    -- Define highlight overrides
+    local hl_overrides = {
+        NavicIconsFile = { fg = default_colors.springViolet2 },
+        NavicIconsModule = { fg = default_colors.boatYellow2 },
+        NavicIconsNamespace = { fg = default_colors.springViolet2 },
+        NavicIconsPackage = { fg = default_colors.springViolet1 },
+        NavicIconsClass = { fg = default_colors.surimiOrange },
+        NavicIconsMethod = { fg = default_colors.crystalBlue },
+        NavicIconsProperty = { fg = default_colors.waveAqua2 },
+        NavicIconsField = { fg = default_colors.waveAqua1 },
+        NavicIconsConstructor = { fg = default_colors.surimiOrange },
+        NavicIconsEnum = { fg = default_colors.boatYellow2 },
+        NavicIconsInterface = { fg = default_colors.carpYellow },
+        NavicIconsFunction = { fg = default_colors.crystalBlue },
+        NavicIconsVariable = { fg = default_colors.oniViolet },
+        NavicIconsConstant = { fg = default_colors.oniViolet },
+        NavicIconsString = { fg = default_colors.springGreen },
+        NavicIconsNumber = { fg = default_colors.sakuraPink },
+        NavicIconsBoolean = { fg = default_colors.surimiOrange },
+        NavicIconsArray = { fg = default_colors.waveAqua2 },
+        NavicIconsObject = { fg = default_colors.surimiOrange },
+        NavicIconsKey = { fg = default_colors.oniViolet },
+        NavicIconsNull = { fg = default_colors.carpYellow },
+        NavicIconsEnumMember = { fg = default_colors.carpYellow },
+        NavicIconsStruct = { fg = default_colors.surimiOrange },
+        NavicIconsEvent = { fg = default_colors.surimiOrange },
+        NavicIconsOperator = { fg = default_colors.springViolet2 },
+        NavicIconsTypeParameter = { fg = default_colors.springBlue },
+        NavicText = { fg = default_colors.fujiWhite },
+        NavicSeparator = { fg = default_colors.fujiWhite },
+    }
+
     local config = {
         undercurl = true, -- enable undercurls
         commentStyle = { italic = true },
@@ -17,7 +51,7 @@ if kanagawa_ok then
         globalStatus = true, -- adjust window separators highlight for laststatus=3
         terminalColors = true, -- define vim.g.terminal_color_{0,17}
         colors = {},
-        overrides = {},
+        overrides = hl_overrides,
         theme = "default",
     }
 
