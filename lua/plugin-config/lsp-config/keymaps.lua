@@ -12,6 +12,13 @@ function M.setup(client, bufnr)
             function() vim.lsp.buf.hover() end,
             { silent = true, buffer = bufnr, desc = "Symbol hover info" }
         )
+
+        vim.keymap.set(
+            "n",
+            "K",
+            function() vim.lsp.buf.hover() end,
+            { silent = true, buffer = bufnr, desc = "Symbol hover info" }
+        )
         has_mappings = true
     end
 
@@ -92,10 +99,7 @@ function M.setup(client, bufnr)
             function() vim.lsp.buf.rename() end,
             { silent = true, buffer = bufnr, desc = "Rename symbol" }
         )
-        has_mappings = true
-    end
 
-    if client.supports_method("textDocument/rename") then
         vim.keymap.set(
             "n",
             "<F2>",
@@ -112,10 +116,6 @@ function M.setup(client, bufnr)
             function() vim.lsp.buf.code_action() end,
             { silent = true, buffer = bufnr, desc = "Code actions" }
         )
-        has_mappings = true
-    end
-
-    if client.supports_method("textDocument/codeAction") then
         vim.keymap.set(
             "n",
             "<F4>",
