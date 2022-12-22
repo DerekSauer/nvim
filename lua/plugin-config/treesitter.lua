@@ -34,6 +34,20 @@ if treesitter_ok then
         },
     })
 
+    -- Autocommand to disable TS-rainbow prior to saving the buffer
+    -- I automatically format buffers on save and this frequently confuses TS-rainbow
+    vim.api.nvim_create_autocmd({ "BufWritePre" }, {
+        pattern = { "*" },
+        command = "TSDisable rainbow",
+    })
+
+    -- Autocommand to reenable TS-rainbow after writing (and formatting) the buffer
+    -- This will reset any misplaced paren colors
+    vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+        pattern = { "*" },
+        command = "TSEnable rainbow",
+    })
+
     vim.opt.foldmethod = "expr"
     vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
     vim.opt.foldenable = false
