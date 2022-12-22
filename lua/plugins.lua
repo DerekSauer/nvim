@@ -21,11 +21,10 @@ if packer_ok then
                 config = function() require("impatient") end,
             })
 
-            -- Catppuccin colorscheme
-            -- https://github.com/catppuccin/nvim
+            -- Kanagawa colorscheme
+            -- https://github.com/rebelot/kanagawa.nvim
             use({
-                "catppuccin/nvim",
-                config = function() require("plugin-config/colorscheme") end,
+                "rebelot/kanagawa.nvim",
             })
 
             -- Dressing, improve default UI
