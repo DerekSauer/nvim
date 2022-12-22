@@ -34,6 +34,13 @@ if kanagawa_ok then
         NavicIconsTypeParameter = { fg = default_colors.springBlue },
         NavicText = { fg = default_colors.fujiWhite },
         NavicSeparator = { fg = default_colors.fujiWhite },
+
+        IndentBlanklineIndent1 = { fg = default_colors.waveAqua1 },
+        IndentBlanklineIndent2 = { fg = default_colors.surimiOrange },
+        IndentBlanklineIndent3 = { fg = default_colors.dragonBlue },
+        IndentBlanklineIndent4 = { fg = default_colors.waveRed },
+        IndentBlanklineIndent5 = { fg = default_colors.springViolet1 },
+        IndentBlanklineIndent6 = { fg = default_colors.springGreen },
     }
 
     local config = {
