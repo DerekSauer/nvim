@@ -35,13 +35,25 @@ if kanagawa_ok then
         NavicText = { fg = default_colors.fujiWhite },
         NavicSeparator = { fg = default_colors.fujiWhite },
 
+        -- Indent Blankline rainbow colors
         IndentBlanklineIndent1 = { fg = default_colors.waveAqua1 },
         IndentBlanklineIndent2 = { fg = default_colors.surimiOrange },
         IndentBlanklineIndent3 = { fg = default_colors.dragonBlue },
         IndentBlanklineIndent4 = { fg = default_colors.waveRed },
         IndentBlanklineIndent5 = { fg = default_colors.springViolet1 },
         IndentBlanklineIndent6 = { fg = default_colors.springGreen },
+        IndentBlanklineIndent7 = { fg = default_colors.springBlue },
 
+        -- Treesitter rainbow paranthesis
+        rainbowcol1 = { fg = default_colors.springBlue },
+        rainbowcol2 = { fg = default_colors.springGreen },
+        rainbowcol3 = { fg = default_colors.springViolet1 },
+        rainbowcol4 = { fg = default_colors.waveRed },
+        rainbowcol5 = { fg = default_colors.dragonBlue },
+        rainbowcol6 = { fg = default_colors.surimiOrange },
+        rainbowcol7 = { fg = default_colors.waveAqua1 },
+
+        -- Lsp Inlay Hints
         LspInlayHint = { fg = default_colors.fujiGray, bg = default_colors.sumiInk1 },
     }
 
