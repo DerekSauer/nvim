@@ -54,7 +54,7 @@ if kanagawa_ok then
         rainbowcol7 = { fg = default_colors.waveAqua1 },
 
         -- Lsp Inlay Hints
-        LspInlayHint = { fg = default_colors.fujiGray, bg = default_colors.sumiInk1 },
+        LspInlayHint = { fg = default_colors.dragonBlue, bg = default_colors.sumiInk1 },
     }
 
     local config = {
