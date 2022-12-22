@@ -3,7 +3,7 @@ local M = {}
 function M.setup(lsp_zero)
     local globals = require("globals")
 
-    local nvim_cmp_config = {
+    local config = {
         completion = {
             keyword_length = 1,
         },
@@ -67,8 +67,9 @@ function M.setup(lsp_zero)
         end,
     }
 
-    -- Setup nvim-cmp by merging our config with it's defaults
-    lsp_zero.setup_nvim_cmp(lsp_zero.defaults.cmp_config(nvim_cmp_config))
+    -- Merge lsp-zero's cmp settings with our own and hand them off to nvim-cmp
+    local cmp_ok, cmp = pcall(require, "cmp")
+    if cmp_ok then cmp.setup(lsp_zero.defaults.cmp_config(config)) end
 
     -- Create snippet navigation keymaps
     vim.keymap.set(

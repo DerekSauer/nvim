@@ -18,9 +18,6 @@ if lsp_ok then
     require("plugin-config/lsp-config/rust_analyzer").setup(lsp_zero)
     require("plugin-config/lsp-config/wgsl_analyzer").setup(lsp_zero)
 
-    -- Setup nvim-cmp
-    require("plugin-config/lsp-config/cmp").setup(lsp_zero)
-
     -- Setup navic which shows code context in the winbar
     local navic_ok, navic = pcall(require, "nvim-navic")
     if navic_ok then navic.setup({ depth_limit = 6, highlight = true }) end
@@ -56,6 +53,9 @@ if lsp_ok then
 
     -- Setup lsp-zero once all the preamble is complete
     lsp_zero.setup()
+
+    -- Extend lsp-zero's nvim-cmp settings with our own
+    require("plugin-config/lsp-config/cmp").setup(lsp_zero)
 
     -- Configure nvim's diagnostics interface
     -- Must be called after lsp-zero's setup to override its settings
