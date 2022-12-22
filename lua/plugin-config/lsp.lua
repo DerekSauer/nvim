@@ -8,6 +8,11 @@ if lsp_ok then
     lsp_zero.preset("recommended")
     lsp_zero.nvim_workspace()
 
+    -- We'll create our own keymaps based on LSP capabilities
+    lsp_zero.set_preferences({
+        set_lsp_keymaps = false,
+    })
+
     -- Setup language servers
     require("plugin-config/lsp-config/sumneko_lua").setup(lsp_zero)
     require("plugin-config/lsp-config/rust_analyzer").setup(lsp_zero)
@@ -44,6 +49,9 @@ if lsp_ok then
         if client.supports_method("textDocument/inlayHint") and lsp_inlay_ok then
             lsp_inlay.on_attach(client, bufnr)
         end
+
+        -- Add keymaps to the buffer for LSP features supported by this client
+        require("plugin-config/lsp-config/keymaps").setup(client, bufnr)
     end)
 
     -- Setup lsp-zero once all the preamble is complete
@@ -55,9 +63,6 @@ if lsp_ok then
 
     -- Setup null-ls
     require("plugin-config/lsp-config/null_ls").setup(lsp_zero)
-
-    -- Set Lsp key mappings
-    require("plugin-config/lsp-config/keymaps").setup()
 else
     vim.notify("Failed to load plugin: lsp-zero.", vim.log.levels.ERROR)
     lsp_zero = nil
