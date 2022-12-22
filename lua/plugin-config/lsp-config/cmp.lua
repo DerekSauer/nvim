@@ -39,7 +39,7 @@ function M.setup(lsp_zero)
         },
 
         -- Modify completion menu to show an icon (using 'lspkind') for the completion
-        -- type, followed by an abbreviation and then menu item
+        -- type, followed by an abbreviation and then menu items
         formatting = {
             fields = { "kind", "abbr", "menu" },
             format = function(entry, vim_item)
@@ -69,6 +69,21 @@ function M.setup(lsp_zero)
 
     -- Setup nvim-cmp by merging our config with it's defaults
     lsp_zero.setup_nvim_cmp(lsp_zero.defaults.cmp_config(nvim_cmp_config))
+
+    -- Create snippet navigation keymaps
+    vim.keymap.set(
+        { "s", "n" },
+        "]n",
+        function() require("luasnip").jump(1) end,
+        { silent = true, desc = "Next snippet placeholder" }
+    )
+
+    vim.keymap.set(
+        { "s", "n" },
+        "[n",
+        function() require("luasnip").jump(-1) end,
+        { silent = true, desc = "Next snippet placeholder" }
+    )
 end
 
 return M
