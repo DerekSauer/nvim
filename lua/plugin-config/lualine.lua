@@ -92,12 +92,6 @@ if lualine_ok then
         return ret
     end
 
-    -- Don't show file format if its unix
-    local function fileformat_override()
-        local ret, _ = vim.bo.fileformat:gsub("^unix$", "")
-        return ret
-    end
-
     -- Output navic code location string if it is available
     local navic_ok, navic = pcall(require, "nvim-navic")
     local function navic_string()
@@ -107,9 +101,6 @@ if lualine_ok then
             return ""
         end
     end
-
-    -- Output trimmed buffer name
-    local function buffer_name() return require("globals").trimmed_buffer_name(0) end
 
     -- Display an icon if a tree-sitter parser is available for this buffer.
     local ts_loaded, treesitter = pcall(require, "nvim-treesitter.parsers")
@@ -124,24 +115,29 @@ if lualine_ok then
     local config = {
         options = {
             theme = "kanagawa",
-            disabled_filetypes = { "neo-tree", "telescope", "mason" },
+            disabled_filetypes = { "telescope", "mason" },
         },
         sections = {
             lualine_a = { "mode" },
             lualine_b = { "branch", "diff", "diagnostics" },
             lualine_c = { treesitter_status, "filename" },
             lualine_x = { lsp_progress, lsp_clients },
-            lualine_y = { encoding_override, fileformat_override, "filetype", "progress" },
+            lualine_y = { encoding_override, "fileformat", "filetype", "progress" },
             lualine_z = { "location" },
         },
 
         winbar = {
             lualine_c = { navic_string },
-            lualine_x = { buffer_name },
+            lualine_y = { { "filename", path = 1, newfile_status = true } },
         },
         inactive_winbar = {
-            lualine_x = { buffer_name },
-        }, -- TODO: Add trimmed file path
+            lualine_y = { { "filename", path = 1, newfile_status = true } },
+        },
+
+        extensions = {
+            "neo-tree",
+            "quickfix",
+        },
     }
 
     lualine.setup(config)
