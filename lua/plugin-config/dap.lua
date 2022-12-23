@@ -7,12 +7,12 @@ if dap_ok then
     -- Setup keymaps
     require("plugin-config/dap-config/keymaps").setup(dap)
 
-    -- Setup Codelldb debug adapter for C, CPP, and Rust
-    require("plugin-config/dap-config/codelldb").setup(dap)
+    -- Setup the lldb debug adapter for C, CPP, and Rust
+    require("plugin-config/dap-config/lldb").setup(dap)
 
     -- Map adapters to configurations for load_launchjs()
     local adapter_map = {
-        codelldb = { "c", "cpp", "rust" },
+        lldb = { "c", "cpp", "rust" },
     }
 
     -- Parse a ".vscode/launch.js" file if one is present in the workspace

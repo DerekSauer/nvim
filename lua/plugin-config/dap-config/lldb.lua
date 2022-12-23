@@ -2,16 +2,16 @@ local M = {}
 
 function M.setup(dap)
     -- Get the path to `codelldb` installed by Mason.nvim
-    local codelldb_path = require("mason-registry").get_package("codelldb"):get_install_path()
+    local lldb_path = require("mason-registry").get_package("codelldb"):get_install_path()
         .. "/extension"
-    local codelldb_bin = codelldb_path .. "/adapter/codelldb"
+    local lldb_bin = lldb_path .. "/adapter/codelldb"
 
     -- Configure the LLDB adapter
-    dap.adapters.codelldb = {
+    dap.adapters.lldb = {
         type = "server",
         port = "${port}",
         executable = {
-            command = codelldb_bin,
+            command = lldb_bin,
             args = { "--port", "${port}" },
         },
         enrich_config = function(config, on_config)
