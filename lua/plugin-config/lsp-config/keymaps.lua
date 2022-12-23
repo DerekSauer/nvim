@@ -145,17 +145,6 @@ function M.setup(client, bufnr)
         has_mappings = true
     end
 
-    local lsp_inlay_ok, lsp_inlay = pcall(require, "lsp-inlayhints")
-    if lsp_inlay_ok and client.supports_method("textDocument/inlayHint") then
-        vim.keymap.set(
-            "n",
-            "<leader>lh",
-            function() lsp_inlay.toggle() end,
-            { silent = true, buffer = bufnr, desc = "Toggle inlay hints" }
-        )
-        has_mappings = true
-    end
-
     -- Add to which-key categories
     local whickey_loaded, whichkey = pcall(require, "which-key")
     if whickey_loaded and has_mappings then

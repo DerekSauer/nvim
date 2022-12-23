@@ -150,7 +150,6 @@ if packer_ok then
                         "jose-elias-alvarez/null-ls.nvim",
                         requires = "nvim-lua/plenary.nvim",
                     },
-                    { "lvimuser/lsp-inlayhints.nvim" },
 
                     -- Autocompletion
                     { "hrsh7th/nvim-cmp" },
