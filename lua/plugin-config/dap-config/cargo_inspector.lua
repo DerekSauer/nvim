@@ -1,5 +1,7 @@
 local M = {}
 
+local globals = require("globals")
+
 -- After extracting cargo's compiler metadata with the cargo inspector
 -- parse it to find the binary to debug
 local function parse_cargo_metadata(cargo_metadata)
@@ -50,7 +52,7 @@ function M.inspect(config)
         height = window_height,
         col = vim.api.nvim_get_option("columns") - window_width - 1,
         row = vim.api.nvim_get_option("lines") - window_height - 1,
-        border = "rounded",
+        border = globals.border_style,
         style = "minimal",
     })
 
