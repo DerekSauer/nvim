@@ -21,6 +21,13 @@ if packer_ok then
                 config = function() require("impatient") end,
             })
 
+            -- Sync system clipboard with Neovim
+            -- https://github.com/EtiamNullam/deferred-clipboard.nvim
+            use({
+                "EtiamNullam/deferred-clipboard.nvim",
+                config = function() require("deferred-clipboard").setup() end,
+            })
+
             -- Kanagawa colorscheme
             -- https://github.com/rebelot/kanagawa.nvim
             use({
