@@ -1,57 +1,25 @@
 local lualine_ok, lualine = pcall(require, "lualine")
+local navic_ok, navic = pcall(require, "nvim-navic")
+local ts_loaded, treesitter = pcall(require, "nvim-treesitter.parsers")
 
 if lualine_ok then
-    -- Get a list of registered null-ls providers for a filetype
-    -- and the methods (formatting, diagnostics, etc...) they provide for that filetype
-    -- https://github.com/AstroNvim/AstroNvim/blob/176265812355a53559497c0f0ada7ab62a2d1ba8/lua/core/utils/init.lua#L407
-    local sources_ok, sources = pcall(require, "null-ls.sources")
-    local function get_null_ls_providers(filetype)
-        local registered = {}
-
-        if sources_ok then
-            -- Iterate through each source registered for this filetype
-            for _, source in ipairs(sources.get_available(filetype)) do
-                -- Associate a source name with the methods it provides (formatting, diagnostics, etc...)
-                for method in pairs(source.methods) do
-                    -- Don't repeat an existing method
-                    registered[method] = registered[method] or {}
-                    table.insert(registered[method], source.name)
-                end
-            end
-        end
-
-        return registered
-    end
-
-    -- Get the null-ls source for a given null-ls method
-    -- https://github.com/AstroNvim/AstroNvim/blob/176265812355a53559497c0f0ada7ab62a2d1ba8/lua/core/utils/init.lua#L429
-    local methods_ok, methods = pcall(require, "null-ls.methods")
-    local function get_null_ls_sources(filetype, method)
-        if methods_ok then
-            return get_null_ls_providers(filetype)[methods.internal[method]]
-        else
-            return {}
-        end
-    end
-
-    -- Get the names of LSP clients attached to this buffer
-    -- https://github.com/AstroNvim/AstroNvim/blob/176265812355a53559497c0f0ada7ab62a2d1ba8/lua/core/utils/status.lua#L519
+    ---Get the names of LSP clients attached to this buffer
+    ---@return string #Returns a string with a comma separated list of LSP client names.
     local function lsp_clients()
         local buf_client_names = {}
 
         -- For each client attached to the current buffer
         for _, client in pairs(vim.lsp.get_active_clients({ bufnr = 0 })) do
-            -- Null-ls clients need special handling
+            -- Null-ls clients will simply display "null-ls", we need to dig deeper for the
+            -- "server" null-ls is using internally
             if client.name == "null-ls" then
-                local null_ls_sources = {}
-
-                -- Add matching formatting and diagnostics sources; completion is handled by regular LSP
-                for _, type in ipairs({ "FORMATTING", "DIAGNOSTICS" }) do
-                    for _, source in ipairs(get_null_ls_sources(vim.bo.filetype, type)) do
-                        null_ls_sources[source] = true
+                -- Iterate through the null-ls sources for this buffer's filetype
+                for _, source in pairs(require("null-ls.sources").get_available(vim.bo.filetype)) do
+                    -- Add add the source to the client name list if it is not already there
+                    if buf_client_names[source.name] == nil then
+                        table.insert(buf_client_names, source.name)
                     end
                 end
-                vim.list_extend(buf_client_names, vim.tbl_keys(null_ls_sources))
             else
                 table.insert(buf_client_names, client.name)
             end
@@ -60,7 +28,9 @@ if lualine_ok then
         return table.concat(buf_client_names, ", ")
     end
 
-    -- Report processing progress of the LSP
+    ---Report the processing progress of busy LSPs attached to the buffer.
+    ---@return string #Returns a formatted string with the name and completion
+    ---percentage (when available) of the operation the LSP is performing.
     local function lsp_progress()
         -- Grab the first LSP message off the queue
         local lsp_message = vim.lsp.util.get_progress_messages()[1]
@@ -86,14 +56,15 @@ if lualine_ok then
         end
     end
 
-    -- Don't show encoding if its utf-8
+    ---Get the file encoding of the current buffer, ignoring UTF-8.
+    ---@return string #Returns the file encoding of the current buffer or an empty string if the file is UTF-8.
     local function encoding_override()
         local ret, _ = (vim.bo.fenc or vim.go.enc):gsub("^utf%-8$", "")
         return ret
     end
 
-    -- Output navic code location string if it is available
-    local navic_ok, navic = pcall(require, "nvim-navic")
+    ---Output Navic code location string if available.
+    ---@return string #Returns the Navic string or an empty string if Navic is unavailable.
     local function navic_string()
         if navic_ok then
             return navic.is_available() and navic.get_location() or ""
@@ -102,8 +73,8 @@ if lualine_ok then
         end
     end
 
-    -- Display an icon if a tree-sitter parser is available for this buffer.
-    local ts_loaded, treesitter = pcall(require, "nvim-treesitter.parsers")
+    ---Get an icon if a tree-sitter parser is available for this buffer.
+    ---@return string #Returns an icon if a parser is available for this buffer or an empty string.
     local function treesitter_status()
         if ts_loaded then
             return treesitter.has_parser() and "" or ""
