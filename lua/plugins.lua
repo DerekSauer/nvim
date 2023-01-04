@@ -83,10 +83,6 @@ if packer_ok then
                 "nvim-treesitter/nvim-treesitter",
                 run = function() vim.cmd("TSUpdate") end,
                 requires = {
-                    -- Rainbow parens highlighting
-                    -- https://github.com/p00f/nvim-ts-rainbow
-                    "p00f/nvim-ts-rainbow",
-
                     -- Autoclose HTML,CSS tags
                     -- https://github.com/windwp/nvim-ts-autotag
                     "windwp/nvim-ts-autotag",

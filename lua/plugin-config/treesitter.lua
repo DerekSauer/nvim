@@ -16,13 +16,6 @@ if treesitter_ok then
             enable = true,
         },
 
-        -- Enable rainbox parens
-        rainbow = {
-            enable = true,
-            extended_mode = true,
-            max_file_lines = 1000,
-        },
-
         -- Enable auto-closing HTMl tags
         autotag = {
             enable = true,
@@ -32,20 +25,6 @@ if treesitter_ok then
         endwise = {
             enable = true,
         },
-    })
-
-    -- Autocommand to disable TS-rainbow prior to saving the buffer
-    -- I automatically format buffers on save and this frequently confuses TS-rainbow
-    vim.api.nvim_create_autocmd({ "BufWritePre" }, {
-        pattern = { "*" },
-        command = "TSDisable rainbow",
-    })
-
-    -- Autocommand to reenable TS-rainbow after writing (and formatting) the buffer
-    -- This will reset any misplaced paren colors
-    vim.api.nvim_create_autocmd({ "BufWritePost" }, {
-        pattern = { "*" },
-        command = "TSEnable rainbow",
     })
 
     vim.opt.foldmethod = "expr"
