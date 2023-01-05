@@ -29,19 +29,6 @@ return {
         config = function() require("plugin-config/telescope") end,
     },
 
-    -- Neo-tree file drawer
-    -- https://github.com/nvim-neo-tree/neo-tree.nvim
-    {
-        "nvim-neo-tree/neo-tree.nvim",
-        branch = "v2.x",
-        dependencies = {
-            "nvim-lua/plenary.nvim",
-            "nvim-tree/nvim-web-devicons",
-            "MunifTanjim/nui.nvim",
-        },
-        config = function() require("plugin-config/neo-tree") end,
-    },
-
     -- Keybinding hint popup window
     -- https://github.com/folke/which-key.nvim
     {
