@@ -50,6 +50,7 @@ function M.setup()
 
     -- Create autocommand to show diagnostics window when hovering over an issue
     vim.api.nvim_create_autocmd({ "CursorHold" }, {
+        group = require("globals").user_au_group,
         pattern = { "*" },
         callback = open_diag_float,
     })

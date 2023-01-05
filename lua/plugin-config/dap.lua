@@ -20,6 +20,7 @@ if dap_ok then
 
     -- Autocommand to reparse the launch.json file if it changes
     vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+        group = require("globals").user_au_group,
         pattern = { ".vscode/launch.json" },
         callback = function() require("dap.ext.vscode").load_launchjs(nil, adapter_map) end,
     })

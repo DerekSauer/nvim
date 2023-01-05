@@ -15,6 +15,7 @@ function M.setup(lsp_zero)
 
     -- Autocommand to reparse the launch.json file if it changes
     vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
+        group = require("globals").user_au_group,
         pattern = { "*.wgsl" },
         command = "set filetype=wgsl",
     })
