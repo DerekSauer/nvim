@@ -1,4 +1,6 @@
 local M = {
+    -- Fast and easy to configure neovim statusline plugin
+    -- https://github.com/nvim-lualine/lualine.nvim
     "nvim-lualine/lualine.nvim",
     dependencies = { "nvim-tree/nvim-web-devicons" },
     event = "VeryLazy",
@@ -118,50 +120,42 @@ local function combined_location()
 end
 
 function M.config()
-    local lualine_ok, lualine = pcall(require, "lualine")
+    local lualine = require("lualine")
 
-    if lualine_ok then
-        local config = {
-            options = {
-                theme = "kanagawa",
-                disabled_filetypes = { "telescope", "mason", "lazy" },
+    local config = {
+        options = {
+            theme = "kanagawa",
+            disabled_filetypes = { "telescope", "mason", "lazy" },
+        },
+        sections = {
+            lualine_a = { "mode" },
+            lualine_b = {
+                { require("lazy.status").updates, cond = require("lazy.status").has_updates },
+                "branch",
+                "diff",
+                "diagnostics",
             },
-            sections = {
-                lualine_a = { "mode" },
-                lualine_b = {
-                    { require("lazy.status").updates, cond = require("lazy.status").has_updates },
-                    "branch",
-                    "diff",
-                    "diagnostics",
-                },
-                lualine_c = { treesitter_status, "filename" },
-                lualine_x = { lsp_progress, lsp_clients },
-                lualine_y = { encoding_override, "fileformat", "filetype", time },
-                lualine_z = { combined_location },
-            },
+            lualine_c = { treesitter_status, "filename" },
+            lualine_x = { lsp_progress, lsp_clients },
+            lualine_y = { encoding_override, "fileformat", "filetype", time },
+            lualine_z = { combined_location },
+        },
 
-            winbar = {
-                lualine_c = { navic_string },
-                lualine_y = { { "filename", path = 1, newfile_status = true } },
-            },
-            inactive_winbar = {
-                lualine_y = { { "filename", path = 1, newfile_status = true } },
-            },
+        winbar = {
+            lualine_c = { navic_string },
+            lualine_y = { { "filename", path = 1, newfile_status = true } },
+        },
+        inactive_winbar = {
+            lualine_y = { { "filename", path = 1, newfile_status = true } },
+        },
 
-            extensions = {
-                "neo-tree",
-                "quickfix",
-            },
-        }
+        extensions = {
+            "neo-tree",
+            "quickfix",
+        },
+    }
 
-        lualine.setup(config)
-    else
-        vim.notify(
-            string.format("Failed to load plugin: lualine.\nError message: %s", lualine),
-            vim.log.levels.ERROR
-        )
-        lualine = nil
-    end
+    lualine.setup(config)
 end
 
 return M
