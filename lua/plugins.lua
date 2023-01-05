@@ -173,13 +173,18 @@ local plugins = {
 }
 
 local config = {
+    checker = {
+        enabled = true,
+        notify = false,
+        frequency = 14400,
+    },
     install = {
         colorscheme = { "kanagawa" },
     },
     performance = {
         cache = {
             enabled = true,
-            -- disable_events = {},
+            disable_events = { "VimEnter", "BufReadPre" },
         },
         rtp = {
             disabled_plugins = {
@@ -193,6 +198,9 @@ local config = {
                 "zipPlugin",
             },
         },
+    },
+    ui = {
+        border = require("globals").border_style,
     },
 }
 

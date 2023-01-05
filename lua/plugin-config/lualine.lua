@@ -90,7 +90,12 @@ if lualine_ok then
         },
         sections = {
             lualine_a = { "mode" },
-            lualine_b = { "branch", "diff", "diagnostics" },
+            lualine_b = {
+                { require("lazy.status").updates, cond = require("lazy.status").has_updates },
+                "branch",
+                "diff",
+                "diagnostics",
+            },
             lualine_c = { treesitter_status, "filename" },
             lualine_x = { lsp_progress, lsp_clients },
             lualine_y = { encoding_override, "fileformat", "filetype", "progress" },
