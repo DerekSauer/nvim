@@ -1,14 +1,5 @@
 -- Configure list of plugins and their dependencies
 return {
-    -- Kanagawa colorscheme
-    -- https://github.com/rebelot/kanagawa.nvim
-    {
-        "rebelot/kanagawa.nvim",
-        lazy = false,
-        priority = 1000,
-        config = function() require("colorscheme") end,
-    },
-
     -- Sync system clipboard with Neovim
     -- https://github.com/EtiamNullam/deferred-clipboard.nvim
     {
