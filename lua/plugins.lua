@@ -1,8 +1,5 @@
--- Install Lazy.nvim if needed
-require("bootstrap").setup()
-
 -- Configure list of plugins and their dependencies
-local plugins = {
+return {
     -- Kanagawa colorscheme
     -- https://github.com/rebelot/kanagawa.nvim
     {
@@ -24,14 +21,6 @@ local plugins = {
     {
         "stevearc/dressing.nvim",
         config = function() require("plugin-config/dressing") end,
-    },
-
-    -- Status line
-    -- https://github.com/nvim-lualine/lualine.nvim
-    {
-        "nvim-lualine/lualine.nvim",
-        dependencies = { "nvim-tree/nvim-web-devicons" },
-        config = function() require("plugin-config/lualine") end,
     },
 
     -- Telescope fuzzy finder
@@ -171,43 +160,3 @@ local plugins = {
         config = function() require("plugin-config/dap") end,
     },
 }
-
-local config = {
-    checker = {
-        enabled = true,
-        notify = false,
-        frequency = 14400,
-    },
-    install = {
-        colorscheme = { "kanagawa" },
-    },
-    performance = {
-        cache = {
-            enabled = true,
-            disable_events = { "VimEnter", "BufReadPre" },
-        },
-        rtp = {
-            disabled_plugins = {
-                "gzip",
-                "matchit",
-                "matchparen",
-                "netrwPlugin",
-                "tarPlugin",
-                "tohtml",
-                "tutor",
-                "zipPlugin",
-            },
-        },
-    },
-    ui = {
-        border = require("globals").border_style,
-    },
-}
-
-local lazy_ok, lazy = pcall(require, "lazy")
-if lazy_ok then
-    lazy.setup(plugins, config)
-else
-    vim.notify("Failed to load Lazy.nvim plugin manager.", vim.log.levels.ERROR)
-    lazy = nil
-end

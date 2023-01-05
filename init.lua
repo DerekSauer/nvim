@@ -41,6 +41,9 @@ vim.opt.swapfile = false
 vim.opt.writebackup = false
 vim.opt.winbar = " "
 
+-- Use the new zero command line height when available
+if vim.fn.has("nvim-0.8") == 1 then vim.opt.cmdheight = 0 end
+
 -- Use ripgrep if available
 if vim.fn.executable("rg") == 1 then
     vim.opt.grepprg = "rg --vimgrep --no-heading --smart-case --hidden"
@@ -68,6 +71,55 @@ vim.g.loaded_node_provider = 0
 local lsp_log = require("vim.lsp.log")
 lsp_log.set_level(lsp_log.levels.ERROR)
 
-require("plugins")
-require("globals")
+-- Setup my own auto commands
+require("functions").setup_autocmds()
+
+-- Bootstrap Lazy.nvim if it is not installed
+require("bootstrap").setup()
+
+-- Setup Lazy.nvim to manage my plugins
+local lazy_ok, lazy = pcall(require, "lazy")
+if lazy_ok then
+    local config = {
+        checker = {
+            enabled = true,
+            notify = false,
+            frequency = 14400,
+        },
+        install = {
+            colorscheme = { "kanagawa" },
+        },
+        performance = {
+            cache = {
+                enabled = true,
+                disable_events = { "VimEnter", "BufReadPre" },
+            },
+            rtp = {
+                disabled_plugins = {
+                    "gzip",
+                    "matchit",
+                    "matchparen",
+                    "netrwPlugin",
+                    "tarPlugin",
+                    "tohtml",
+                    "tutor",
+                    "zipPlugin",
+                },
+            },
+        },
+        ui = {
+            border = require("globals").border_style,
+        },
+    }
+
+    lazy.setup("plugins", config)
+else
+    vim.notify(
+        string.format("Failed to load `Lazy.nvim` plugin manager.\nError message: %s", lazy),
+        vim.log.levels.ERROR
+    )
+    lazy = nil
+end
+
+-- Load key mappings not handled by Which-key
 require("mappings")
