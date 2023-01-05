@@ -42,23 +42,6 @@ return {
         config = function() require("plugin-config/neo-tree") end,
     },
 
-    -- Treesitter configurations and abstraction layer
-    -- https://github.com/nvim-treesitter/nvim-treesitter
-    {
-        "nvim-treesitter/nvim-treesitter",
-        build = ":TSUpdate",
-        dependencies = {
-            -- Autoclose HTML,CSS tags
-            -- https://github.com/windwp/nvim-ts-autotag
-            "windwp/nvim-ts-autotag",
-
-            -- Automatically add closing operators to textual languages (Lua, Ruby, etc...)
-            -- https://github.com/RRethy/nvim-treesitter-endwise
-            "RRethy/nvim-treesitter-endwise",
-        },
-        config = function() require("plugin-config/treesitter") end,
-    },
-
     -- Keybinding hint popup window
     -- https://github.com/folke/which-key.nvim
     {
