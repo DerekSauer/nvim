@@ -81,11 +81,16 @@ require("bootstrap").setup()
 local lazy_ok, lazy = pcall(require, "lazy")
 if lazy_ok then
     local config = {
+        change_detection = {
+            enabled = false,
+            notify = false,
+        },
         checker = {
             enabled = true,
             notify = false,
             frequency = 14400,
         },
+
         install = {
             colorscheme = { "kanagawa" },
         },
