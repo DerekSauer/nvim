@@ -117,7 +117,6 @@ return {
             { "rafamadriz/friendly-snippets" },
 
             -- Code context
-            { "SmiteshP/nvim-navic" },
         },
         config = function() require("plugin-config/lsp") end,
     },
