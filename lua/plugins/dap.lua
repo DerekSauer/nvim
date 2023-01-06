@@ -5,7 +5,6 @@ local M = {
     dependencies = {
         "rcarriga/nvim-dap-ui",
         "theHamsta/nvim-dap-virtual-text",
-        "nvim-treesitter/nvim-treesitter",
     },
 }
 
