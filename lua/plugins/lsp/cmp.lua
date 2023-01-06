@@ -68,8 +68,7 @@ function M.setup(lsp_zero)
     }
 
     -- Merge lsp-zero's cmp settings with our own and hand them off to nvim-cmp
-    local cmp_ok, cmp = pcall(require, "cmp")
-    if cmp_ok then cmp.setup(lsp_zero.defaults.cmp_config(config)) end
+    require("cmp").setup(lsp_zero.defaults.cmp_config(config))
 
     -- Create snippet navigation keymaps
     vim.keymap.set(
@@ -83,7 +82,7 @@ function M.setup(lsp_zero)
         { "s", "n" },
         "[n",
         function() require("luasnip").jump(-1) end,
-        { silent = true, desc = "Next snippet placeholder" }
+        { silent = true, desc = "Previous snippet placeholder" }
     )
 end
 

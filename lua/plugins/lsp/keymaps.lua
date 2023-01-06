@@ -146,8 +146,8 @@ function M.setup(client, bufnr)
     end
 
     -- Add to which-key categories
-    local whickey_loaded, whichkey = pcall(require, "which-key")
-    if whickey_loaded and has_mappings then
+    if has_mappings then
+        local whichkey = require("which-key")
         whichkey.register({
             l = { name = "LSP" },
         }, { prefix = "<leader>", buffer = bufnr })
