@@ -1,14 +1,25 @@
-local dap_ok, dap = pcall(require, "dap")
+local M = {
+    -- Debug adapter
+    -- https://github.com/mfussenegger/nvim-dap
+    "mfussenegger/nvim-dap",
+    dependencies = {
+        "rcarriga/nvim-dap-ui",
+        "theHamsta/nvim-dap-virtual-text",
+        "nvim-treesitter/nvim-treesitter",
+    },
+}
 
-if dap_ok then
-    -- Setup Dap-UI
-    require("plugin-config/dap-config/dapui").setup(dap)
+function M.config()
+    local dap = require("dap")
+
+    -- Setup dap-ui
+    require("plugins/dap/dapui").setup(dap)
 
     -- Setup keymaps
-    require("plugin-config/dap-config/keymaps").setup(dap)
+    require("plugins/dap/keymaps").setup(dap)
 
     -- Setup the lldb debug adapter for C, CPP, and Rust
-    require("plugin-config/dap-config/lldb").setup(dap)
+    require("plugins/dap/lldb").setup(dap)
 
     -- Map adapters to configurations for load_launchjs()
     local adapter_map = {
@@ -24,6 +35,6 @@ if dap_ok then
         pattern = { ".vscode/launch.json" },
         callback = function() require("dap.ext.vscode").load_launchjs(nil, adapter_map) end,
     })
-else
-    vim.notify("Failed to load plugin: dap", vim.log.levels.ERROR)
 end
+
+return M

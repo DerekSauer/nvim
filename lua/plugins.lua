@@ -34,16 +34,4 @@ return {
         },
         config = function() require("plugin-config/lsp") end,
     },
-
-    -- Debug adapter
-    -- https://github.com/mfussenegger/nvim-dap
-    {
-        "mfussenegger/nvim-dap",
-        dependencies = {
-            "rcarriga/nvim-dap-ui",
-            "theHamsta/nvim-dap-virtual-text",
-            "nvim-treesitter/nvim-treesitter",
-        },
-        config = function() require("plugin-config/dap") end,
-    },
 }
