@@ -7,20 +7,6 @@ return {
         config = function() require("deferred-clipboard").setup() end,
     },
 
-    -- Telescope fuzzy finder
-    -- https://github.com/nvim-telescope/telescope.nvim
-    {
-        "nvim-telescope/telescope.nvim",
-        dependencies = {
-            "nvim-lua/plenary.nvim",
-            "nvim-telescope/telescope-frecency.nvim",
-            "nvim-telescope/telescope-project.nvim",
-            "nvim-telescope/telescope-dap.nvim",
-            "nvim-tree/nvim-web-devicons",
-            "kkharji/sqlite.lua",
-        },
-        config = function() require("plugin-config/telescope") end,
-    },
 
     -- Lsp Setup and completions
     -- https://github.com/VonHeikemen/lsp-zero.nvim

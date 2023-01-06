@@ -1,11 +1,26 @@
-local telescope_ok, telescope = pcall(require, "telescope")
+local M = {
+    -- Telescope fuzzy finder
+    -- https://github.com/nvim-telescope/telescope.nvim
+    "nvim-telescope/telescope.nvim",
+    dependencies = {
+        "nvim-lua/plenary.nvim",
+        "nvim-telescope/telescope-frecency.nvim",
+        "nvim-telescope/telescope-project.nvim",
+        "nvim-telescope/telescope-dap.nvim",
+        "nvim-tree/nvim-web-devicons",
+        "kkharji/sqlite.lua",
+    },
+    keys = { "<leader>f" },
+}
 
-if telescope_ok then
+function M.config()
+    local telescope = require("telescope")
+
     local config = {
         defaults = {
             layout_strategy = "flex",
             border = true,
-            borderchars = { "═", "│", "═", "│", "╒", "╕", "╛", "╘" },
+            borderchars = require("globals").telescope_border_style,
         },
 
         extensions = {},
@@ -13,13 +28,10 @@ if telescope_ok then
 
     telescope.setup(config)
     telescope.load_extension("project")
+    telescope.load_extension("dap")
 
     -- Having trouble making the sqlite3 dev libs available for this extension on windows
-    -- load it only on *nix for now
     if vim.fn.has("win32") == 0 then telescope.load_extension("frecency") end
-
-    local dap_loaded, _ = pcall(require, "dap")
-    if dap_loaded then telescope.load_extension("dap") end
 
     -- Key mappings
     vim.keymap.set(
@@ -85,13 +97,9 @@ if telescope_ok then
     )
 
     -- Add to which-key categories
-    local whickey_loaded, whichkey = pcall(require, "which-key")
-    if whickey_loaded then
-        whichkey.register({
-            f = { name = "Finder" },
-        }, { prefix = "<leader>" })
-    end
-else
-    vim.notify("Failed to load plugin: telescope.", vim.log.levels.ERROR)
-    telescope = nil
+    require("which-key").register({
+        f = { name = "Finder" },
+    }, { prefix = "<leader>" })
 end
+
+return M
