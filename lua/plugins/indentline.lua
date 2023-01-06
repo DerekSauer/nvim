@@ -2,7 +2,7 @@ local M = {
     -- Indent guides
     -- https://github.com/lukas-reineke/indent-blankline.nvim
     "lukas-reineke/indent-blankline.nvim",
-    event = "BufEnter",
+    event = "VeryLazy",
 }
 
 function M.config()

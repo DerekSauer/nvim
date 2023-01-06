@@ -3,6 +3,7 @@ local M = {
     -- https://github.com/nvim-treesitter/nvim-treesitter
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
+    event = "BufEnter",
     dependencies = {
         -- Autoclose HTML,CSS tags
         -- https://github.com/windwp/nvim-ts-autotag

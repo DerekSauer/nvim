@@ -2,6 +2,7 @@ local M = {
     -- Automatic pair (parens, brackets, etc...) insertion
     -- https://github.com/windwp/nvim-autopairs
     "windwp/nvim-autopairs",
+    event = "BufEnter",
     dependencies = { "nvim-cmp" },
 }
 
