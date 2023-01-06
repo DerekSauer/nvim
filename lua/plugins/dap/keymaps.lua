@@ -90,12 +90,9 @@ function M.setup(dap)
         { silent = true, desc = "Toggle REPL" }
     )
 
-    local whichkey_ok, whichkey = pcall(require, "which-key")
-    if whichkey_ok then
-        whichkey.register({
-            d = { name = "Debugger" },
-        }, { prefix = "<leader>" })
-    end
+    require("which-key").register({
+        d = { name = "Debugger" },
+    }, { prefix = "<leader>" })
 end
 
 return M

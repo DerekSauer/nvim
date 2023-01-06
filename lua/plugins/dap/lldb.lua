@@ -18,7 +18,7 @@ function M.setup(dap)
             -- If the configuration(s) in `launch.json` contains a `cargo` section
             -- send the configuration off to the cargo_inspector.
             if config["cargo"] ~= nil then
-                on_config(require("plugin-config/dap-config/cargo_inspector").inspect(config))
+                on_config(require("plugins/dap/cargo_inspector").inspect(config))
             end
         end,
     }
