@@ -51,13 +51,6 @@ return {
         config = function() require("plugin-config/comment") end,
     },
 
-    -- Easy code annotations.
-    -- https://github.com/danymat/neogen/
-    {
-        "danymat/neogen",
-        dependencies = "nvim-treesitter/nvim-treesitter",
-        config = function() require("plugin-config/neogen") end,
-    },
 
     -- Automatic pair (parens, brackets, etc...) insertion
     -- https://github.com/windwp/nvim-autopairs
