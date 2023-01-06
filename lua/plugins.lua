@@ -37,13 +37,6 @@ return {
         config = function() require("plugin-config/gitsigns") end,
     },
 
-    -- Smart code commenting
-    -- https://github.com/numToStr/Comment.nvim
-    {
-        "numToStr/Comment.nvim",
-        config = function() require("plugin-config/comment") end,
-    },
-
     -- Lsp Setup and completions
     -- https://github.com/VonHeikemen/lsp-zero.nvim
     {
