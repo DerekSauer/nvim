@@ -174,7 +174,7 @@ function M.config()
             end
 
             -- Add which-key categories
-            require("whichkey").register({
+            require("which-key").register({
                 g = {
                     name = "Git",
                     t = { name = "Toggle" },
