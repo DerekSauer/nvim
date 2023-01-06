@@ -1,6 +1,13 @@
-local indent_ok, indent = pcall(require, "indent_blankline")
+local M = {
+    -- Indent guides
+    -- https://github.com/lukas-reineke/indent-blankline.nvim
+    "lukas-reineke/indent-blankline.nvim",
+    event = "BufEnter",
+}
 
-if indent_ok then
+function M.config()
+    local indent = require("indent_blankline")
+
     local config = {
         char = "┊",
         show_current_context = true,
@@ -17,6 +24,6 @@ if indent_ok then
     }
 
     indent.setup(config)
-else
-    vim.notify("Failed to load plugin: indent_blankline.", vim.log.levels.ERROR)
 end
+
+return M

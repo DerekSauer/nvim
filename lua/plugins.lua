@@ -51,20 +51,11 @@ return {
         config = function() require("plugin-config/comment") end,
     },
 
-
     -- Automatic pair (parens, brackets, etc...) insertion
     -- https://github.com/windwp/nvim-autopairs
     {
         "windwp/nvim-autopairs",
         config = function() require("plugin-config/autopairs") end,
-    },
-
-    -- Indent guides
-    -- https://github.com/lukas-reineke/indent-blankline.nvim
-    {
-        "lukas-reineke/indent-blankline.nvim",
-        event = "BufEnter",
-        config = function() require("plugin-config/indentline") end,
     },
 
     -- Lsp Setup and completions
