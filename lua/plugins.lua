@@ -29,13 +29,6 @@ return {
         config = function() require("plugin-config/telescope") end,
     },
 
-    -- Keybinding hint popup window
-    -- https://github.com/folke/which-key.nvim
-    {
-        "folke/which-key.nvim",
-        config = function() require("plugin-config/which-key") end,
-    },
-
     -- Git diffs and signs in gutter
     -- https://github.com/lewis6991/gitsigns.nvim
     {
