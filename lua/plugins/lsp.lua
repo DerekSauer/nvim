@@ -67,7 +67,7 @@ function M.config()
     lsp_zero.setup()
 
     -- Extend lsp-zero's nvim-cmp settings with our own
-    require("plugins/lsp/cmp").setup(lsp_zero)
+    require("plugins/lsp/nvim_cmp").setup(lsp_zero)
 
     -- Configure nvim's diagnostics interface
     -- Must be called after lsp-zero's setup to override its settings
