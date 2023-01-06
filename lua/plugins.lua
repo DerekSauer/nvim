@@ -22,14 +22,6 @@ return {
         config = function() require("plugin-config/telescope") end,
     },
 
-    -- Git diffs and signs in gutter
-    -- https://github.com/lewis6991/gitsigns.nvim
-    {
-        "lewis6991/gitsigns.nvim",
-        event = "BufEnter",
-        config = function() require("plugin-config/gitsigns") end,
-    },
-
     -- Lsp Setup and completions
     -- https://github.com/VonHeikemen/lsp-zero.nvim
     {

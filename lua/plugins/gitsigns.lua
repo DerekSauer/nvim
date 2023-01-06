@@ -1,7 +1,13 @@
-local gitsigns_ok, gitsigns = pcall(require, "gitsigns")
+local M = {
 
-if gitsigns_ok then
-    local globals = require("globals")
+    -- Git diffs and signs in gutter
+    -- https://github.com/lewis6991/gitsigns.nvim
+    "lewis6991/gitsigns.nvim",
+    event = "BufEnter",
+}
+
+function M.config()
+    local gitsigns = require("gitsigns")
 
     local config = {
         signs = {
@@ -70,7 +76,7 @@ if gitsigns_ok then
         max_file_length = 10000, -- Disable if file is longer than this (in lines)
 
         preview_config = {
-            border = globals.border_style,
+            border = require("globals").border_style,
             style = "minimal",
             relative = "cursor",
             row = 0,
@@ -91,26 +97,18 @@ if gitsigns_ok then
 
             -- Jump to next hunk with ]g
             map("n", "]g", function()
-                if vim.wo.diff then
-                    return "]g"
-                end
+                if vim.wo.diff then return "]g" end
 
-                vim.schedule(function()
-                    gitsigns.next_hunk()
-                end)
+                vim.schedule(function() gitsigns.next_hunk() end)
 
                 return "<Ignore>"
             end, { expr = true, desc = "Jump to next hunk" })
 
             -- Jump to previous hunk with [g
             map("n", "[g", function()
-                if vim.wo.diff then
-                    return "[g"
-                end
+                if vim.wo.diff then return "[g" end
 
-                vim.schedule(function()
-                    gitsigns.prev_hunk()
-                end)
+                vim.schedule(function() gitsigns.prev_hunk() end)
 
                 return "<Ignore>"
             end, { expr = true, desc = "Jump to previous hunk" })
@@ -122,15 +120,26 @@ if gitsigns_ok then
             map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", { desc = "Select hunk" })
             map("n", "<leader>gS", gitsigns.stage_buffer, { desc = "Stage buffer" })
             map("n", "<leader>gR", gitsigns.reset_buffer, { desc = "Reset stage buffer" })
-            map("n", "<leader>gb", function()
-                gitsigns.blame_line({ full = true })
-            end, { desc = "Blame this line" })
+            map(
+                "n",
+                "<leader>gb",
+                function() gitsigns.blame_line({ full = true }) end,
+                { desc = "Blame this line" }
+            )
             map("n", "<leader>gd", gitsigns.diffthis, { desc = "Show diff" })
-            map("n", "<leader>gD", function()
-                gitsigns.diffthis("~")
-            end, { desc = "Diff last commit" })
+            map(
+                "n",
+                "<leader>gD",
+                function() gitsigns.diffthis("~") end,
+                { desc = "Diff last commit" }
+            )
 
-            map("n", "<leader>gtb", gitsigns.toggle_current_line_blame, { desc = "Toggle line blames" })
+            map(
+                "n",
+                "<leader>gtb",
+                gitsigns.toggle_current_line_blame,
+                { desc = "Toggle line blames" }
+            )
             map("n", "<leader>gtd", gitsigns.toggle_deleted, { desc = "Toggle deleted indicators" })
             map("n", "<leader>gtn", gitsigns.toggle_numhl, { desc = "Toggle number highlighting" })
             map("n", "<leader>gtl", gitsigns.toggle_linehl, { desc = "Toggle line highlighting" })
@@ -138,35 +147,43 @@ if gitsigns_ok then
 
             local telescope_loaded, _ = pcall(require, "telescope")
             if telescope_loaded then
-                vim.keymap.set("n", "<leader>gb", function()
-                    require("telescope.builtin").git_branches()
-                end, { silent = true, desc = "List branches" })
-                vim.keymap.set("n", "<leader>gc", function()
-                    require("telescope.builtin").git_commits()
-                end, { silent = true, desc = "List commits" })
-                vim.keymap.set("n", "<leader>gC", function()
-                    require("telescope.builtin").git_bcommits()
-                end, { silent = true, desc = "List buffer commits" })
-                vim.keymap.set("n", "<leader>gg", function()
-                    require("telescope.builtin").git_status()
-                end, { silent = true, desc = "Git status" })
+                vim.keymap.set(
+                    "n",
+                    "<leader>gb",
+                    function() require("telescope.builtin").git_branches() end,
+                    { silent = true, desc = "List branches" }
+                )
+                vim.keymap.set(
+                    "n",
+                    "<leader>gc",
+                    function() require("telescope.builtin").git_commits() end,
+                    { silent = true, desc = "List commits" }
+                )
+                vim.keymap.set(
+                    "n",
+                    "<leader>gC",
+                    function() require("telescope.builtin").git_bcommits() end,
+                    { silent = true, desc = "List buffer commits" }
+                )
+                vim.keymap.set(
+                    "n",
+                    "<leader>gg",
+                    function() require("telescope.builtin").git_status() end,
+                    { silent = true, desc = "Git status" }
+                )
             end
 
             -- Add which-key categories
-            local whichkey_loaded, whichkey = pcall(require, "which-key")
-            if whichkey_loaded then
-                whichkey.register({
-                    g = {
-                        name = "Git",
-                        t = { name = "Toggle" },
-                    },
-                }, { prefix = "<leader>" })
-            end
+            require("whichkey").register({
+                g = {
+                    name = "Git",
+                    t = { name = "Toggle" },
+                },
+            }, { prefix = "<leader>", buffer = bufnr })
         end,
     }
 
     gitsigns.setup(config)
-else
-    vim.notify("Failed to load plugin: gitsigns.", vim.log.levels.ERROR)
-    gitsigns = nil
 end
+
+return M
