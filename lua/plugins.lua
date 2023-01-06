@@ -44,13 +44,6 @@ return {
         config = function() require("plugin-config/comment") end,
     },
 
-    -- Automatic pair (parens, brackets, etc...) insertion
-    -- https://github.com/windwp/nvim-autopairs
-    {
-        "windwp/nvim-autopairs",
-        config = function() require("plugin-config/autopairs") end,
-    },
-
     -- Lsp Setup and completions
     -- https://github.com/VonHeikemen/lsp-zero.nvim
     {
