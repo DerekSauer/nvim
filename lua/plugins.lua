@@ -7,13 +7,6 @@ return {
         config = function() require("deferred-clipboard").setup() end,
     },
 
-    -- Dressing, improve default UI
-    -- https://github.com/stevearc/dressing.nvim
-    {
-        "stevearc/dressing.nvim",
-        config = function() require("plugin-config/dressing") end,
-    },
-
     -- Telescope fuzzy finder
     -- https://github.com/nvim-telescope/telescope.nvim
     {
