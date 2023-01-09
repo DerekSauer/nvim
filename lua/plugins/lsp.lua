@@ -58,13 +58,13 @@ function M.config()
     -- that support code actions, instead of being a global hook
     require("nvim-lightbulb").setup({ autocmd = { enabled = true } })
 
-    -- Setup symbol outline
-    require("plugins.lsp.symbolsoutline").setup()
-
     -- Attach additional LSP functionality
     lsp_zero.on_attach(function(client, bufnr)
-        -- Feed LSP data to navic if the LSP has a symbol provider
-        if client.server_capabilities.documentSymbolProvider then navic.attach(client, bufnr) end
+        -- Feed LSP data to navic and symbol outline if the LSP has a symbol provider
+        if client.server_capabilities.documentSymbolProvider then
+            navic.attach(client, bufnr)
+            require("plugins.lsp.symbolsoutline").setup(bufnr)
+        end
 
         -- Add auto formatting to LSPs that support formatting
         if client.supports_method("textDocument/formatting") then lsp_format.on_attach(client) end
