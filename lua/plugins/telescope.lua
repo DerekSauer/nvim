@@ -10,7 +10,6 @@ local M = {
         "nvim-tree/nvim-web-devicons",
         "kkharji/sqlite.lua",
     },
-    keys = { "<leader>f" },
 }
 
 function M.config()
