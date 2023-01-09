@@ -25,6 +25,10 @@ local M = {
         { "SmiteshP/nvim-navic" },
         { "kosayoda/nvim-lightbulb" },
         { "simrat39/symbols-outline.nvim" },
+        {
+            "~whynothugo/lsp_lines.nvim",
+            url = "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
+        },
     },
 }
 
