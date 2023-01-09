@@ -14,8 +14,8 @@ local M = {
         { "saadparwaiz1/cmp_luasnip", dependencies = "hrsh7th/nvim-cmp" },
         { "hrsh7th/cmp-nvim-lsp", dependencies = "hrsh7th/nvim-cmp" },
         { "hrsh7th/cmp-nvim-lua", dependencies = "hrsh7th/nvim-cmp" },
-        { "hrsh7th/cmp-nvim-lsp-signature-help", dependencies = "hrsh7th/nvim-cmp" },
         { "onsails/lspkind.nvim", dependencies = "hrsh7th/nvim-cmp" },
+        { "ray-x/lsp_signature.nvim", dependencies = "hrsh7th/nvim-cmp" },
 
         -- Snippets
         { "L3MON4D3/LuaSnip" },
@@ -58,6 +58,14 @@ function M.config()
 
         -- Add auto formatting to LSPs that support formatting
         if client.supports_method("textDocument/formatting") then lsp_format.on_attach(client) end
+
+        -- Add function signature help
+        if client.server_capabilities.signatureHelpProvider then
+            require("lsp_signature").on_attach(
+                { bind = true, handler_opts = { border = require("globals").border_style } },
+                bufnr
+            )
+        end
 
         -- Add keymaps to the buffer for LSP features supported by this client
         require("plugins/lsp/keymaps").setup(client, bufnr)
