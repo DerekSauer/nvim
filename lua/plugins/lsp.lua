@@ -24,6 +24,7 @@ local M = {
         -- Context
         { "SmiteshP/nvim-navic" },
         { "kosayoda/nvim-lightbulb" },
+        { "simrat39/symbols-outline.nvim" },
     },
 }
 
@@ -56,6 +57,9 @@ function M.config()
     -- Todo: See if there's a similar plugin available that can be attached to LSP clients
     -- that support code actions, instead of being a global hook
     require("nvim-lightbulb").setup({ autocmd = { enabled = true } })
+
+    -- Setup symbol outline
+    require("plugins.lsp.symbolsoutline").setup()
 
     -- Attach additional LSP functionality
     lsp_zero.on_attach(function(client, bufnr)
