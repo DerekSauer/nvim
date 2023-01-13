@@ -50,8 +50,11 @@ function M.inspect(config)
         relative = "editor",
         width = window_width,
         height = window_height,
-        col = vim.api.nvim_get_option("columns") - window_width - 1,
-        row = vim.api.nvim_get_option("lines") - window_height - 1,
+        col = vim.api.nvim_get_option("columns") - window_width - 2,
+        row = vim.api.nvim_get_option("lines")
+            - vim.api.nvim_get_option("cmdheight")
+            - window_height
+            - 3,
         border = globals.border_style,
         style = "minimal",
     })
