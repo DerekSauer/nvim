@@ -43,6 +43,20 @@ function M.setup()
         require("lsp_lines").toggle,
         { silent = true, desc = "Toggle diagnostics" }
     )
+
+    -- Add key maps for jumping to diagnostics
+    vim.keymap.set(
+        "n",
+        "]d",
+        function() vim.diagnostic.goto_next() end,
+        { silent = true, desc = "Jump to next diagnostic" }
+    )
+    vim.keymap.set(
+        "n",
+        "[d",
+        function() vim.diagnostic.goto_prev() end,
+        { silent = true, desc = "Jump to previous diagnostic" }
+    )
 end
 
 return M
