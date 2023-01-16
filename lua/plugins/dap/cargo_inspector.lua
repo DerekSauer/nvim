@@ -17,8 +17,7 @@ local function parse_cargo_metadata(cargo_metadata)
             json_table = vim.fn.json_decode(json_table)
 
             -- Our binary will be the compiler artifact with an executable defined
-            if
-                json_table["reason"] == "compiler-artifact"
+            if json_table["reason"] == "compiler-artifact"
                 and json_table["executable"] ~= vim.NIL
             then
                 return json_table["executable"]
@@ -33,14 +32,12 @@ end
 ---@param debug_name string Name of the debug configuration. The created window will be large enough to display the whole name or the size defined in options, whichever is greater.
 ---@param window_options {enabled: boolean, width: number, height: number, border: string[]|string} Display options for the window.
 ---@return {buffer: number, window: number, channel: number}|nil #Returns the buffer that stores text for the window, the window itself, and a channel to communicate with the buffer. Returns nil on failure.
+---@return string|nil If an error occurs, return a string with the error message, otherwise return nil.
 local function create_window(debug_name, window_options)
     -- Create the buffer the will receive Cargo's build messages
     local new_buffer = vim.api.nvim_create_buf(false, true)
     if new_buffer == 0 then
-        vim.api.nvim_err_writeln(
-            "Cargo Inspector: Failed to create progress message buffer. Debugging process will continue."
-        )
-        return nil
+        return nil, "Failed to create build progress message buffer."
     end
 
     -- Create a window that will display build messages from the buffer
@@ -59,19 +56,13 @@ local function create_window(debug_name, window_options)
         style = "minimal",
     })
     if new_window == 0 then
-        vim.api.nvim_err_writeln(
-            "Cargo Inspector: Failed to create progress message window. Debugging process will continue."
-        )
-        return nil
+        return nil, "Failed to create build progress message window."
     end
 
     -- Open a channel to the buffer so we can send build messages to it
     local new_channel = vim.api.nvim_open_term(new_buffer, {})
     if new_channel == 0 then
-        vim.api.nvim_err_writeln(
-            "Cargo Inspector: Failed to create progress message channel. Debugging process will continue."
-        )
-        return nil
+        return nil, "Failed to create build progress message channel."
     end
 
     return { buffer = new_buffer, window = new_window, channel = new_channel }
@@ -97,16 +88,113 @@ local function destroy_window(window_objects)
     end
 end
 
+---@alias pipe userdata A named pipe allowing access to a process's stdout, stderr, or stdin.
+---Create pipes connecting to the stdout/stderr of the various processes we're going to run.
+---@return {cargo : {stdout : pipe, stderr : pipe}, rust_hash : {stdout : pipe}, rust_source : {stdout : pipe}}|nil #Table containing the various pipes or nil if an error occured.
+---@return string|nil #String containing the error message if an error occured or nil if no error occured.
+local function create_pipes()
+    local cargo_stdout, stdout_error = vim.loop.new_pipe()
+    if not cargo_stdout then
+        return nil, stdout_error
+    end
+
+    local cargo_stderr, stderr_error = vim.loop.new_pipe()
+    if not cargo_stderr then
+        cargo_stdout:close()
+        return nil, stderr_error
+    end
+
+    local rust_hash_stdout, hash_error = vim.loop.new_pipe()
+    if not rust_hash_stdout then
+        cargo_stderr:close()
+        cargo_stdout:close()
+        return nil, hash_error
+    end
+
+    local rust_source_stdout, source_error = vim.loop.new_pipe()
+    if not rust_source_stdout then
+        cargo_stderr:close()
+        cargo_stdout:close()
+        rust_hash_stdout:close()
+        return nil, source_error
+    end
+
+    return {
+        cargo = {
+            stdout = cargo_stdout,
+            stderr = cargo_stderr,
+        },
+        rust_hash = {
+            stdout = rust_hash_stdout,
+        },
+        rust_source = {
+            stdout = rust_source_stdout
+        }
+    }
+end
+
+---Destroy the named pipes created in `create_pipes()`.
+---@param pipes {cargo : {stdout : pipe, stderr : pipe}, rust_hash : {stdout : pipe}, rust_source : {stdout : pipe}} A table of pipes returned by `create_pipes()`.
+local function destroy_pipes(pipes)
+    if pipes.rust_source.stdout ~= nil then
+        pipes.rust_source.stdout:close()
+        pipes.rust_source.stdout = nil
+    end
+
+    if pipes.rust_hash.stdout ~= nil then
+        pipes.rust_hash.stdout:close()
+        pipes.rust_hash.stdout = nil
+    end
+
+    if pipes.cargo.stderr ~= nil then
+        pipes.cargo.stderr:close()
+        pipes.cargo.stderr = nil
+    end
+
+    if pipes.cargo.stdout ~= nil then
+        pipes.cargo.stdout:close()
+        pipes.cargo.stdout = nil
+    end
+end
+
+---Callback called when the Cargo process emits data to stdout. Cargo emits build process metadata to stdout.
+---@param error string|nil If not nil, an error occured and `error` is a string containing the error message.
+---@param data string Data emitted by Cargo to stdout.
+---@return nil #Returns early without processing `data` if an error occurs.
+local function cargo_stdout(error, data)
+    if error then
+        vim.api.nvim_err_writeln("Cargo Inspector: Error in Cargo's stdout callback\n" .. error)
+        return
+    end
+
+    print("Cargo stdout datatype: " .. type(data) .. "\n")
+end
+
+---Callback called when the Cargo process emits data to stderr. Cargo emits build progress messages to stderr.
+---@param error string|nil If not nil, an error occured and `error` is a string containing the error message.
+---@param data string Data emitted by Cargo to stderr.
+---@return nil #Returns early without processing `data` if an error occurs.
+local function cargo_stderr(error, data)
+    if error then
+        vim.api.nvim_err_writeln("Cargo Inspector: Error in Cargo's stderr callback\n" .. error)
+        return
+    end
+
+    print("Cargo stderr datatype: " .. type(data) .. "\n")
+end
+
 ---Parse the `cargo` table of a DAP configuration, running any Cargo tasks
 ---defined in the `cargo` table then extracting the debuggable binary that
 ---results. Also fills in Rust specific debugging hints for LLDB.
 ---@param dap_config table A DAP configuration with a `cargo` table.
+---@param user_options table|nil The user's options for Cargo Inspector.
 ---@return table #Returns a DAP configuration with the debuggable binary
 ---defined and some additional Rust debugging hints for LLDB.
 ---@public
-function M.inspect(dap_config)
+function M.inspect(dap_config, user_options)
     local final_config = vim.deepcopy(dap_config)
 
+    -- Default options
     local options = {
         ---Options for the build progress message window.
         ---@class window
@@ -122,10 +210,33 @@ function M.inspect(dap_config)
         },
     }
 
+    -- Extend default option with user's choices
+    if user_options then
+        options = vim.tbl_deep_extend('force', options, user_options)
+    end
+
     -- Create build progress window
-    local progress_window = options.window.enabled
-            and create_window(final_config.name, options.window)
-        or nil
+    local progress_window = nil
+    if options.window.enabled then
+        local window_error = nil
+        progress_window, window_error = create_window(final_config.name, options.window)
+        if not progress_window then
+            vim.api.nvim_err_writeln("Cargo Inspector Window Error:\n" .. window_error)
+        end
+    end
+
+    -- Create pipes that will recieve data from our external processes
+    local pipes, pipe_error = create_pipes()
+    if not pipes then
+        vim.api.nvim_err_writeln("Cargo Inspector Pipe Error:\n" .. pipe_error)
+        return final_config
+    end
+
+    -- Destroy the named pipes
+    if pipes then
+        destroy_pipes(pipes)
+        pipes = nil
+    end
 
     -- Destroy build progress window
     if progress_window then

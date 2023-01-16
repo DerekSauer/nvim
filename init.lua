@@ -40,6 +40,7 @@ vim.opt.backup = false
 vim.opt.swapfile = false
 vim.opt.writebackup = false
 vim.opt.winbar = " "
+vim.opt.linebreak = true
 
 -- Use the new zero command line height when available
 if vim.fn.has("nvim-0.8") == 1 then vim.opt.cmdheight = 0 end
