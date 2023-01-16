@@ -1,12 +1,12 @@
 local M = {}
 
-local globals = require("globals")
-
--- After extracting cargo's compiler metadata with the cargo inspector
--- parse it to find the binary to debug
+---Parse the build metadata emitted by Cargo to find the executable to debug.
+---@param cargo_metadata string[] An array of JSON strings emitted by Cargo.
+---@return string|nil #Returns the path of the debuggable executable built by
+---Cargo or nil if an executable cannot be found.
 local function parse_cargo_metadata(cargo_metadata)
-    -- Iterate backwards through the metadata list since the binary
-    -- we're interested will be near the end (usually second to last)
+    -- Iterate backwards through the metadata list since the executable
+    -- will likely be near the end (usually second to last)
     for i = 1, #cargo_metadata do
         local json_table = cargo_metadata[#cargo_metadata + 1 - i]
 
@@ -29,164 +29,245 @@ local function parse_cargo_metadata(cargo_metadata)
     return nil
 end
 
--- Parse the `cargo` section of a DAP configuration and add any needed
--- information to the final configuration to be handed back to the adapter.
--- E.g.: When debugging a test, cargo generates a random executable name.
--- We need to ask cargo for the name and add it to the `program` config field
--- so LLDB can find it.
-function M.inspect(config)
-    local final_config = vim.deepcopy(config)
+---Create the window and associated buffer and channel that will display build messages.
+---@param debug_name string Name of the debug configuration. The created window will be large enough to display the whole name or the size defined in options, whichever is greater.
+---@param window_options {enabled: boolean, width: number, height: number, border: string[]|string} Display options for the window.
+---@return {buffer: number, window: number, channel: number}|nil #Returns the buffer that stores text for the window, the window itself, and a channel to communicate with the buffer. Returns nil on failure.
+local function create_window(debug_name, window_options)
+    -- Create the buffer the will receive Cargo's build messages
+    local new_buffer = vim.api.nvim_create_buf(false, true)
+    if new_buffer == 0 then
+        vim.api.nvim_err_writeln(
+            "Cargo Inspector: Failed to create progress message buffer. Debugging process will continue."
+        )
+        return nil
+    end
 
-    -- TODO: https://neovim.io/doc/user/api.html#nvim_open_term()
-
-    -- Create a buffer to receive compiler progress messages
-    local compiler_msg_buf = vim.api.nvim_create_buf(false, true)
-    vim.api.nvim_buf_set_option(compiler_msg_buf, "buftype", "nofile")
-
-    -- And a floating window in the corner to display those messages
-    local window_width = math.max(#final_config.name + 1, 50)
-    local window_height = 12
-    local compiler_msg_window = vim.api.nvim_open_win(compiler_msg_buf, false, {
+    -- Create a window that will display build messages from the buffer
+    local window_width = math.max(#debug_name + 1, window_options.width)
+    local window_height = window_options.height
+    local new_window = vim.api.nvim_open_win(new_buffer, false, {
         relative = "editor",
         width = window_width,
         height = window_height,
         col = vim.api.nvim_get_option("columns") - window_width - 2,
         row = vim.api.nvim_get_option("lines")
             - vim.api.nvim_get_option("cmdheight")
-            - window_height
+            - window_options.height
             - 3,
-        border = globals.border_style,
+        border = window_options.border,
         style = "minimal",
     })
-
-    -- Let the user know what's going on
-    vim.fn.appendbufline(compiler_msg_buf, "$", "Compiling: ")
-    vim.fn.appendbufline(compiler_msg_buf, "$", final_config.name)
-    vim.fn.appendbufline(compiler_msg_buf, "$", string.rep("=", window_width - 1))
-
-    -- Instruct cargo to emit compiler metadata as JSON
-    local message_format = "--message-format=json"
-    if final_config.cargo.args ~= nil then
-        table.insert(final_config.cargo.args, message_format)
-    else
-        final_config.cargo.args = { message_format }
+    if new_window == 0 then
+        vim.api.nvim_err_writeln(
+            "Cargo Inspector: Failed to create progress message window. Debugging process will continue."
+        )
+        return nil
     end
 
-    -- Build final `cargo` command to be executed
-    local cargo_cmd = { "cargo" }
-    for _, value in pairs(final_config.cargo.args) do
-        table.insert(cargo_cmd, value)
+    -- Open a channel to the buffer so we can send build messages to it
+    local new_channel = vim.api.nvim_open_term(new_buffer, {})
+    if new_channel == 0 then
+        vim.api.nvim_err_writeln(
+            "Cargo Inspector: Failed to create progress message channel. Debugging process will continue."
+        )
+        return nil
     end
 
-    -- Run `cargo`, retaining buffered `stdout` for later processing,
-    -- and emitting compiler messages to to a window
-    local compiler_metadata = {}
-    local cargo_job = vim.fn.jobstart(cargo_cmd, {
-        clear_env = false,
-        env = final_config.cargo.env,
-        cwd = final_config.cwd,
+    return { buffer = new_buffer, window = new_window, channel = new_channel }
+end
 
-        -- Cargo emits compiler metadata to `stdout`
-        stdout_buffered = true,
-        on_stdout = function(_, data) compiler_metadata = data end,
+---Destroy the build message window and associated buffer and channel.
+---@param window_objects {buffer: number, window: number, channel: number}
+local function destroy_window(window_objects)
+    print(vim.inspect(window_objects))
+    if window_objects.channel ~= 0 then
+        vim.fn.chanclose(window_objects.channel)
+        window_objects.channel = nil
+    end
 
-        -- Cargo emits compiler messages to `stderr`
-        on_stderr = function(_, data)
-            local complete_line = ""
+    if window_objects.window ~= 0 then
+        vim.api.nvim_win_close(window_objects.window, { force = true })
+        window_objects.window = nil
+    end
 
-            -- `data` might contain partial lines, glue data together until
-            -- the stream indicates the line is complete with an empty string
-            for _, partial_line in ipairs(data) do
-                if string.len(partial_line) ~= 0 then
-                    complete_line = complete_line .. partial_line
-                end
-            end
+    if window_objects.buffer ~= 0 then
+        vim.api.nvim_buf_delete(window_objects.buffer, { force = true })
+        window_objects.buffer = nil
+    end
+end
 
-            if vim.api.nvim_buf_is_valid(compiler_msg_buf) then
-                vim.fn.appendbufline(compiler_msg_buf, "$", complete_line)
-                vim.api.nvim_win_set_cursor(
-                    compiler_msg_window,
-                    { vim.api.nvim_buf_line_count(compiler_msg_buf), 1 }
-                )
-                vim.cmd("redraw")
-            end
-        end,
+---Parse the `cargo` table of a DAP configuration, running any Cargo tasks
+---defined in the `cargo` table then extracting the debuggable binary that
+---results. Also fills in Rust specific debugging hints for LLDB.
+---@param dap_config table A DAP configuration with a `cargo` table.
+---@return table #Returns a DAP configuration with the debuggable binary
+---defined and some additional Rust debugging hints for LLDB.
+---@public
+function M.inspect(dap_config)
+    local final_config = vim.deepcopy(dap_config)
 
-        on_exit = function(_, exit_code)
-            -- Cleanup the compile message window and buffer
-            if vim.api.nvim_win_is_valid(compiler_msg_window) then
-                vim.api.nvim_win_close(compiler_msg_window, { force = true })
-            end
+    local options = {
+        ---Options for the build progress message window.
+        ---@class window
+        ---@field enabled boolean Open a window to display build progress messages?
+        ---@field width number Width of the window in characters.
+        ---@field height number Height of the window in lines.
+        ---@field border string|string[] Standard Neovim border style name or arrays of characters defining the border style.
+        window = {
+            enabled = true,
+            width = 64,
+            height = 12,
+            border = require("globals").border_style,
+        },
+    }
 
-            if vim.api.nvim_buf_is_valid(compiler_msg_buf) then
-                vim.api.nvim_buf_delete(compiler_msg_buf, { force = true })
-            end
+    -- Create build progress window
+    local progress_window = options.window.enabled
+            and create_window(final_config.name, options.window)
+        or nil
 
-            -- If compiling succeeed, send the compile metadata off for processing
-            -- and add the resulting executable name to the `program` field of the final config
-            if exit_code == 0 then
-                local executable_name = parse_cargo_metadata(compiler_metadata)
-                if executable_name ~= nil then
-                    final_config.program = executable_name
-                else
-                    vim.notify(
-                        "Cargo could not find an executable for debug configuration:\n\n\t"
-                            .. final_config.name,
-                        vim.log.levels.ERROR
-                    )
-                end
-            else
-                vim.notify(
-                    "Cargo failed to compile debug configuration:\n\n\t" .. final_config.name,
-                    vim.log.levels.ERROR
-                )
-            end
-        end,
-    })
+    -- Destroy build progress window
+    if progress_window then
+        destroy_window(progress_window)
+        progress_window = nil
+    end
 
-    -- Get the rust compiler's commit hash for the source map
-    local rust_hash = ""
-    local rust_hash_stdout = {}
-    local rust_hash_job = vim.fn.jobstart({ "rustc", "--version", "--verbose" }, {
-        clear_env = false,
-        stdout_buffered = true,
-        on_stdout = function(_, data) rust_hash_stdout = data end,
-        on_exit = function()
-            for _, line in pairs(rust_hash_stdout) do
-                local start, finish = string.find(line, "commit-hash: ", 1, true)
-
-                if start ~= nil then rust_hash = string.sub(line, finish + 1) end
-            end
-        end,
-    })
-
-    -- Get the location of the rust toolchain's source code for the source map
-    local rust_source_path = ""
-    local rust_source_job = vim.fn.jobstart({ "rustc", "--print", "sysroot" }, {
-        clear_env = false,
-        stdout_buffered = true,
-        on_stdout = function(_, data) rust_source_path = data[1] end,
-    })
-
-    -- Wait until compiling and parsing are done
-    -- This blocks the UI (except for the :redraw above) and I haven't figured
-    -- out how to avoid it, yet
-    -- Regardless, not much point in debugging if the binary isn't ready yet
-    vim.fn.jobwait({ cargo_job, rust_hash_job, rust_source_job })
-
-    -- Enable visualization of built in Rust datatypes
-    final_config.sourceLanguages = { "rust" }
-
-    -- Build sourcemap to rust's source code so we can step into stdlib
-    rust_hash = "/rustc/" .. rust_hash .. "/"
-    rust_source_path = rust_source_path .. "/lib/rustlib/src/rust/"
-    if final_config.sourceMap == nil then final_config["sourceMap"] = {} end
-    final_config.sourceMap[rust_hash] = rust_source_path
-
-    -- Cargo section is no longer needed
+    -- The `cargo` section of the configuration is no longer needed
     final_config.cargo = nil
 
     return final_config
 end
+
+-- -- Parse the `cargo` section of a DAP configuration and add any needed
+-- -- information to the final configuration to be handed back to the adapter.
+-- -- E.g.: When debugging a test, cargo generates a random executable name.
+-- -- We need to ask cargo for the name and add it to the `program` config field
+-- -- so LLDB can find it.
+-- function M.old_inspect(config)
+--     -- Instruct cargo to emit compiler metadata as JSON
+--     local message_format = "--message-format=json"
+--     if final_config.cargo.args ~= nil then
+--         table.insert(final_config.cargo.args, message_format)
+--     else
+--         final_config.cargo.args = { message_format }
+--     end
+--
+--     -- Build final `cargo` command to be executed
+--     local cargo_cmd = { "cargo" }
+--     for _, value in pairs(final_config.cargo.args) do
+--         table.insert(cargo_cmd, value)
+--     end
+--
+--     -- Run `cargo`, retaining buffered `stdout` for later processing,
+--     -- and emitting compiler messages to to a window
+--     local compiler_metadata = {}
+--     local cargo_job = vim.fn.jobstart(cargo_cmd, {
+--         clear_env = false,
+--         env = final_config.cargo.env,
+--         cwd = final_config.cwd,
+--
+--         -- Cargo emits compiler metadata to `stdout`
+--         stdout_buffered = true,
+--         on_stdout = function(_, data) compiler_metadata = data end,
+--
+--         -- Cargo emits compiler messages to `stderr`
+--         on_stderr = function(_, data)
+--             local complete_line = ""
+--
+--             -- `data` might contain partial lines, glue data together until
+--             -- the stream indicates the line is complete with an empty string
+--             for _, partial_line in ipairs(data) do
+--                 if string.len(partial_line) ~= 0 then
+--                     complete_line = complete_line .. partial_line
+--                 end
+--             end
+--
+--             if vim.api.nvim_buf_is_valid(compiler_msg_buf) then
+--                 vim.fn.appendbufline(compiler_msg_buf, "$", complete_line)
+--                 vim.api.nvim_win_set_cursor(
+--                     compiler_msg_window,
+--                     { vim.api.nvim_buf_line_count(compiler_msg_buf), 1 }
+--                 )
+--                 vim.cmd("redraw")
+--             end
+--         end,
+--
+--         on_exit = function(_, exit_code)
+--             -- Cleanup the compile message window and buffer
+--             if vim.api.nvim_win_is_valid(compiler_msg_window) then
+--                 vim.api.nvim_win_close(compiler_msg_window, { force = true })
+--             end
+--
+--             if vim.api.nvim_buf_is_valid(compiler_msg_buf) then
+--                 vim.api.nvim_buf_delete(compiler_msg_buf, { force = true })
+--             end
+--
+--             -- If compiling succeeed, send the compile metadata off for processing
+--             -- and add the resulting executable name to the `program` field of the final config
+--             if exit_code == 0 then
+--                 local executable_name = parse_cargo_metadata(compiler_metadata)
+--                 if executable_name ~= nil then
+--                     final_config.program = executable_name
+--                 else
+--                     vim.notify(
+--                         "Cargo could not find an executable for debug configuration:\n\n\t"
+--                             .. final_config.name,
+--                         vim.log.levels.ERROR
+--                     )
+--                 end
+--             else
+--                 vim.notify(
+--                     "Cargo failed to compile debug configuration:\n\n\t" .. final_config.name,
+--                     vim.log.levels.ERROR
+--                 )
+--             end
+--         end,
+--     })
+--
+--     -- Get the rust compiler's commit hash for the source map
+--     local rust_hash = ""
+--     local rust_hash_stdout = {}
+--     local rust_hash_job = vim.fn.jobstart({ "rustc", "--version", "--verbose" }, {
+--         clear_env = false,
+--         stdout_buffered = true,
+--         on_stdout = function(_, data) rust_hash_stdout = data end,
+--         on_exit = function()
+--             for _, line in pairs(rust_hash_stdout) do
+--                 local start, finish = string.find(line, "commit-hash: ", 1, true)
+--
+--                 if start ~= nil then rust_hash = string.sub(line, finish + 1) end
+--             end
+--         end,
+--     })
+--
+--     -- Get the location of the rust toolchain's source code for the source map
+--     local rust_source_path = ""
+--     local rust_source_job = vim.fn.jobstart({ "rustc", "--print", "sysroot" }, {
+--         clear_env = false,
+--         stdout_buffered = true,
+--         on_stdout = function(_, data) rust_source_path = data[1] end,
+--     })
+--
+--     -- Wait until compiling and parsing are done
+--     -- This blocks the UI (except for the :redraw above) and I haven't figured
+--     -- out how to avoid it, yet
+--     -- Regardless, not much point in debugging if the binary isn't ready yet
+--     vim.fn.jobwait({ cargo_job, rust_hash_job, rust_source_job })
+--
+--     -- Enable visualization of built in Rust datatypes
+--     final_config.sourceLanguages = { "rust" }
+--
+--     -- Build sourcemap to rust's source code so we can step into stdlib
+--     rust_hash = "/rustc/" .. rust_hash .. "/"
+--     rust_source_path = rust_source_path .. "/lib/rustlib/src/rust/"
+--     if final_config.sourceMap == nil then final_config["sourceMap"] = {} end
+--     final_config.sourceMap[rust_hash] = rust_source_path
+--
+--     -- Cargo section is no longer needed
+--     final_config.cargo = nil
+--
+--     return final_config
+-- end
 
 return M
