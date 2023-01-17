@@ -183,6 +183,14 @@ local function cargo_stderr(error, data)
     print("Cargo stderr datatype: " .. type(data) .. "\n")
 end
 
+---Callback called when the Cargo process terminates.
+---@param exit_code number The process's exit code.
+---@param exit_signal number The signal that terminated the process (if any).
+local function cargo_exit(exit_code, exit_signal)
+    print("Cargo on exit code: " .. exit_code .. "\n")
+    print("Cargo on exit signal datatype: " .. type(exit_signal) .. "\n")
+end
+
 ---Parse the `cargo` table of a DAP configuration, running any Cargo tasks
 ---defined in the `cargo` table then extracting the debuggable binary that
 ---results. Also fills in Rust specific debugging hints for LLDB.
@@ -231,6 +239,27 @@ function M.inspect(dap_config, user_options)
         vim.api.nvim_err_writeln("Cargo Inspector Pipe Error:\n" .. pipe_error)
         return final_config
     end
+
+    -- Instruct Cargo to emit build metadata as JSON
+    if final_config.cargo.args then
+        table.insert(final_config.cargo.args, "--message-format=json")
+    else
+        final_config.cargo.args = { "--message-format=json" }
+    end
+
+    -- Run the Cargo process
+    local cargo_job, cargo_job_error = vim.loop.spawn("cargo", {
+        args = final_config.cargo.args,
+        stdio = { nil, pipes.cargo.stdout, pipes.cargo.stderr },
+        env = final_config.cargo.env,
+        cwd = final_config.cwd,
+    }, cargo_exit)
+    if not cargo_job then
+        vim.api.nvim_err_writeln("Cargo Inspector Process Error:\n" .. cargo_job_error)
+        return final_config
+    end
+
+    -- Run vim.wait(), inside the callback process stdin, stdout, and wait for the on exit to set some data in a global
 
     -- Destroy the named pipes
     if pipes then
