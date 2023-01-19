@@ -20,8 +20,6 @@ function M.setup(lsp_zero)
                         table_separator_style = "comma",
                         trailing_table_separator = "smart",
                         max_line_length = 120,
-                        continuous_assign_statement_align_to_equal_sign = false,
-                        continuous_assign_table_field_align_to_equal_sign = false,
                     },
                 },
                 runtime = {
