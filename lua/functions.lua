@@ -17,6 +17,12 @@ function M.setup_autocmds()
         group = globals.user_au_group,
         command = "nnoremap <buffer> q <cmd>quit<cr>",
     })
+
+    -- Normalize splits if the window size changes
+    vim.api.nvim_create_autocmd("VimResized", {
+        group = globals.user_au_group,
+        command = "tabdo wincmd ="
+    })
 end
 
 return M
