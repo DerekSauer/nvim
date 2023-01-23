@@ -23,12 +23,7 @@ local M = {
 
         -- Context
         { "SmiteshP/nvim-navic" },
-        { "kosayoda/nvim-lightbulb" },
         { "simrat39/symbols-outline.nvim" },
-        {
-            "~whynothugo/lsp_lines.nvim",
-            url = "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
-        },
     },
 }
 
@@ -56,11 +51,6 @@ function M.config()
     -- Setup lsp-format for easy code formatting on save
     local lsp_format = require("lsp-format")
     lsp_format.setup()
-
-    -- Setup code action light bulb
-    -- Todo: See if there's a similar plugin available that can be attached to LSP clients
-    -- that support code actions, instead of being a global hook
-    require("nvim-lightbulb").setup({ autocmd = { enabled = true } })
 
     -- Attach additional LSP functionality
     lsp_zero.on_attach(function(client, bufnr)
