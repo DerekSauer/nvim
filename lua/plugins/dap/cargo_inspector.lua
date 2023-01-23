@@ -117,17 +117,6 @@ local function cargo_start()
     end
 end
 
----Callback called when the Cargo process emits data to stdout. Cargo emits build process metadata to stdout.
----@param error string|nil If not nil, an error occured and `error` is a string containing the error message.
----@param data string Data emitted by Cargo to stdout.
----@return nil #Returns early without processing `data` if an error occurs.
-local function cargo_stdout(error, data)
-    if error then
-        vim.api.nvim_err_writeln("Cargo Inspector: Error in Cargo's stdout callback\n" .. error)
-        return
-    end
-end
-
 ---Callback called when the Cargo process emits data to stderr. Cargo emits build progress messages to stderr.
 ---@param error string|nil If not nil, an error occured and `error` is a string containing the error message.
 ---@param data string Data emitted by Cargo to stderr.
@@ -140,7 +129,7 @@ local function cargo_stderr(error, data)
 
     if M.progress_window then
         vim.schedule(function()
-            vim.api.nvim_chan_send(M.progress_window.channel, data)
+            vim.api.nvim_chan_send(M.progress_window.channel, data .. "\r\n")
         end)
     end
 end
@@ -155,6 +144,19 @@ local function cargo_exit(job, exit_code)
             destroy_window(M.progress_window)
             M.progress_window = nil
         end)
+    end
+
+    -- If Cargo ran successfully send the build meta data off for parsing
+    if exit_code == 0 then
+        local executable_name = parse_cargo_metadata(job:result())
+        if executable_name ~= nil then
+            M.final_config.program = executable_name
+        else
+            vim.api.nvim_err_writeln("Cargo could not find an executable for debug configuration:\n" ..
+                M.final_config.name)
+        end
+    else
+        vim.api.nvim_err_writeln("Cargo failed to compile debug configuration:\n" .. M.final_config.name)
     end
 end
 
@@ -197,150 +199,16 @@ function M.inspect(dap_config, user_options)
         skip_validation = true,
         enable_handlers = true,
         on_start = cargo_start,
-        on_stdout = cargo_stdout,
         on_stderr = cargo_stderr,
-        on_exit = cargo_exit,
+        on_exit = vim.schedule_wrap(cargo_exit),
         detached = false,
-        enabled_recording = true
+        enable_recording = true
     }):start()
-
-    cargo_job:wait(0, 10, true)
 
     -- The `cargo` section of the configuration is no longer needed
     M.final_config.cargo = nil
 
     return M.final_config
 end
-
--- -- Parse the `cargo` section of a DAP configuration and add any needed
--- -- information to the final configuration to be handed back to the adapter.
--- -- E.g.: When debugging a test, cargo generates a random executable name.
--- -- We need to ask cargo for the name and add it to the `program` config field
--- -- so LLDB can find it.
--- function M.old_inspect(config)
---     -- Instruct cargo to emit compiler metadata as JSON
---     local message_format = "--message-format=json"
---     if final_config.cargo.args ~= nil then
---         table.insert(final_config.cargo.args, message_format)
---     else
---         final_config.cargo.args = { message_format }
---     end
---
---     -- Build final `cargo` command to be executed
---     local cargo_cmd = { "cargo" }
---     for _, value in pairs(final_config.cargo.args) do
---         table.insert(cargo_cmd, value)
---     end
---
---     -- Run `cargo`, retaining buffered `stdout` for later processing,
---     -- and emitting compiler messages to to a window
---     local compiler_metadata = {}
---     local cargo_job = vim.fn.jobstart(cargo_cmd, {
---         clear_env = false,
---         env = final_config.cargo.env,
---         cwd = final_config.cwd,
---
---         -- Cargo emits compiler metadata to `stdout`
---         stdout_buffered = true,
---         on_stdout = function(_, data) compiler_metadata = data end,
---
---         -- Cargo emits compiler messages to `stderr`
---         on_stderr = function(_, data)
---             local complete_line = ""
---
---             -- `data` might contain partial lines, glue data together until
---             -- the stream indicates the line is complete with an empty string
---             for _, partial_line in ipairs(data) do
---                 if string.len(partial_line) ~= 0 then
---                     complete_line = complete_line .. partial_line
---                 end
---             end
---
---             if vim.api.nvim_buf_is_valid(compiler_msg_buf) then
---                 vim.fn.appendbufline(compiler_msg_buf, "$", complete_line)
---                 vim.api.nvim_win_set_cursor(
---                     compiler_msg_window,
---                     { vim.api.nvim_buf_line_count(compiler_msg_buf), 1 }
---                 )
---                 vim.cmd("redraw")
---             end
---         end,
---
---         on_exit = function(_, exit_code)
---             -- Cleanup the compile message window and buffer
---             if vim.api.nvim_win_is_valid(compiler_msg_window) then
---                 vim.api.nvim_win_close(compiler_msg_window, { force = true })
---             end
---
---             if vim.api.nvim_buf_is_valid(compiler_msg_buf) then
---                 vim.api.nvim_buf_delete(compiler_msg_buf, { force = true })
---             end
---
---             -- If compiling succeeed, send the compile metadata off for processing
---             -- and add the resulting executable name to the `program` field of the final config
---             if exit_code == 0 then
---                 local executable_name = parse_cargo_metadata(compiler_metadata)
---                 if executable_name ~= nil then
---                     final_config.program = executable_name
---                 else
---                     vim.notify(
---                         "Cargo could not find an executable for debug configuration:\n\n\t"
---                             .. final_config.name,
---                         vim.log.levels.ERROR
---                     )
---                 end
---             else
---                 vim.notify(
---                     "Cargo failed to compile debug configuration:\n\n\t" .. final_config.name,
---                     vim.log.levels.ERROR
---                 )
---             end
---         end,
---     })
---
---     -- Get the rust compiler's commit hash for the source map
---     local rust_hash = ""
---     local rust_hash_stdout = {}
---     local rust_hash_job = vim.fn.jobstart({ "rustc", "--version", "--verbose" }, {
---         clear_env = false,
---         stdout_buffered = true,
---         on_stdout = function(_, data) rust_hash_stdout = data end,
---         on_exit = function()
---             for _, line in pairs(rust_hash_stdout) do
---                 local start, finish = string.find(line, "commit-hash: ", 1, true)
---
---                 if start ~= nil then rust_hash = string.sub(line, finish + 1) end
---             end
---         end,
---     })
---
---     -- Get the location of the rust toolchain's source code for the source map
---     local rust_source_path = ""
---     local rust_source_job = vim.fn.jobstart({ "rustc", "--print", "sysroot" }, {
---         clear_env = false,
---         stdout_buffered = true,
---         on_stdout = function(_, data) rust_source_path = data[1] end,
---     })
---
---     -- Wait until compiling and parsing are done
---     -- This blocks the UI (except for the :redraw above) and I haven't figured
---     -- out how to avoid it, yet
---     -- Regardless, not much point in debugging if the binary isn't ready yet
---     vim.fn.jobwait({ cargo_job, rust_hash_job, rust_source_job })
---
---     -- Enable visualization of built in Rust datatypes
---     final_config.sourceLanguages = { "rust" }
---
---     -- Build sourcemap to rust's source code so we can step into stdlib
---     rust_hash = "/rustc/" .. rust_hash .. "/"
---     rust_source_path = rust_source_path .. "/lib/rustlib/src/rust/"
---     if final_config.sourceMap == nil then final_config["sourceMap"] = {} end
---     final_config.sourceMap[rust_hash] = rust_source_path
---
---     -- Cargo section is no longer needed
---     final_config.cargo = nil
---
---     return final_config
--- end
 
 return M
