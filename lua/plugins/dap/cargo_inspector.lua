@@ -149,7 +149,7 @@ end
 
 ---Determine the Rust compiler's commit hash for the source map.
 ---@return string|nil #Returns the Rust compiler's commit hash or nil if it cannot be found.
-local function run_hash_task()
+local function get_commit_hash()
     local rust_hash = nil
 
     require("plenary.job"):new({
@@ -171,7 +171,7 @@ end
 
 ---Determine the path to Rust's source code.
 ---@return string|nil #Returns the path to Rust's source code or nil if it cannot be found.
-local function run_source_task()
+local function get_source_path()
     local source_path = nil
 
     require("plenary.job"):new({
@@ -245,11 +245,11 @@ function M.inspect(dap_config, user_options)
         end
     end
 
-    -- Run the Rust compiler hash task (sync)
-    local rust_hash = run_hash_task()
+    -- Get the Rust compiler's commit hash for the source map
+    local rust_hash = get_commit_hash()
 
-    -- Run the Rust source code path task (sync)
-    local rust_source_path = run_source_task()
+    -- Get the Rust source code path for the source map
+    local rust_source_path = get_source_path()
 
     -- Build a source map so that the user can step into Rust's standard
     -- library while debugging instead of getting a screen full of ASM
@@ -267,6 +267,15 @@ function M.inspect(dap_config, user_options)
 
     -- Run the Cargo task to get the path to the debuggable executable
     run_cargo_task(progress_window, final_config)
+
+    -- TODO: Revisit this and figure out a way to avoid blocking the UI while
+    --       Cargo is building the project. You can't use the debugger without
+    --       an executable but Rust builds can be quite long and I'd like
+    --       to keep working on other parts of the workspace while building.
+    --       There is probably some await() like functionality I am not aware of
+    --       that would let us `await` on run_cargo_task() so nvim can get back
+    --       to being a text editor while the task is running instead of spending
+    --       its time asking "Are you done yet? Are you done yet?".
 
     -- Spin our wheels until Cargo is done
     repeat
