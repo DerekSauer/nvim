@@ -2,14 +2,19 @@
 local M = {}
 
 function M.setup(lsp_zero)
-    local runtime_path = vim.split(package.path, ";")
-    table.insert(runtime_path, "lua/?.lua")
-    table.insert(runtime_path, "lua/?/init.lua")
+    local runtime_path = vim.split(package
+        .path, ";")
+    table.insert(runtime_path,
+        "lua/?.lua")
+    table.insert(runtime_path,
+        "lua/?/init.lua")
     lsp_zero.configure("sumneko_lua", {
         settings = {
             Lua = {
                 format = {
                     enable = true,
+
+                    -- Values must be strings
                     defaultConfig = {
                         indent_style = "space",
                         indent_size = "4",
@@ -19,7 +24,7 @@ function M.setup(lsp_zero)
                         call_arg_parentheses = "keep",
                         table_separator_style = "comma",
                         trailing_table_separator = "smart",
-                        max_line_length = 120,
+                        max_line_length = "120",
                     },
                 },
                 runtime = {
