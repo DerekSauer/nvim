@@ -1,5 +1,6 @@
 local M = {
     "VonHeikemen/lsp-zero.nvim",
+    branch = "v1.x",
     dependencies = {
         -- LSP Support
         { "neovim/nvim-lspconfig" },
@@ -33,6 +34,13 @@ function M.config()
     -- Use recommended LSP settings and add nvim's API
     lsp_zero.preset("recommended")
     lsp_zero.nvim_workspace()
+
+    -- Ensure the following LSPs are installed
+    lsp_zero.ensure_installed({
+        "sumneko_lua",
+        "rust_analyzer",
+        "taplo"
+    })
 
     -- We'll create our own keymaps based on LSP capabilities
     lsp_zero.set_preferences({
