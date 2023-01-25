@@ -270,7 +270,7 @@ function M.inspect(dap_config, user_options)
 
     -- Spin our wheels until Cargo is done
     repeat
-        vim.wait(1, function() vim.cmd("redraw") end)
+        vim.wait(250, function() vim.cmd("redraw") end)
     until final_config.program ~= nil
 
     -- Destroy build progress window
