@@ -163,7 +163,7 @@ local function get_commit_hash()
                     if start ~= nil then rust_hash = string.sub(line, finish + 1) end
                 end
             end
-        end
+        end,
     }):sync()
 
     return rust_hash
@@ -185,7 +185,7 @@ local function get_source_path()
                     source_path = job:result()[1]
                 end
             end
-        end
+        end,
     }):sync()
 
     return source_path
@@ -212,7 +212,7 @@ function M.inspect(dap_config, user_options)
 
     -- Extend default option with user's choices
     if user_options then
-        options = vim.tbl_deep_extend('force', options, user_options)
+        options = vim.tbl_deep_extend("force", options, user_options)
     end
 
     -- Verify that Cargo exists

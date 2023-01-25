@@ -21,7 +21,7 @@ function M.setup_autocmds()
     -- Normalize splits if the window size changes
     vim.api.nvim_create_autocmd("VimResized", {
         group = globals.user_au_group,
-        command = "tabdo wincmd ="
+        command = "tabdo wincmd =",
     })
 end
 

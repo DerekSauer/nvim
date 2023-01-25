@@ -21,7 +21,7 @@ function M.config()
         auto_install = true,
 
         -- Make sure the following syntaxes are always installed
-        ensure_installed = { "lua", "vim", "help", "markdown", "rust", "toml"},
+        ensure_installed = { "lua", "vim", "help", "markdown", "rust", "toml" },
 
         -- Enable the syntax highlighting module
         highlight = {

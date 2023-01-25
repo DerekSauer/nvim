@@ -54,8 +54,9 @@ vim.keymap.set(
 -- If which-key is present add a Buffers category
 local loaded, whichkey = pcall(require, "which-key")
 if loaded then whichkey.register({
-    b = { name = "Buffers" },
-}, { prefix = "<leader>" }) end
+        b = { name = "Buffers" },
+    }, { prefix = "<leader>" })
+end
 
 -- Selections
 vim.keymap.set(
