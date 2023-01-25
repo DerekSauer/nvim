@@ -69,7 +69,7 @@ function M.config()
         end
 
         -- Add auto formatting to LSPs that support formatting
-        if client.supports_method("textDocument/formatting") then lsp_format.on_attach(client) end
+        if client.server_capabilities.documentFormattingProvider then lsp_format.on_attach(client) end
 
         -- Add function signature help
         if client.server_capabilities.signatureHelpProvider then
