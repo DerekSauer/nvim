@@ -12,7 +12,7 @@ function M.config()
     local dap = require("dap")
 
     -- Setup dap-ui
-    require("plugins/dap/dapui").setup(dap)
+    require("plugins/dap/ui").setup(dap)
 
     -- Setup keymaps
     require("plugins/dap/keymaps").setup(dap)
