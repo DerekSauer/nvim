@@ -11,6 +11,14 @@ function M.config()
 
     local config = {
         snippet_engine = "luasnip",
+
+        languages = {
+            lua = {
+                template = {
+                    annotation_convention = "emmylua",
+                },
+            },
+        },
     }
 
     neogen.setup(config)
