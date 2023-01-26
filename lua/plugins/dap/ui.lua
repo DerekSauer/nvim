@@ -22,9 +22,6 @@ function M.setup(dap)
         vim.cmd(":Neotree close")
         dapui.open({})
     end
-    dap.listeners.before.event_terminated["dap_ui_config"] = function() dapui.close({}) end
-    dap.listeners.before.event_exited["dap_ui_config"] = function() dapui.close({}) end
-    dap.listeners.before.disconnect["dap_ui_config"] = function() dapui.close({}) end
 
     -- Setup dap virtual texts
     local dap_vt_config = {
