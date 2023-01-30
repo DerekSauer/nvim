@@ -1,8 +1,9 @@
--- Rust-Analyzer LSP configuration
 local M = {}
 
-function M.setup(lsp_zero)
-    lsp_zero.configure("rust_analyzer", {
+function M.setup(lsp_config, lsp_capabilities)
+    lsp_config.rust_analyzer.setup({
+        capabilities = lsp_capabilities,
+
         settings = {
             ["rust-analyzer"] = {
                 checkOnSave = {

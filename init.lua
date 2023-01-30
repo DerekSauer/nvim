@@ -75,6 +75,9 @@ lsp_log.set_level(lsp_log.levels.ERROR)
 -- Setup my own auto commands
 require("functions").setup_autocmds()
 
+-- Setup the diagnostics interface
+require("diagnostics").setup()
+
 -- Bootstrap Lazy.nvim if it is not installed
 require("bootstrap").setup()
 

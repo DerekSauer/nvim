@@ -1,20 +1,20 @@
--- Sumneko_lua LSP configuration
 local M = {}
 
-function M.setup(lsp_zero)
-    local runtime_path = vim.split(package
-        .path, ";")
-    table.insert(runtime_path,
-        "lua/?.lua")
-    table.insert(runtime_path,
-        "lua/?/init.lua")
-    lsp_zero.configure("sumneko_lua", {
+local runtime_path = vim.split(package.path, ";")
+table.insert(runtime_path, "lua/?.lua")
+table.insert(runtime_path, "lua/?/init.lua")
+
+function M.setup(lsp_config, lsp_capabilities)
+    lsp_config.sumneko_lua.setup({
+        capabilities = lsp_capabilities,
+        single_file_support = true,
+
         settings = {
             Lua = {
                 format = {
                     enable = true,
 
-                    -- Values must be strings
+                    -- Values must be strings!
                     defaultConfig = {
                         indent_style = "space",
                         indent_size = "4",
@@ -24,7 +24,7 @@ function M.setup(lsp_zero)
                         call_arg_parentheses = "keep",
                         table_separator_style = "comma",
                         trailing_table_separator = "smart",
-                        max_line_length = "120",
+                        max_line_length = "100",
                     },
                 },
                 runtime = {
@@ -36,6 +36,7 @@ function M.setup(lsp_zero)
                 },
                 workspace = {
                     checkThirdParty = false,
+                    library = vim.api.nvim_get_runtime_file("*.lua", true),
                 },
                 telemetry = {
                     enable = false,
