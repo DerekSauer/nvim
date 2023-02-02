@@ -24,6 +24,9 @@ local M = {
         -- Improve interop between 'mason' and 'null-ls'
         { "jay-babu/mason-null-ls.nvim",
             dependencies = { "jose-elias-alvarez/null-ls.nvim", "williamboman/mason.nvim" }, },
+
+        -- Show function signature help
+        "ray-x/lsp_signature.nvim",
     },
 }
 
@@ -97,6 +100,14 @@ function M.config()
     -- Initialize code symbols outline utility
     require("symbols-outline").setup()
 
+    -- Config options for lsp_signature
+    local lsp_sig_config = {
+        bind = true,
+        handler_opts = {
+            border = require("globals").border_style,
+        },
+    }
+
     -- Create an autocommand that will execute additional configuration when an LSP is attached to a buffer
     vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(args)
@@ -114,6 +125,11 @@ function M.config()
             -- Get code context from the LSP
             if client.server_capabilities.documentSymbolProvider then
                 navic.attach(client, buffer_number)
+            end
+
+            -- Show function signature help
+            if client.server_capabilities.signatureHelpProvider then
+                require("lsp_signature").on_attach(lsp_sig_config, buffer_number)
             end
         end,
     })
