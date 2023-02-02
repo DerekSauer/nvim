@@ -21,23 +21,8 @@ local M = {
         -- Attached LSP as a completion source
         "hrsh7th/cmp-nvim-lsp",
 
-        -- LSP documentSymbol completion source
-        "hrsh7th/cmp-nvim-lsp-document-symbol",
-
-        -- LSP function signature completion source
-        "hrsh7th/cmp-nvim-lsp-signature-help",
-
-        -- Completions for math operations
-        "hrsh7th/cmp-calc",
-
-        -- Completions for emoji
-        "hrsh7th/cmp-emoji",
-
-        -- Completeions for nerdfonts
-        "chrisgrieser/cmp-nerdfont",
-
-        -- Git as a completion source
-        { "petertriho/cmp-git", ft = "gitcommit", config = function() require("cmp_git").setup() end },
+        -- Nvim's command line as a source
+        "hrsh7th/cmp-cmdline",
 
         -- Crates.io as a completion source
         { "Saecki/crates.nvim", event = { "Bufread Cargo.toml" },
@@ -45,12 +30,6 @@ local M = {
 
         -- Dap REPL and Dap-UI as completion sources
         { "rcarriga/cmp-dap", ft = { "dap-repl", "dapui_watches", "dapui_hover" } },
-
-        -- Latex symbol completions
-        { "amarakon/nvim-cmp-lua-latex-symbols", ft = { "tex", "plaintex" } },
-
-        -- Nvim's command line as a source
-        "hrsh7th/cmp-cmdline",
 
         -- Add LSP symbols to completions
         "onsails/lspkind.nvim",
@@ -66,18 +45,11 @@ end
 -- Abbreviated names for sources
 local menu_items = {
     nvim_lsp = "[LSP]",
-    nvim_lsp_signature_help = "[SIG]",
-    nvim_lsp_document_symbol = "[DOC]",
-    calc = "[CALC]",
-    emoji = "[EMOJI]",
-    nerdfont = "[NF]",
     luasnip = "[SNIP]",
     crates = "[CRATE]",
     buffer = "[BUF]",
     path = "[PATH]",
-    git = "[GIT]",
     dap = "[DAP]",
-    ["lua-latex-symbols"] = "[TEX]",
 }
 
 function M.config()
@@ -85,16 +57,12 @@ function M.config()
     local luasnip = require("luasnip")
     local globals = require("globals")
 
-    -- Set nvim to show a popup menu for completions
-    -- without automatically selecting a match
-    vim.opt.completeopt = "menu,menuone,noselect"
-
     -- Default completion selection behavior
     local select_opts = { behavior = cmp.SelectBehavior.Select }
 
     local config = {
+        -- Display the matching completion inline
         experimental = {
-            -- Display the matching completion inline
             ghost_text = true,
         },
 
@@ -108,13 +76,6 @@ function M.config()
         -- Open the menu immediately when matches are available
         completion = {
             keyword_length = 1,
-            completeopt = "menu,menuone,noselect",
-        },
-
-        -- Replace existing text when selecting a completion
-        confirm_opts = {
-            behavior = cmp.ConfirmBehavior.Replace,
-            select = false,
         },
 
         -- Add our borders and style the completion and documentation windows
@@ -136,23 +97,19 @@ function M.config()
         sources = cmp.config.sources(
         -- LSP completion group
             {
-                { name = "nvim_lsp_signature_help" },
                 { name = "nvim_lsp" },
             },
 
             -- Snippets completion group
             {
-                { name = "calc" },
-                { name = "emoji" },
-                { name = "nerdfont" },
                 { name = "luasnip" },
             },
 
             -- Misc completion group
             {
                 { name = "crates" },
-                { name = "buffer", option = { keyword_length = 3 } },
                 { name = "path" },
+                { name = "buffer", option = { keyword_length = 3 } },
             }
         ),
 
@@ -233,36 +190,6 @@ function M.config()
     -- Initialize 'nvim-cmp'
     cmp.setup(config)
 
-    -- Enable git completions in git commit messages
-    cmp.setup.filetype("gitcommit", {
-        sources = cmp.config.sources(
-            {
-                { name = "git" },
-                { name = "nvim_lsp" },
-            },
-            {
-                { name = "buffer" },
-            }
-        ),
-    })
-
-    -- Enable completions in tex files
-    cmp.setup.filetype({ "tex", "plaintex" }, {
-        sources = cmp.config.sources(
-            {
-                { name = "nvim_lsp_signature_help" },
-                { name = "nvim_lsp" },
-            },
-            {
-                { name = "lua-latex-symbols" },
-                { name = "luasnip" },
-            },
-            {
-                { name = "buffer" },
-            }
-        ),
-    })
-
     -- Enable completions in DAP repl or Dap-UI
     cmp.setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
         sources = {
@@ -275,9 +202,6 @@ function M.config()
         mapping = cmp.mapping.preset.cmdline(),
         sources = cmp.config.sources(
             {
-                { name = "nvim_lsp_document_symbol" },
-            },
-            {
                 { name = "buffer" },
             }
         ),
@@ -289,8 +213,6 @@ function M.config()
         sources = cmp.config.sources(
             {
                 { name = "path" },
-            },
-            {
                 { name = "cmdline" },
             }
         ),
