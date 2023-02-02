@@ -30,9 +30,6 @@ local M = {
 
         -- Dap REPL and Dap-UI as completion sources
         { "rcarriga/cmp-dap", ft = { "dap-repl", "dapui_watches", "dapui_hover" } },
-
-        -- Add LSP symbols to completions
-        "onsails/lspkind.nvim",
     },
 }
 
@@ -50,6 +47,35 @@ local menu_items = {
     buffer = "[BUF]",
     path = "[PATH]",
     dap = "[DAP]",
+}
+
+-- Icons for the 'kind' of completion menu entry
+local kind_icons = {
+    Text = "",
+    Method = "",
+    Function = "",
+    Constructor = "",
+    Field = "ﰠ",
+    Variable = "",
+    Class = "ﴯ",
+    Interface = "",
+    Module = "",
+    Property = "ﰠ",
+    Unit = "塞",
+    Value = "",
+    Enum = "",
+    Keyword = "",
+    Snippet = "",
+    Color = "",
+    File = "",
+    Reference = "",
+    Folder = "",
+    EnumMember = "",
+    Constant = "",
+    Struct = "פּ",
+    Event = "",
+    Operator = "",
+    TypeParameter = "",
 }
 
 function M.config()
@@ -113,13 +139,15 @@ function M.config()
             }
         ),
 
-        -- Modify completion menu to show an icon (using 'lspkind') for the completion, followed
-        -- by the completion itself and source name.
+        -- Modify completion menu to show an icon for the completion, followed
+        -- by the completion item itself and source name.
         formatting = {
             fields = { "kind", "abbr", "menu" },
             format = function(entry, vim_item)
-                return require("lspkind").cmp_format({ mode = "symbol", menu = menu_items })(entry,
-                    vim_item)
+                vim_item.kind = kind_icons[vim_item.kind] or "??"
+                vim_item.menu = menu_items[entry.source.name] or "??"
+
+                return vim_item
             end,
         },
 
