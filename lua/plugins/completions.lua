@@ -147,6 +147,9 @@ function M.config()
                 vim_item.kind = kind_icons[vim_item.kind] or "??"
                 vim_item.menu = menu_items[entry.source.name] or "??"
 
+                -- Suppress duplicate entries
+                vim_item.dup = ({ nvim_lsp = 0 })[entry.source.name] or 0
+
                 return vim_item
             end,
         },
