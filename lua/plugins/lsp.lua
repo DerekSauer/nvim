@@ -30,116 +30,11 @@ local M = {
     },
 }
 
-function M.config()
-    local lsp_config = require("lspconfig")
-
-    -- Extend nvim's LSP client capabilities with those provided by 'nvim-cmp'
-    local lsp_capabilities = vim.deepcopy(lsp_config.util.default_config.capabilities)
-    lsp_capabilities = vim.tbl_deep_extend("force", lsp_capabilities,
-        require("cmp_nvim_lsp").default_capabilities())
-
-    -- Initialize 'mason'
-    require("mason").setup()
-    require("mason.settings").set({ ui = { border = require("globals").border_style } })
-
-    -- Initialize the 'mason' & 'lspconfig' interop helper
-    require("mason-lspconfig").setup({ ensure_installed = { "sumneko_lua", "rust_analyzer", "taplo" } })
-
-    -- Setup installed LSPs
-    require("mason-lspconfig").setup_handlers({
-        -- Default handler will automatically setup any server without a custom setup function
-        function(server_name)
-            require("lspconfig")[server_name].setup({ capabilities = lsp_capabilities })
-        end,
-
-        -- Override the defaults with our own settings for select servers
-        ["rust_analyzer"] = function() require("plugins/lsp_servers/rust_analyzer").setup(lsp_config
-                , lsp_capabilities)
-        end,
-        ["sumneko_lua"] = function() require("plugins/lsp_servers/sumneko_lua").setup(lsp_config,
-                lsp_capabilities)
-        end,
-        ["wgsl_analyzer"] = function() require("plugins/lsp_servers/wgsl_analyzer").setup(lsp_config
-                , lsp_capabilities)
-        end,
-    })
-
-    -- Initialize the interop handler for 'mason' and 'null-ls'
-    local null_ls = require("null-ls")
-    require("mason-null-ls").setup({ ensure_installed = {}, automatic_setup = true })
-
-    -- Setup installed 'null-ls' sources
-    require("mason-null-ls").setup_handlers({
-        -- Default handler will automatically setup any source without a custom setup function
-        function(source_name, methods)
-            require("mason-null-ls.automatic_setup")(source_name, methods)
-        end,
-
-        -- Disable Taplo as a null-ls source, its already an LSP source
-        ["taplo"] = function()
-            null_ls.disable(null_ls.builtins.formatting.taplo)
-        end,
-
-        -- Example override
-        -- ["stylua"] = function(source_name, methods)
-        --     null_ls.register(null_ls.builtins.formatting.stylua)
-        -- end,
-    })
-
-    -- Initialize 'null-ls'
-    null_ls.setup()
-
-    -- Initialize buffer auto-formatting utility
-    local lsp_format = require("lsp-format")
-    lsp_format.setup()
-
-    -- Initialize 'navic' so we can show code context in the winbar
-    local navic = require("nvim-navic")
-    navic.setup({ depth_limit = 6, highlight = true })
-
-    -- Initialize code symbols outline utility
-    require("symbols-outline").setup()
-
-    -- Config options for lsp_signature
-    local lsp_sig_config = {
-        bind = true,
-        handler_opts = {
-            border = require("globals").border_style,
-        },
-    }
-
-    -- Create an autocommand that will execute additional configuration when an LSP is attached to a buffer
-    vim.api.nvim_create_autocmd("LspAttach", {
-        callback = function(args)
-            local client = vim.lsp.get_client_by_id(args.data.client_id)
-            local buffer_number = args.buf
-
-            -- Add LSP keymaps
-            M.lsp_keymaps(client, buffer_number)
-
-            -- Auto-format buffers on save
-            if client.server_capabilities.documentFormattingProvider then
-                lsp_format.on_attach(client)
-            end
-
-            -- Get code context from the LSP
-            if client.server_capabilities.documentSymbolProvider then
-                navic.attach(client, buffer_number)
-            end
-
-            -- Show function signature help
-            if client.server_capabilities.signatureHelpProvider then
-                require("lsp_signature").on_attach(lsp_sig_config, buffer_number)
-            end
-        end,
-    })
-end
-
 ---Creates LSP keymaps for a buffer when an LSP is attached.
 ---The function will only create maps for functionality the LSP supports.
 ---@param client number ID of the LSP client.
 ---@param bufnr number ID of the buffer.
-function M.lsp_keymaps(client, bufnr)
+local function lsp_keymaps(client, bufnr)
     -- Tracks if any mappings were created to control if the
     -- LSP group appears in Whichkey for this buffer
     local has_mappings = false
@@ -238,6 +133,111 @@ function M.lsp_keymaps(client, bufnr)
             l = { name = "LSP" },
         }, { prefix = "<leader>", buffer = bufnr })
     end
+end
+
+function M.config()
+    local lsp_config = require("lspconfig")
+
+    -- Extend nvim's LSP client capabilities with those provided by 'nvim-cmp'
+    local lsp_capabilities = vim.deepcopy(lsp_config.util.default_config.capabilities)
+    lsp_capabilities = vim.tbl_deep_extend("force", lsp_capabilities,
+        require("cmp_nvim_lsp").default_capabilities())
+
+    -- Initialize 'mason'
+    require("mason").setup()
+    require("mason.settings").set({ ui = { border = require("globals").border_style } })
+
+    -- Initialize the 'mason' & 'lspconfig' interop helper
+    require("mason-lspconfig").setup({ ensure_installed = { "sumneko_lua", "rust_analyzer", "taplo" } })
+
+    -- Setup installed LSPs
+    require("mason-lspconfig").setup_handlers({
+        -- Default handler will automatically setup any server without a custom setup function
+        function(server_name)
+            require("lspconfig")[server_name].setup({ capabilities = lsp_capabilities })
+        end,
+
+        -- Override the defaults with our own settings for select servers
+        ["rust_analyzer"] = function() require("plugins/lsp_servers/rust_analyzer").setup(lsp_config
+                , lsp_capabilities)
+        end,
+        ["sumneko_lua"] = function() require("plugins/lsp_servers/sumneko_lua").setup(lsp_config,
+                lsp_capabilities)
+        end,
+        ["wgsl_analyzer"] = function() require("plugins/lsp_servers/wgsl_analyzer").setup(lsp_config
+                , lsp_capabilities)
+        end,
+    })
+
+    -- Initialize the interop handler for 'mason' and 'null-ls'
+    local null_ls = require("null-ls")
+    require("mason-null-ls").setup({ ensure_installed = {}, automatic_setup = true })
+
+    -- Setup installed 'null-ls' sources
+    require("mason-null-ls").setup_handlers({
+        -- Default handler will automatically setup any source without a custom setup function
+        function(source_name, methods)
+            require("mason-null-ls.automatic_setup")(source_name, methods)
+        end,
+
+        -- Disable Taplo as a null-ls source, its already an LSP source
+        ["taplo"] = function()
+            null_ls.disable(null_ls.builtins.formatting.taplo)
+        end,
+
+        -- Example override
+        -- ["stylua"] = function(source_name, methods)
+        --     null_ls.register(null_ls.builtins.formatting.stylua)
+        -- end,
+    })
+
+    -- Initialize 'null-ls'
+    null_ls.setup()
+
+    -- Initialize buffer auto-formatting utility
+    local lsp_format = require("lsp-format")
+    lsp_format.setup()
+
+    -- Initialize 'navic' so we can show code context in the winbar
+    local navic = require("nvim-navic")
+    navic.setup({ depth_limit = 6, highlight = true })
+
+    -- Initialize code symbols outline utility
+    require("symbols-outline").setup()
+
+    -- Config options for lsp_signature
+    local lsp_sig_config = {
+        bind = true,
+        handler_opts = {
+            border = require("globals").border_style,
+        },
+    }
+
+    -- Create an autocommand that will execute additional configuration when an LSP is attached to a buffer
+    vim.api.nvim_create_autocmd("LspAttach", {
+        callback = function(args)
+            local client = vim.lsp.get_client_by_id(args.data.client_id)
+            local buffer_number = args.buf
+
+            -- Add LSP keymaps
+            lsp_keymaps(client, buffer_number)
+
+            -- Auto-format buffers on save
+            if client.server_capabilities.documentFormattingProvider then
+                lsp_format.on_attach(client)
+            end
+
+            -- Get code context from the LSP
+            if client.server_capabilities.documentSymbolProvider then
+                navic.attach(client, buffer_number)
+            end
+
+            -- Show function signature help
+            if client.server_capabilities.signatureHelpProvider then
+                require("lsp_signature").on_attach(lsp_sig_config, buffer_number)
+            end
+        end,
+    })
 end
 
 return M

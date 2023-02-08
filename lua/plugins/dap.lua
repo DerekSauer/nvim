@@ -14,59 +14,8 @@ local M = {
     },
 }
 
-function M.config()
-    local dap = require("dap")
-
-    -- Initialize the 'mason' & 'nvim-dap' interop helper
-    require("mason-nvim-dap").setup({ ensure_installed = { "codelldb" }, automatic_setup = true })
-
-    -- Setup installed debug adapters
-    require("mason-nvim-dap").setup_handlers({
-        -- Default handler will automatically setup any DAP without a custom
-        -- setup below. Automatic setup will enable an adapter with default settings.
-        function(source_name)
-            require("mason-nvim-dap.automatic_setup")(source_name)
-        end,
-
-        -- Override 'codelldb' with our own setup function
-        codelldb = function()
-            require("plugins/dap_adapters/codelldb").setup(dap)
-        end,
-
-        -- Example override
-        -- python = function(source_name)
-        --     dap.adapters.python = {
-        --     }
-        --
-        --     dap.configurations.python = {
-        --     }
-        -- end,
-    })
-
-    -- Setup dap-ui
-    M.ui_config(dap)
-
-    -- Setup keymaps
-    M.keymaps(dap)
-
-    -- Map adapters to configurations for load_launchjs()
-    local adapter_map = {
-        codelldb = { "c", "cpp", "rust" },
-    }
-
-    -- Parse a ".vscode/launch.js" file if one is present in the workspace
-    require("dap.ext.vscode").load_launchjs(nil, adapter_map)
-
-    -- Autocommand to reparse the launch.json file if it changes
-    vim.api.nvim_create_autocmd({ "BufWritePost" }, {
-        group = require("globals").user_au_group,
-        pattern = { ".vscode/launch.json" },
-        callback = function() require("dap.ext.vscode").load_launchjs(nil, adapter_map) end,
-    })
-end
-
 ---Configure dap-ui.
-function M.ui_config(dap)
+local function ui_config(dap)
     local dapui = require("dapui")
 
     local dap_ui_config = {
@@ -116,7 +65,7 @@ function M.ui_config(dap)
 end
 
 ---Config DAP keymap.
-function M.keymaps(dap)
+local function keymaps(dap)
     vim.keymap.set("n", "<F5>", function() dap.continue() end, { desc = "Debugger: Start/continue" })
     vim.keymap.set("n", "<F6>", function() dap.step_into() end, { desc = "Debugger: Step into" })
     vim.keymap.set("n", "<F7>", function() dap.step_over() end, { desc = "Debugger: Step over" })
@@ -145,6 +94,57 @@ function M.keymaps(dap)
     require("which-key").register({
         d = { name = "Debugger" },
     }, { prefix = "<leader>" })
+end
+
+function M.config()
+    local dap = require("dap")
+
+    -- Initialize the 'mason' & 'nvim-dap' interop helper
+    require("mason-nvim-dap").setup({ ensure_installed = { "codelldb" }, automatic_setup = true })
+
+    -- Setup installed debug adapters
+    require("mason-nvim-dap").setup_handlers({
+        -- Default handler will automatically setup any DAP without a custom
+        -- setup below. Automatic setup will enable an adapter with default settings.
+        function(source_name)
+            require("mason-nvim-dap.automatic_setup")(source_name)
+        end,
+
+        -- Override 'codelldb' with our own setup function
+        codelldb = function()
+            require("plugins/dap_adapters/codelldb").setup(dap)
+        end,
+
+        -- Example override
+        -- python = function(source_name)
+        --     dap.adapters.python = {
+        --     }
+        --
+        --     dap.configurations.python = {
+        --     }
+        -- end,
+    })
+
+    -- Setup dap-ui
+    ui_config(dap)
+
+    -- Setup keymaps
+    keymaps(dap)
+
+    -- Map adapters to configurations for load_launchjs()
+    local adapter_map = {
+        codelldb = { "c", "cpp", "rust" },
+    }
+
+    -- Parse a ".vscode/launch.js" file if one is present in the workspace
+    require("dap.ext.vscode").load_launchjs(nil, adapter_map)
+
+    -- Autocommand to reparse the launch.json file if it changes
+    vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+        group = require("globals").user_au_group,
+        pattern = { ".vscode/launch.json" },
+        callback = function() require("dap.ext.vscode").load_launchjs(nil, adapter_map) end,
+    })
 end
 
 return M

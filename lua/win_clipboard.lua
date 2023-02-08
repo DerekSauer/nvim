@@ -73,29 +73,41 @@ function M.get_active()
 end
 
 function M.setup()
-    vim.api.nvim_exec(
-        [[
-    function s:copy(lines, regtype)
-      call luaeval('require("core.vim.deferclip").copy(_A[1], _A[2])', [a:lines, a:regtype])
-    endfunction
-    function s:get_active()
-      call luaeval('require("core.vim.deferclip").get_active()')
-    endfunction
+    vim.opt.clipboard = {
+        name = "deferClip",
+        copy = {
+            ["+"] = function(lines, regtype) M.copy(lines, regtype) end,
+            ["*"] = function(lines, regtype) M.copy(lines, regtype) end,
+        },
+        paste = {
 
-    let g:clipboard = {
-          \   'name': 'deferClip',
-          \   'copy': {
-          \      '+': {lines, regtype -> s:copy(lines, regtype)},
-          \      '*': {lines, regtype -> s:copy(lines, regtype)},
-          \    },
-          \   'paste': {
-          \      '+': {-> s:get_active()},
-          \      '*': {-> s:get_active()},
-          \   },
-          \ }
-  ]]     ,
-        false
-    )
+        },
+    }
+
+    --   vim.api.nvim_exec(
+    --       [[
+    --   function s:copy(lines, regtype)
+    --     call luaeval('require("win_clipboard").copy(_A[1], _A[2])', [a:lines, a:regtype])
+    --   endfunction
+    --   function s:get_active()
+    --     call luaeval('require("win_clipboard").get_active()')
+    --   endfunction
+    --
+    --   let g:clipboard = {
+    --         \   'name': 'deferClip',
+    --         \   'copy': {
+    --         \      '+': {lines, regtype -> s:copy(lines, regtype)},
+    --         \      '*': {lines, regtype -> s:copy(lines, regtype)},
+    --         \    },
+    --         \   'paste': {
+    --         \      '+': {-> s:get_active()},
+    --         \      '*': {-> s:get_active()},
+    --         \   },
+    --         \ }
+    -- ]]     ,
+    --       false
+    --   )
+
     vim.api.nvim_create_autocmd({ "FocusGained", "VimEnter" }, {
         group = augroup,
         callback = sync_from,
