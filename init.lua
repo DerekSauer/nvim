@@ -2,6 +2,7 @@
 vim.g.mapleader = ","
 
 -- Neovim Options
+vim.opt.clipboard = "unnamedplus"
 vim.opt.encoding = "utf-8"
 vim.opt.fileencoding = "utf-8"
 vim.opt.updatetime = 300
@@ -48,16 +49,6 @@ if vim.fn.has("nvim-0.8") == 1 then vim.opt.cmdheight = 0 end
 if vim.fn.executable("rg") == 1 then
     vim.opt.grepprg = "rg --vimgrep --no-heading --smart-case --hidden"
     vim.opt.grepformat = "%f:%l:%c:%m"
-end
-
--- On Windows use a work around for poor clipboard performance
--- Needs win32yank installed (scoop install win32yank)
--- Credit, Yioneko @ https://github.com/yioneko
--- https://github.com/neovim/neovim/issues/21739#issuecomment-1399405391
-if vim.fn.has("win32") or vim.fn.has("wsl") then
-    require("win_clipboard").setup()
-else
-    vim.opt.clipboard = "unnamedplus"
 end
 
 -- On Windows use Powershell for terminal commands
