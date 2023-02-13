@@ -1,7 +1,6 @@
 local M = {
     -- Text/code completion engine
     "hrsh7th/nvim-cmp",
-
     dependencies = {
         -- Snippets engine
         "L3MON4D3/LuaSnip",
@@ -10,7 +9,7 @@ local M = {
         { "rafamadriz/friendly-snippets", dependencies = "L3MON4D3/LuaSnip" },
 
         -- Snippet completions
-        { "saadparwaiz1/cmp_luasnip", dependencies = "L3MON4D3/LuaSnip" },
+        { "saadparwaiz1/cmp_luasnip",     dependencies = "L3MON4D3/LuaSnip" },
 
         -- File path completions
         "hrsh7th/cmp-path",
@@ -32,12 +31,6 @@ local M = {
         { "rcarriga/cmp-dap", ft = { "dap-repl", "dapui_watches", "dapui_hover" } },
     },
 }
-
-local has_words_before = function()
-    local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-    return col ~= 0 and
-        vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
-end
 
 -- Abbreviated names for sources
 local menu_items = {
@@ -91,19 +84,16 @@ function M.config()
         experimental = {
             ghost_text = true,
         },
-
         -- Use LuaSnip as cmp's snippet engine
         snippet = {
             expand = function(args)
                 luasnip.lsp_expand(args.body)
             end,
         },
-
         -- Open the menu immediately when matches are available
         completion = {
             keyword_length = 1,
         },
-
         -- Add our borders and style the completion and documentation windows
         window = {
             completion = {
@@ -119,7 +109,6 @@ function M.config()
                 scrollbar = true,
             },
         },
-
         sources = cmp.config.sources(
         -- LSP completion group
             {
@@ -138,7 +127,6 @@ function M.config()
                 { name = "buffer", option = { keyword_length = 3 } },
             }
         ),
-
         -- Modify completion menu to show an icon for the completion, followed
         -- by the completion item itself and source name.
         formatting = {
@@ -153,7 +141,6 @@ function M.config()
                 return vim_item
             end,
         },
-
         -- Disable completions when in a comment
         enabled = function()
             local context = require("cmp.config.context")
@@ -164,7 +151,6 @@ function M.config()
                     and not context.in_syntax_group("Comment")
             end
         end,
-
         -- Keymaps
         mapping = cmp.mapping.preset.insert({
             -- Accept selected completion
@@ -179,9 +165,9 @@ function M.config()
 
             -- Scroll through documention window
             ["<Right>"] = cmp.mapping.scroll_docs(5),
-            ["<Left>"] = cmp.mapping.scroll_docs(-5),
+            ["<Left>"] = cmp.mapping.scroll_docs( -5),
             ["<C-l>"] = cmp.mapping.scroll_docs(5),
-            ["<C-h>"] = cmp.mapping.scroll_docs(-5),
+            ["<C-h>"] = cmp.mapping.scroll_docs( -5),
 
             -- Open/Close completion menu
             ["<C-Space>"] = cmp.mapping(function()
@@ -198,8 +184,6 @@ function M.config()
                     cmp.select_next_item()
                 elseif luasnip.expand_or_jumpable() then
                     luasnip.expand_or_jump()
-                elseif has_words_before() then
-                    cmp.complete()
                 else
                     fallback()
                 end
@@ -209,8 +193,8 @@ function M.config()
             ["<S-Tab>"] = cmp.mapping(function(fallback)
                 if cmp.visible() then
                     cmp.select_prev_item()
-                elseif luasnip.jumpable(-1) then
-                    luasnip.jump(-1)
+                elseif luasnip.jumpable( -1) then
+                    luasnip.jump( -1)
                 else
                     fallback()
                 end
@@ -255,7 +239,7 @@ function M.config()
     -- Create snippet navigation keymaps
     vim.keymap.set({ "s", "n" }, "]n", function() require("luasnip").jump(1) end,
         { desc = "Next snippet placeholder" })
-    vim.keymap.set({ "s", "n" }, "[n", function() require("luasnip").jump(-1) end,
+    vim.keymap.set({ "s", "n" }, "[n", function() require("luasnip").jump( -1) end,
         { desc = "Previous snippet placeholder" })
 end
 
