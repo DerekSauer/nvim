@@ -1,7 +1,6 @@
 local M = {
     -- LSP configuration helper
     "neovim/nvim-lspconfig",
-
     dependencies = {
         -- LSP installation and management tool
         "williamboman/mason.nvim",
@@ -19,7 +18,7 @@ local M = {
         "lukas-reineke/lsp-format.nvim",
 
         -- Use non-LSP services as though they were an LSP (E.g.: Linters, formatters)
-        { "jose-elias-alvarez/null-ls.nvim", dependencies = "nvim-lua/plenary.nvim" },
+        { "jose-elias-alvarez/null-ls.nvim",   dependencies = "nvim-lua/plenary.nvim" },
 
         -- Improve interop between 'mason' and 'null-ls'
         { "jay-babu/mason-null-ls.nvim",
@@ -115,7 +114,10 @@ local function lsp_keymaps(client, bufnr)
     end
 
     if client.server_capabilities.documentSymbolProvider then
-        vim.keymap.set("n", "<leader>lo", function() vim.cmd("SymbolsOutline") vim.cmd("redraw") end
+        vim.keymap.set("n", "<leader>lo", function()
+            vim.cmd("SymbolsOutline")
+            vim.cmd("redraw")
+        end
             , { buffer = bufnr, desc = "Toggle symbol outline" })
         has_mappings = true
     end
@@ -148,7 +150,7 @@ function M.config()
     require("mason.settings").set({ ui = { border = require("globals").border_style } })
 
     -- Initialize the 'mason' & 'lspconfig' interop helper
-    require("mason-lspconfig").setup({ ensure_installed = { "sumneko_lua", "rust_analyzer", "taplo" } })
+    require("mason-lspconfig").setup({ ensure_installed = { "lua_ls", "rust_analyzer", "taplo" } })
 
     -- Setup installed LSPs
     require("mason-lspconfig").setup_handlers({
@@ -156,15 +158,17 @@ function M.config()
         function(server_name)
             require("lspconfig")[server_name].setup({ capabilities = lsp_capabilities })
         end,
-
         -- Override the defaults with our own settings for select servers
-        ["rust_analyzer"] = function() require("plugins/lsp_servers/rust_analyzer").setup(lsp_config
+        ["rust_analyzer"] = function()
+            require("plugins/lsp_servers/rust_analyzer").setup(lsp_config
                 , lsp_capabilities)
         end,
-        ["sumneko_lua"] = function() require("plugins/lsp_servers/sumneko_lua").setup(lsp_config,
+        ["lua_ls"] = function()
+            require("plugins/lsp_servers/lua_ls").setup(lsp_config,
                 lsp_capabilities)
         end,
-        ["wgsl_analyzer"] = function() require("plugins/lsp_servers/wgsl_analyzer").setup(lsp_config
+        ["wgsl_analyzer"] = function()
+            require("plugins/lsp_servers/wgsl_analyzer").setup(lsp_config
                 , lsp_capabilities)
         end,
     })
@@ -179,12 +183,10 @@ function M.config()
         function(source_name, methods)
             require("mason-null-ls.automatic_setup")(source_name, methods)
         end,
-
         -- Disable Taplo as a null-ls source, its already an LSP source
         ["taplo"] = function()
             null_ls.disable(null_ls.builtins.formatting.taplo)
         end,
-
         -- Example override
         -- ["stylua"] = function(source_name, methods)
         --     null_ls.register(null_ls.builtins.formatting.stylua)

@@ -5,10 +5,9 @@ table.insert(runtime_path, "lua/?.lua")
 table.insert(runtime_path, "lua/?/init.lua")
 
 function M.setup(lsp_config, lsp_capabilities)
-    lsp_config.sumneko_lua.setup({
+    lsp_config.lua_ls.setup({
         capabilities = lsp_capabilities,
         single_file_support = true,
-
         settings = {
             Lua = {
                 format = {
