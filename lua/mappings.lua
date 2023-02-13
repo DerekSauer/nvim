@@ -53,7 +53,8 @@ vim.keymap.set(
 
 -- If which-key is present add a Buffers category
 local loaded, whichkey = pcall(require, "which-key")
-if loaded then whichkey.register({
+if loaded then
+    whichkey.register({
         b = { name = "Buffers" },
     }, { prefix = "<leader>" })
 end
@@ -66,3 +67,6 @@ vim.keymap.set(
     { silent = true, desc = "Select all" }
 )
 vim.keymap.set("n", "<C-a>", ":keepjumps normal! ggVG<CR>", { silent = true, desc = "Select all" })
+
+-- Toggle spelling
+vim.keymap.set("n", "<leader>s", ":set spell!<CR>", { silent = true, desc = "Toggle spelling" })
