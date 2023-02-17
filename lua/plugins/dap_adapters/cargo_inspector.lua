@@ -48,9 +48,9 @@ local function create_window(configuration_name, window_options)
         height = window_height,
         col = vim.api.nvim_get_option("columns") - window_width - 2,
         row = vim.api.nvim_get_option("lines")
-            - vim.api.nvim_get_option("cmdheight")
-            - window_options.height
-            - 3,
+        - vim.api.nvim_get_option("cmdheight")
+        - window_options.height
+        - 3,
         border = window_options.border,
         style = "minimal",
     })
@@ -103,7 +103,6 @@ local function run_cargo_task(progress_window, final_config)
         args = final_config.cargo.args,
         cwd = final_config.cwd,
         env = final_config.cargo.env,
-
         -- Cargo emits build progress messages to `stderr`
         -- We can send that output directly to the progress window
         on_stderr = progress_window and function(error, data)
@@ -119,7 +118,6 @@ local function run_cargo_task(progress_window, final_config)
                 end)
             end
         end or nil,
-
         -- Cargo emits build metadata to `stdout`
         -- We buffer that data and process it here after the Cargo process terminates
         on_exit = function(job, exit_code)
@@ -131,7 +129,8 @@ local function run_cargo_task(progress_window, final_config)
                     else
                         final_config.program = ""
                         vim.schedule(function()
-                            vim.notify("Cargo could not find an executable for debug configuration:\n" ..
+                            vim.notify(
+                                "Cargo could not find an executable for debug configuration:\n" ..
                                 final_config.name,
                                 vim.log.levels.ERROR)
                         end)
@@ -139,10 +138,12 @@ local function run_cargo_task(progress_window, final_config)
                 end)
             else
                 vim.schedule(function()
-                    vim.notify("Cargo failed to build debug configuration:\n" .. final_config.name, vim.log.levels.ERROR)
+                    vim.notify("Cargo failed to build debug configuration:\n" .. final_config.name,
+                        vim.log.levels.ERROR)
                 end)
-            end
 
+                final_config.program = ""
+            end
         end,
     }):start()
 end
@@ -223,7 +224,8 @@ function M.inspect(dap_config, user_options)
 
     -- Verify that the rust compiler exists
     if vim.fn.exepath("rustc") == "" then
-        vim.notify("Cargo Inspector Error:\nRust compiler (rustc) cannot be found.", vim.log.levels.ERROR)
+        vim.notify("Cargo Inspector Error:\nRust compiler (rustc) cannot be found.",
+            vim.log.levels.ERROR)
         return final_config
     end
 
@@ -255,7 +257,8 @@ function M.inspect(dap_config, user_options)
     -- library while debugging instead of getting a screen full of ASM
     if rust_source_path and rust_hash then
         if final_config.sourceMap == nil then final_config["sourceMap"] = {} end
-        final_config.sourceMap["/rustc/" .. rust_hash .. "/"] = rust_source_path .. "/lib/rustlib/src/rust/"
+        final_config.sourceMap["/rustc/" .. rust_hash .. "/"] = rust_source_path ..
+            "/lib/rustlib/src/rust/"
     end
 
     -- Enable LLDB's support for Rust's builtin datatypes (vec, str, etc...)
