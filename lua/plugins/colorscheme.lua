@@ -68,6 +68,14 @@ function M.config()
                 IndentBlanklineIndent5 = { fg = theme.term[6] },
                 IndentBlanklineIndent6 = { fg = theme.term[7] },
                 IndentBlanklineIndent7 = { fg = theme.term[8] },
+                -- Treesitter rainbow parens
+                TSRainbowRed = { fg = theme.term[17] },
+                TSRainbowYellow = { fg = theme.term[3] },
+                TSRainbowBlue = { fg = theme.term[4] },
+                TSRainbowOrange = { fg = theme.term[5] },
+                TSRainbowGreen = { fg = theme.term[6] },
+                TSRainbowViolet = { fg = theme.term[7] },
+                TSRainbowCyan = { fg = theme.term[8] },
             }
         end,
         colors = {
