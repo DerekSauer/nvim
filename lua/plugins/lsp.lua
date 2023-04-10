@@ -178,10 +178,7 @@ function M.config()
 
     -- Initialize the interop handler for 'mason' and 'null-ls'
     local null_ls = require("null-ls")
-    require("mason-null-ls").setup({ ensure_installed = {}, automatic_setup = true })
-
-    -- Setup installed 'null-ls' sources
-    require("mason-null-ls").setup_handlers({
+    require("mason-null-ls").setup({ ensure_installed = {}, handlers =  {
         -- Default handler will automatically setup any source without a custom setup function
         function(source_name, methods)
             require("mason-null-ls.automatic_setup")(source_name, methods)
@@ -194,7 +191,7 @@ function M.config()
         -- ["stylua"] = function(source_name, methods)
         --     null_ls.register(null_ls.builtins.formatting.stylua)
         -- end,
-    })
+    }})
 
     -- Initialize 'null-ls'
     null_ls.setup()

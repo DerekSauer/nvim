@@ -100,10 +100,7 @@ function M.config()
     local dap = require("dap")
 
     -- Initialize the 'mason' & 'nvim-dap' interop helper
-    require("mason-nvim-dap").setup({ ensure_installed = { "codelldb" }, automatic_setup = true })
-
-    -- Setup installed debug adapters
-    require("mason-nvim-dap").setup_handlers({
+    require("mason-nvim-dap").setup({ ensure_installed = { "codelldb" }, handlers =  {
         -- Default handler will automatically setup any DAP without a custom
         -- setup below. Automatic setup will enable an adapter with default settings.
         function(source_name)
@@ -123,7 +120,7 @@ function M.config()
         --     dap.configurations.python = {
         --     }
         -- end,
-    })
+    }})
 
     -- Setup dap-ui
     ui_config(dap)
