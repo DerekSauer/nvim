@@ -82,7 +82,7 @@ function M.config()
     local config = {
         -- Display the matching completion inline
         experimental = {
-            ghost_text = true,
+            -- ghost_text = true,
         },
         -- Use LuaSnip as cmp's snippet engine
         snippet = {
