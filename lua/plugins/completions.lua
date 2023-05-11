@@ -24,8 +24,12 @@ local M = {
         "hrsh7th/cmp-cmdline",
 
         -- Crates.io as a completion source
-        { "Saecki/crates.nvim", event = { "Bufread Cargo.toml" },
-            dependencies = "nvim-lua/plenary.nvim", config = function() require("crates").setup() end, },
+        {
+            "Saecki/crates.nvim",
+            event = { "Bufread Cargo.toml" },
+            dependencies = "nvim-lua/plenary.nvim",
+            config = function() require("crates").setup() end,
+        },
 
         -- Dap REPL and Dap-UI as completion sources
         { "rcarriga/cmp-dap", ft = { "dap-repl", "dapui_watches", "dapui_hover" } },
@@ -82,7 +86,7 @@ function M.config()
     local config = {
         -- Display the matching completion inline
         experimental = {
-            -- ghost_text = true,
+            ghost_text = { enabled = true },
         },
         -- Use LuaSnip as cmp's snippet engine
         snippet = {
@@ -165,9 +169,9 @@ function M.config()
 
             -- Scroll through documention window
             ["<Right>"] = cmp.mapping.scroll_docs(5),
-            ["<Left>"] = cmp.mapping.scroll_docs( -5),
+            ["<Left>"] = cmp.mapping.scroll_docs(-5),
             ["<C-l>"] = cmp.mapping.scroll_docs(5),
-            ["<C-h>"] = cmp.mapping.scroll_docs( -5),
+            ["<C-h>"] = cmp.mapping.scroll_docs(-5),
 
             -- Open/Close completion menu
             ["<C-Space>"] = cmp.mapping(function()
@@ -235,7 +239,7 @@ function M.config()
     -- Create snippet navigation keymaps
     vim.keymap.set({ "s", "n" }, "]n", function() require("luasnip").jump(1) end,
         { desc = "Next snippet placeholder" })
-    vim.keymap.set({ "s", "n" }, "[n", function() require("luasnip").jump( -1) end,
+    vim.keymap.set({ "s", "n" }, "[n", function() require("luasnip").jump(-1) end,
         { desc = "Previous snippet placeholder" })
 end
 
