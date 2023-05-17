@@ -3,7 +3,6 @@ local M = {
     -- https://github.com/nvim-treesitter/nvim-treesitter
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
-    event = "BufEnter",
     dependencies = {
         -- Autoclose HTML,CSS tags
         -- https://github.com/windwp/nvim-ts-autotag
@@ -26,7 +25,7 @@ function M.config()
         -- Install Tree-Sitter syntaxes automatically when missing
         auto_install = true,
         -- Make sure the following syntaxes are always installed
-        ensure_installed = { "lua", "vim", "help", "markdown", "rust", "toml" },
+        ensure_installed = { "lua", "vim", "vimdoc", "markdown", "rust", "toml" },
         -- Enable the syntax highlighting module
         highlight = {
             enable = true,
