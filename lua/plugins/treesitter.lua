@@ -25,7 +25,7 @@ function M.config()
         -- Install Tree-Sitter syntaxes automatically when missing
         auto_install = true,
         -- Make sure the following syntaxes are always installed
-        ensure_installed = { "lua", "vim", "vimdoc", "markdown", "rust", "toml" },
+        ensure_installed = { "lua", "vim", "vimdoc", "markdown", "markdown_inline", "rust", "toml" },
         -- Enable the syntax highlighting module
         highlight = {
             enable = true,
@@ -43,10 +43,10 @@ function M.config()
         endwise = {
             enable = true,
         },
-
+        -- Enable rainbow brackets
         rainbow = {
             enable = true,
-        }
+        },
     })
 
     vim.opt.foldmethod = "expr"
