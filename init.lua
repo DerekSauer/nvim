@@ -84,10 +84,6 @@ require("bootstrap").setup()
 -- Setup Lazy.nvim to manage my plugins
 local lazy_ok, lazy = pcall(require, "lazy")
 if lazy_ok then
-    -- Windows can't seem to handle running dozens of Lazy.nvim tasks at a time
-    -- Limit it on Windows platform
-    local lazy_task_count = vim.fn.has("win32") == 1 and 10 or nil
-
     local config = {
         change_detection = {
             enabled = false,
@@ -98,7 +94,6 @@ if lazy_ok then
             notify = false,
             frequency = 14400,
         },
-        concurrency = lazy_task_count,
         install = {
             colorscheme = { "kanagawa" },
         },
