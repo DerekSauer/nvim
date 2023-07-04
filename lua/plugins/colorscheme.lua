@@ -21,7 +21,7 @@ function M.config()
         theme = "wave",
         background = {
             dark = "wave",
-            light = "lotus"
+            light = "lotus",
         },
         overrides = function(colors)
             local theme = colors.theme
@@ -69,20 +69,20 @@ function M.config()
                 IndentBlanklineIndent6 = { fg = theme.term[7] },
                 IndentBlanklineIndent7 = { fg = theme.term[8] },
                 -- Treesitter rainbow parens
-                TSRainbowRed = { fg = theme.term[17] },
-                TSRainbowYellow = { fg = theme.term[3] },
-                TSRainbowBlue = { fg = theme.term[4] },
-                TSRainbowOrange = { fg = theme.term[5] },
-                TSRainbowGreen = { fg = theme.term[6] },
-                TSRainbowViolet = { fg = theme.term[7] },
-                TSRainbowCyan = { fg = theme.term[8] },
+                RainbowDelimiterRed = { fg = theme.term[17] },
+                RainbowDelimiterYellow = { fg = theme.term[3] },
+                RainbowDelimiterBlue = { fg = theme.term[4] },
+                RainbowDelimiterOrange = { fg = theme.term[5] },
+                RainbowDelimiterGreen = { fg = theme.term[6] },
+                RainbowDelimiterViolet = { fg = theme.term[7] },
+                RainbowDelimiterCyan = { fg = theme.term[8] },
             }
         end,
         colors = {
             theme = {
                 all = {
                     ui = {
-                        bg_gutter = "none"
+                        bg_gutter = "none",
                     },
                 },
             },

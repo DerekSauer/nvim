@@ -14,8 +14,8 @@ local M = {
 
         -- Rainbow parens
         {
-            url = "https://gitlab.com/HiPhish/nvim-ts-rainbow2",
-            name = "nvim-ts-rainbow2",
+            url = "https://gitlab.com/HiPhish/rainbow-delimiters.nvim",
+            name = "rainbow-delimiters",
         },
     },
 }
@@ -43,15 +43,33 @@ function M.config()
         endwise = {
             enable = true,
         },
-        -- Enable rainbow brackets
-        rainbow = {
-            enable = true,
-        },
     })
 
     vim.opt.foldmethod = "expr"
     vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
     vim.opt.foldenable = false
+
+    local rainbow_delimiters = require "rainbow-delimiters"
+
+    vim.g.rainbow_delimiters = {
+        strategy = {
+            [""] = rainbow_delimiters.strategy["global"],
+            commonlisp = rainbow_delimiters.strategy["local"],
+        },
+        query = {
+            [""] = "rainbow-delimiters",
+            lua = "rainbow-blocks",
+        },
+        highlight = {
+            "RainbowDelimiterRed",
+            "RainbowDelimiterYellow",
+            "RainbowDelimiterBlue",
+            "RainbowDelimiterOrange",
+            "RainbowDelimiterGreen",
+            "RainbowDelimiterViolet",
+            "RainbowDelimiterCyan",
+        },
+    }
 end
 
 return M
