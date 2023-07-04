@@ -68,14 +68,6 @@ function M.config()
                 IndentBlanklineIndent5 = { fg = theme.term[6] },
                 IndentBlanklineIndent6 = { fg = theme.term[7] },
                 IndentBlanklineIndent7 = { fg = theme.term[8] },
-                -- Treesitter rainbow parens
-                RainbowDelimiterRed = { fg = theme.term[17] },
-                RainbowDelimiterYellow = { fg = theme.term[3] },
-                RainbowDelimiterBlue = { fg = theme.term[4] },
-                RainbowDelimiterOrange = { fg = theme.term[5] },
-                RainbowDelimiterGreen = { fg = theme.term[6] },
-                RainbowDelimiterViolet = { fg = theme.term[7] },
-                RainbowDelimiterCyan = { fg = theme.term[8] },
             }
         end,
         colors = {

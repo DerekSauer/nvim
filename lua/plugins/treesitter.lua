@@ -11,12 +11,6 @@ local M = {
         -- Automatically add closing operators to textual languages (Lua, Ruby, etc...)
         -- https://github.com/RRethy/nvim-treesitter-endwise
         "RRethy/nvim-treesitter-endwise",
-
-        -- Rainbow parens
-        {
-            url = "https://gitlab.com/HiPhish/rainbow-delimiters.nvim",
-            name = "rainbow-delimiters",
-        },
     },
 }
 
@@ -48,28 +42,6 @@ function M.config()
     vim.opt.foldmethod = "expr"
     vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
     vim.opt.foldenable = false
-
-    local rainbow_delimiters = require "rainbow-delimiters"
-
-    vim.g.rainbow_delimiters = {
-        strategy = {
-            [""] = rainbow_delimiters.strategy["global"],
-            commonlisp = rainbow_delimiters.strategy["local"],
-        },
-        query = {
-            [""] = "rainbow-delimiters",
-            lua = "rainbow-blocks",
-        },
-        highlight = {
-            "RainbowDelimiterRed",
-            "RainbowDelimiterYellow",
-            "RainbowDelimiterBlue",
-            "RainbowDelimiterOrange",
-            "RainbowDelimiterGreen",
-            "RainbowDelimiterViolet",
-            "RainbowDelimiterCyan",
-        },
-    }
 end
 
 return M
