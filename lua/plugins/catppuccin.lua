@@ -45,10 +45,6 @@ function M.config()
                     background = true,
                 },
             },
-            navic = {
-                enabled = true,
-                custom_bg = "NONE",
-            },
             neotree = false,
             notify = true,
             symbols_outline = true,

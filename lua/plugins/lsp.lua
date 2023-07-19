@@ -9,9 +9,6 @@ local M = {
         -- Improved interop between 'nvim-lspconfig' and 'Mason'
         { "williamboman/mason-lspconfig.nvim", dependencies = "williamboman/mason.nvim" },
 
-        -- Code context from LSP
-        "SmiteshP/nvim-navic",
-
         -- Code symbols outline window
         "simrat39/symbols-outline.nvim",
 
@@ -162,15 +159,15 @@ function M.config()
             require("lspconfig")[server_name].setup({ capabilities = lsp_capabilities })
         end,
         -- Override the defaults with our own settings for select servers
-            ["rust_analyzer"] = function()
+        ["rust_analyzer"] = function()
             require("plugins/lsp_servers/rust_analyzer").setup(lsp_config
             , lsp_capabilities)
         end,
-            ["lua_ls"] = function()
+        ["lua_ls"] = function()
             require("plugins/lsp_servers/lua_ls").setup(lsp_config,
                 lsp_capabilities)
         end,
-            ["wgsl_analyzer"] = function()
+        ["wgsl_analyzer"] = function()
             require("plugins/lsp_servers/wgsl_analyzer").setup(lsp_config
             , lsp_capabilities)
         end,
@@ -178,20 +175,23 @@ function M.config()
 
     -- Initialize the interop handler for 'mason' and 'null-ls'
     local null_ls = require("null-ls")
-    require("mason-null-ls").setup({ ensure_installed = {}, handlers =  {
-        -- Default handler will automatically setup any source without a custom setup function
-        function(source_name, methods)
-            require("mason-null-ls.automatic_setup")(source_name, methods)
-        end,
-        -- Disable Taplo as a null-ls source, its already an LSP source
+    require("mason-null-ls").setup({
+        ensure_installed = {},
+        handlers = {
+            -- Default handler will automatically setup any source without a custom setup function
+            function(source_name, methods)
+                require("mason-null-ls.automatic_setup")(source_name, methods)
+            end,
+            -- Disable Taplo as a null-ls source, its already an LSP source
             ["taplo"] = function()
-            null_ls.disable(null_ls.builtins.formatting.taplo)
-        end,
-        -- Example override
-        -- ["stylua"] = function(source_name, methods)
-        --     null_ls.register(null_ls.builtins.formatting.stylua)
-        -- end,
-    }})
+                null_ls.disable(null_ls.builtins.formatting.taplo)
+            end,
+            -- Example override
+            -- ["stylua"] = function(source_name, methods)
+            --     null_ls.register(null_ls.builtins.formatting.stylua)
+            -- end,
+        },
+    })
 
     -- Initialize 'null-ls'
     null_ls.setup()
@@ -199,10 +199,6 @@ function M.config()
     -- Initialize buffer auto-formatting utility
     local lsp_format = require("lsp-format")
     lsp_format.setup()
-
-    -- Initialize 'navic' so we can show code context in the winbar
-    local navic = require("nvim-navic")
-    navic.setup({ depth_limit = 6, highlight = true })
 
     -- Initialize code symbols outline utility
     require("symbols-outline").setup()
@@ -227,11 +223,6 @@ function M.config()
             -- Auto-format buffers on save
             if client.server_capabilities.documentFormattingProvider then
                 lsp_format.on_attach(client)
-            end
-
-            -- Get code context from the LSP
-            if client.server_capabilities.documentSymbolProvider then
-                navic.attach(client, buffer_number)
             end
 
             -- Show function signature help

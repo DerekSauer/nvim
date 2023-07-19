@@ -4,7 +4,6 @@ local M = {
     "nvim-lualine/lualine.nvim",
     dependencies = {
         "nvim-tree/nvim-web-devicons",
-        "SmiteshP/nvim-navic",
     },
     event = "VeryLazy",
 }
@@ -106,7 +105,6 @@ end
 
 function M.config()
     local lualine = require("lualine")
-    local navic = require("nvim-navic")
 
     local config = {
         options = {
@@ -137,7 +135,6 @@ function M.config()
         },
 
         winbar = {
-            lualine_c = { { navic.get_location, cond = navic.is_available } },
             lualine_y = { { "filename", path = 1, newfile_status = true } },
         },
         inactive_winbar = {
