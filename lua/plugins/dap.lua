@@ -54,14 +54,13 @@ local function ui_config(dap)
 
     -- Define icons and colors for breakpoints
     vim.fn.sign_define("DapBreakpoint",
-        { text = "", texthl = "DapBreakpoint", linehl = "", numhl = "" })
+        { text = "", texthl = "DapBreakpoint", linehl = "", numhl = "" })
     vim.fn.sign_define("DapBreakpointCondition",
-        { text = "ﳁ", texthl = "DapBreakpointCondition", linehl = "", numhl = "" })
+        { text = "", texthl = "DapBreakpointCondition", linehl = "", numhl = "" })
     vim.fn.sign_define("DapBreakpointRejected",
-        { text = "", texthl = "DapBreakpointCondition", linehl = "", numhl = "" })
-    vim.fn.sign_define("DapLogPoint", { text = "", texthl = "DapLogPoint", linehl = "", numhl = "" })
-    vim.fn.sign_define("DapStopped", { text = "", texthl = "DapStopped", linehl = "", numhl = "" })
-
+        { text = "", texthl = "DapBreakpointCondition", linehl = "", numhl = "" })
+    vim.fn.sign_define("DapLogPoint", { text = "", texthl = "DapLogPoint", linehl = "", numhl = "" })
+    vim.fn.sign_define("DapStopped", { text = "", texthl = "DapStopped", linehl = "", numhl = "" })
 end
 
 ---Config DAP keymap.
@@ -72,14 +71,22 @@ local function keymaps(dap)
     vim.keymap.set("n", "<F8>", function() dap.step_out() end, { desc = "Debugger: Step out" })
     vim.keymap.set("n", "<F9>", function() dap.toggle_breakpoint() end,
         { desc = "Debugger: Toggle breakpoint" })
-    vim.keymap.set("n", "<F12>", function() dap.close() dap.terminate() require("dapui").close() end
-        , { desc = "Debugger: Stop debugging" })
+    vim.keymap.set("n", "<F12>", function()
+        dap.close()
+        dap.terminate()
+        require("dapui").close()
+    end
+    , { desc = "Debugger: Stop debugging" })
     vim.keymap.set("n", "<leader>ds", function() dap.continue() end, { desc = "Start/continue" })
     vim.keymap.set("n", "<leader>di", function() dap.step_into() end, { desc = "Step into" })
     vim.keymap.set("n", "<leader>do", function() dap.step_over() end, { desc = "Step over" })
     vim.keymap.set("n", "<leader>dO", function() dap.step_out() end, { desc = "Step out" })
     vim.keymap.set("n", "<leader>dx",
-        function() dap.close() dap.terminate() require("dapui").close() end,
+        function()
+            dap.close()
+            dap.terminate()
+            require("dapui").close()
+        end,
         { desc = "Stop debugging" })
     vim.keymap.set("n", "<leader>db", function() dap.toggle_breakpoint() end,
         { desc = "Toggle breakpoint" })
@@ -100,27 +107,30 @@ function M.config()
     local dap = require("dap")
 
     -- Initialize the 'mason' & 'nvim-dap' interop helper
-    require("mason-nvim-dap").setup({ ensure_installed = { "codelldb" }, handlers =  {
-        -- Default handler will automatically setup any DAP without a custom
-        -- setup below. Automatic setup will enable an adapter with default settings.
-        function(source_name)
-            require("mason-nvim-dap.automatic_setup")(source_name)
-        end,
+    require("mason-nvim-dap").setup({
+        ensure_installed = { "codelldb" },
+        handlers = {
+            -- Default handler will automatically setup any DAP without a custom
+            -- setup below. Automatic setup will enable an adapter with default settings.
+            function(source_name)
+                require("mason-nvim-dap.automatic_setup")(source_name)
+            end,
 
-        -- Override 'codelldb' with our own setup function
-        codelldb = function()
-            require("plugins/dap_adapters/codelldb").setup(dap)
-        end,
+            -- Override 'codelldb' with our own setup function
+            codelldb = function()
+                require("plugins/dap_adapters/codelldb").setup(dap)
+            end,
 
-        -- Example override
-        -- python = function(source_name)
-        --     dap.adapters.python = {
-        --     }
-        --
-        --     dap.configurations.python = {
-        --     }
-        -- end,
-    }})
+            -- Example override
+            -- python = function(source_name)
+            --     dap.adapters.python = {
+            --     }
+            --
+            --     dap.configurations.python = {
+            --     }
+            -- end,
+        },
+    })
 
     -- Setup dap-ui
     ui_config(dap)

@@ -23,16 +23,16 @@ function M.setup()
     })
 
     vim.lsp.handlers["textDocument/hover"] =
-    vim.lsp.with(vim.lsp.handlers.hover, { border = globals.border_style })
+        vim.lsp.with(vim.lsp.handlers.hover, { border = globals.border_style })
 
     vim.lsp.handlers["textDocument/signatureHelp"] =
-    vim.lsp.with(vim.lsp.handlers.signature_help, { border = globals.border_style })
+        vim.lsp.with(vim.lsp.handlers.signature_help, { border = globals.border_style })
 
     -- Define icons for diagnostics
     vim.fn.sign_define("DiagnosticSignError", { text = " ", texthl = "DiagnosticSignError" })
     vim.fn.sign_define("DiagnosticSignWarn", { text = " ", texthl = "DiagnosticSignWarn" })
     vim.fn.sign_define("DiagnosticSignInfo", { text = " ", texthl = "DiagnosticSignInfo" })
-    vim.fn.sign_define("DiagnosticSignHint", { text = "", texthl = "DiagnosticSignHint" })
+    vim.fn.sign_define("DiagnosticSignHint", { text = "󰌵", texthl = "DiagnosticSignHint" })
 
     -- Add key maps for jumping to diagnostics
     vim.keymap.set(

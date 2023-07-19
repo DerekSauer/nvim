@@ -10,7 +10,7 @@ local M = {
 
 ---Gets the current time.
 ---@return string #Returns the current time in HH:MM format.
-local function time() return " " .. os.date("%H:%M") end
+local function time() return "  " .. os.date("%H:%M") end
 
 ---Determines if the current buffer has any LSP clients attached.
 ---@return boolean #Returns true if there is one or more LSP clients attached to this buffer.

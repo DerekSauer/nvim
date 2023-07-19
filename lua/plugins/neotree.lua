@@ -26,13 +26,21 @@ function M.config()
         },
         default_component_configs = {
             icon = {
+                folder_closed = "",
+                folder_open = "",
                 folder_empty = "󰜌",
-                folder_empty_open = "󰜌",
             },
             git_status = {
                 symbols = {
-                    renamed  = "󰁕",
-                    unstaged = "󰄱",
+                    added     = "",
+                    modified  = "",
+                    deleted   = "✖",
+                    renamed   = "󰁕",
+                    untracked = "",
+                    ignored   = "",
+                    unstaged  = "󰄱",
+                    staged    = "",
+                    conflict  = "",
                 },
             },
         },

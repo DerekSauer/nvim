@@ -1,5 +1,4 @@
 local M = {
-
     -- Git diffs and signs in gutter
     -- https://github.com/lewis6991/gitsigns.nvim
     "lewis6991/gitsigns.nvim",
@@ -13,45 +12,39 @@ function M.config()
         signs = {
             add = {
                 hl = "GitSignsAdd",
-                text = "│",
+                text = "",
                 numhl = "GitSignsAddNr",
                 linehl = "GitSignsAddLn",
             },
             change = {
                 hl = "GitSignsChange",
-                text = "│",
+                text = "",
                 numhl = "GitSignsChangeNr",
                 linehl = "GitSignsChangeLn",
             },
             delete = {
                 hl = "GitSignsDelete",
-                text = "_",
+                text = "",
                 numhl = "GitSignsDeleteNr",
                 linehl = "GitSignsDeleteLn",
             },
             topdelete = {
                 hl = "GitSignsDelete",
-                text = "‾",
+                text = "󱅁",
                 numhl = "GitSignsDeleteNr",
                 linehl = "GitSignsDeleteLn",
             },
             changedelete = {
                 hl = "GitSignsChange",
-                text = "~",
+                text = "󰍷",
                 numhl = "GitSignsChangeNr",
                 linehl = "GitSignsChangeLn",
-            },
-            untracked = {
-                hl = "GitSignsAdd",
-                text = "┆",
-                numhl = "GitSignsAddNr",
-                linehl = "GitSignsAddLn",
             },
         },
 
         signcolumn = true, -- Toggle with `:Gitsigns toggle_signs`
-        numhl = false, -- Toggle with `:Gitsigns toggle_numhl`
-        linehl = false, -- Toggle with `:Gitsigns toggle_linehl`
+        numhl = false,     -- Toggle with `:Gitsigns toggle_numhl`
+        linehl = false,    -- Toggle with `:Gitsigns toggle_linehl`
         word_diff = false, -- Toggle with `:Gitsigns toggle_word_diff`
 
         watch_gitdir = {
@@ -72,7 +65,7 @@ function M.config()
 
         sign_priority = 6,
         update_debounce = 100,
-        status_formatter = nil, -- Use default
+        status_formatter = nil,  -- Use default
         max_file_length = 10000, -- Disable if file is longer than this (in lines)
 
         preview_config = {
