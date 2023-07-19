@@ -95,7 +95,7 @@ if lazy_ok then
             frequency = 14400,
         },
         install = {
-            colorscheme = { "kanagawa" },
+            colorscheme = { "catppuccin" },
         },
         performance = {
             cache = {
@@ -128,6 +128,9 @@ else
     )
     lazy = nil
 end
+
+-- Set colorscheme
+vim.cmd("colorscheme catppuccin")
 
 -- Load key mappings not handled by Which-key
 require("mappings")

@@ -110,7 +110,7 @@ function M.config()
 
     local config = {
         options = {
-            theme = "kanagawa",
+            theme = "auto",
             disabled_filetypes = { "telescope", "mason", "lazy" },
         },
         sections = {
@@ -130,7 +130,7 @@ function M.config()
             },
             lualine_x = {
                 { lsp_progress, cond = has_lsp_progress },
-                { lsp_clients, cond = has_lsp_clients },
+                { lsp_clients,  cond = has_lsp_clients },
             },
             lualine_y = { encoding_override, "fileformat", "filetype", time },
             lualine_z = { combined_location },
