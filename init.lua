@@ -95,7 +95,7 @@ if lazy_ok then
             frequency = 14400,
         },
         install = {
-            colorscheme = { "tundra" },
+            colorscheme = { "kanagawa" },
         },
         performance = {
             cache = {
@@ -130,7 +130,7 @@ else
 end
 
 -- Set colorscheme
-vim.cmd("colorscheme tundra")
+vim.cmd("colorscheme kanagawa")
 
 -- Load key mappings not handled by Which-key
 require("mappings")
