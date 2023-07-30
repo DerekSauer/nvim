@@ -108,7 +108,7 @@ function M.config()
 
     local config = {
         options = {
-            theme = "auto",
+            theme = "tundra",
             disabled_filetypes = { "telescope", "mason", "lazy" },
         },
         sections = {
