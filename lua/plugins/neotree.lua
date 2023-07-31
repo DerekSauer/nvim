@@ -13,9 +13,6 @@ local M = {
 function M.config()
     local neo_tree = require("neo-tree")
 
-    -- Remove depricated legacy commands from neo-tree
-    vim.cmd([[ let g:neo_tree_remove_legacy_commands = 1 ]])
-
     local config = {
         close_if_last_window = true,
         popup_border_style = require("globals").border_style,
