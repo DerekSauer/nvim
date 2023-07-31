@@ -19,7 +19,8 @@ function M.config()
         -- Install Tree-Sitter syntaxes automatically when missing
         auto_install = true,
         -- Make sure the following syntaxes are always installed
-        ensure_installed = { "lua", "vim", "vimdoc", "markdown", "markdown_inline", "rust", "toml" },
+        ensure_installed = { "lua", "vim", "vimdoc", "markdown", "markdown_inline", "rust", "toml",
+            "c", "cpp", "regex", "bash", "latex", "json" },
         -- Enable the syntax highlighting module
         highlight = {
             enable = true,
