@@ -48,6 +48,12 @@ vim.opt.pumheight = 20
 -- Use the new zero command line height when available
 if vim.fn.has("nvim-0.8") == 1 then vim.opt.cmdheight = 0 end
 
+-- Use the new status column added in Neovim 0.9
+if vim.fn.has("nvim-9.0") == 1 then
+    vim.opt.numberwidth = 4
+    vim.opt.statuscolumn = "%= %{v:virtnum < 1 ? (v:relnum ? v:relnum : v:lnum) : ''}%=%s"
+end
+
 -- Use ripgrep if available
 if vim.fn.executable("rg") == 1 then
     vim.opt.grepprg = "rg --vimgrep --no-heading --smart-case --hidden"
