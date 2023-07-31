@@ -2,7 +2,6 @@ local M = {
     -- Easy code annotations.
     -- https://github.com/danymat/neogen/
     "danymat/neogen",
-    event = "VeryLazy",
     dependencies = "nvim-treesitter/nvim-treesitter",
 }
 

@@ -1,6 +1,7 @@
 local M = {
     -- LSP configuration helper
     "neovim/nvim-lspconfig",
+    lazy = false,
     priority = 999,
     dependencies = {
         -- LSP installation and management tool

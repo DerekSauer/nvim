@@ -2,7 +2,6 @@ local M = {
     -- Git diffs and signs in gutter
     -- https://github.com/lewis6991/gitsigns.nvim
     "lewis6991/gitsigns.nvim",
-    event = "BufEnter",
 }
 
 function M.config()

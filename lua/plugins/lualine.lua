@@ -5,7 +5,6 @@ local M = {
     dependencies = {
         "nvim-tree/nvim-web-devicons",
     },
-    event = "VeryLazy",
 }
 
 ---Gets the current time.

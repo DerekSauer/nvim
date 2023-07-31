@@ -2,7 +2,6 @@ local M = {
     -- Smart code commenting
     -- https://github.com/numToStr/Comment.nvim
     "numToStr/Comment.nvim",
-    event = "VeryLazy",
 }
 
 function M.config()

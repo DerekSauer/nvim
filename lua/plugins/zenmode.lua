@@ -2,7 +2,6 @@ local M = {
     -- Zen-mode distraction free coding
     -- https://github.com/folke/zen-mode.nvim
     "folke/zen-mode.nvim",
-    event = "VeryLazy",
 }
 
 function M.config()

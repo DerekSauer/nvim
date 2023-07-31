@@ -2,7 +2,6 @@ local M = {
     -- Dressing, improve default UI
     -- https://github.com/stevearc/dressing.nvim
     "stevearc/dressing.nvim",
-    event = "UIEnter",
 }
 
 function M.config()
