@@ -76,14 +76,14 @@ local function combined_location()
 
     if current_line == 1 then
         return string.format(
-            "%d:%d (0%%%%)",
+            "󰓾 %d:%d  0%%%%",
             current_line,
             current_col,
             math.floor(current_line / total_lines * 100)
         )
     else
         return string.format(
-            "%d:%d (%d%%%%)",
+            "󰓾 %d:%d  %d%%%%",
             current_line,
             current_col,
             math.floor(current_line / total_lines * 100)
@@ -96,8 +96,11 @@ function M.config()
 
     local config = {
         options = {
+            icons_enabled = true,
             theme = "kanagawa",
             disabled_filetypes = { "telescope", "mason", "lazy" },
+            section_separators = { left = "", right = "" },
+            component_separators = { left = "", right = "" },
         },
         sections = {
             lualine_a = { "mode" },
@@ -106,12 +109,12 @@ function M.config()
                 "branch",
                 "diff",
                 "diagnostics",
-            },
-            lualine_c = {
                 {
                     function() return "" end,
                     cond = require("nvim-treesitter.parsers").has_parser,
                 },
+            },
+            lualine_c = {
                 "filename",
             },
             lualine_x = {
@@ -132,6 +135,8 @@ function M.config()
         extensions = {
             "neo-tree",
             "quickfix",
+            "symbols-outline",
+            "nvim-dap-ui",
         },
     }
 
