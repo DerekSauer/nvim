@@ -23,23 +23,11 @@ local function lsp_clients()
 
     -- For each client attached to the current buffer
     for _, client in pairs(vim.lsp.get_active_clients({ bufnr = 0 })) do
-        -- Null-ls clients will simply display "null-ls", we need to dig deeper for the
-        -- "server" null-ls is using internally
-        if client.name == "null-ls" then
-            -- Iterate through the null-ls sources for this buffer's filetype
-            -- Don't need a pcall on this require(), since we'll never get a "null-ls" client name
-            -- if null-ls isn't even loaded
-            for _, source in pairs(require("null-ls.sources").get_available(vim.bo.filetype)) do
-                -- Add add the source to the client name list if it is not already there
-                if buf_client_names[source.name] == nil then
-                    table.insert(buf_client_names, source.name)
-                end
-            end
-        else
-            table.insert(buf_client_names, client.name)
-        end
+        -- Insert the client name into the list of names
+        table.insert(buf_client_names, client.name)
     end
 
+    -- Concat the list of names into a comma separated string
     return table.concat(buf_client_names, ", ")
 end
 

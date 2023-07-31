@@ -15,15 +15,6 @@ local M = {
         -- Automatically format buffers if supported by an attached LSP
         "lukas-reineke/lsp-format.nvim",
 
-        -- Use non-LSP services as though they were an LSP (E.g.: Linters, formatters)
-        { "jose-elias-alvarez/null-ls.nvim",   dependencies = "nvim-lua/plenary.nvim" },
-
-        -- Improve interop between 'mason' and 'null-ls'
-        {
-            "jay-babu/mason-null-ls.nvim",
-            dependencies = { "jose-elias-alvarez/null-ls.nvim", "williamboman/mason.nvim" },
-        },
-
         -- Show function signature help
         "ray-x/lsp_signature.nvim",
     },
@@ -172,29 +163,6 @@ function M.config()
             , lsp_capabilities)
         end,
     })
-
-    -- Initialize the interop handler for 'mason' and 'null-ls'
-    local null_ls = require("null-ls")
-    require("mason-null-ls").setup({
-        ensure_installed = {},
-        handlers = {
-            -- Default handler will automatically setup any source without a custom setup function
-            function(source_name, methods)
-                require("mason-null-ls.automatic_setup")(source_name, methods)
-            end,
-            -- Disable Taplo as a null-ls source, its already an LSP source
-            ["taplo"] = function()
-                null_ls.disable(null_ls.builtins.formatting.taplo)
-            end,
-            -- Example override
-            -- ["stylua"] = function(source_name, methods)
-            --     null_ls.register(null_ls.builtins.formatting.stylua)
-            -- end,
-        },
-    })
-
-    -- Initialize 'null-ls'
-    null_ls.setup()
 
     -- Initialize buffer auto-formatting utility
     local lsp_format = require("lsp-format")
