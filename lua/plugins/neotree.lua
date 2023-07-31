@@ -32,9 +32,9 @@ function M.config()
             },
             git_status = {
                 symbols = {
-                    added     = "",
-                    modified  = "",
-                    deleted   = "✖",
+                    added     = "",
+                    modified  = "",
+                    deleted   = "",
                     renamed   = "󰁕",
                     untracked = "",
                     ignored   = "",
