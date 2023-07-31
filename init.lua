@@ -5,7 +5,7 @@ vim.g.mapleader = ","
 vim.opt.clipboard = "unnamedplus"
 vim.opt.encoding = "utf-8"
 vim.opt.fileencoding = "utf-8"
-vim.opt.updatetime = 300
+vim.opt.updatetime = 750
 vim.opt.timeoutlen = 300
 vim.opt.expandtab = true
 vim.opt.shiftround = true
@@ -13,6 +13,8 @@ vim.opt.shiftwidth = 4
 vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
 vim.opt.smarttab = true
+vim.opt.autoindent = true
+vim.opt.smartindent = true
 vim.opt.wrap = false
 vim.opt.breakindent = true
 vim.opt.scrolloff = 5
@@ -41,6 +43,7 @@ vim.opt.swapfile = false
 vim.opt.writebackup = false
 vim.opt.winbar = " "
 vim.opt.linebreak = true
+vim.opt.pumheight = 20
 
 -- Use the new zero command line height when available
 if vim.fn.has("nvim-0.8") == 1 then vim.opt.cmdheight = 0 end
@@ -104,14 +107,6 @@ if lazy_ok then
             },
             rtp = {
                 disabled_plugins = {
-                    "gzip",
-                    "matchit",
-                    "matchparen",
-                    "netrwPlugin",
-                    "tarPlugin",
-                    "tohtml",
-                    "tutor",
-                    "zipPlugin",
                 },
             },
         },
