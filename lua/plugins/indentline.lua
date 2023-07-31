@@ -13,6 +13,8 @@ function M.config()
         show_current_context = true,
         show_current_context_start = false,
         space_char_blankline = " ",
+        use_treesitter = true,
+        use_treesitter_scope = true,
         char_highlight_list = {
             "IndentBlanklineIndent1",
             "IndentBlanklineIndent2",
