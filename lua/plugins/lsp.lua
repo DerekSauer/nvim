@@ -191,7 +191,7 @@ function M.config()
 
             -- Auto-format buffers on save
             if client.server_capabilities.documentFormattingProvider then
-                lsp_format.on_attach(client)
+                lsp_format.on_attach(client, buffer_number)
             end
 
             -- Show function signature help
