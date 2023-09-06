@@ -16,7 +16,6 @@ function M.config()
     local config = {
         close_if_last_window = true,
         popup_border_style = require("globals").border_style,
-        use_libuv_file_watcher = true,
         window = {
             position = "left",
             width = 32,
@@ -61,6 +60,9 @@ function M.config()
                 StaticMethod = { icon = "󰠄 ", hl = "Function" },
             },
         },
+        filesystem = {
+            use_libuv_file_watcher = true,
+        }
     }
 
     neo_tree.setup(config)
