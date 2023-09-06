@@ -2,29 +2,37 @@ local M = {
     -- Indent guides
     -- https://github.com/lukas-reineke/indent-blankline.nvim
     "lukas-reineke/indent-blankline.nvim",
+    branch = "v3"
 }
 
 function M.config()
-    local indent = require("indent_blankline")
-
-    local config = {
-        char = "┊",
-        show_current_context = true,
-        show_current_context_start = false,
-        space_char_blankline = " ",
-        use_treesitter = true,
-        use_treesitter_scope = true,
-        char_highlight_list = {
-            "IndentBlanklineIndent1",
-            "IndentBlanklineIndent2",
-            "IndentBlanklineIndent3",
-            "IndentBlanklineIndent4",
-            "IndentBlanklineIndent5",
-            "IndentBlanklineIndent6",
-        },
+    local highlights = {
+        "IndentBlanklineIndent1",
+        "IndentBlanklineIndent2",
+        "IndentBlanklineIndent3",
+        "IndentBlanklineIndent4",
+        "IndentBlanklineIndent5",
+        "IndentBlanklineIndent6",
+        "IndentBlanklineIndent7",
     }
 
-    indent.setup(config)
+    require("ibl").setup({
+        indent = {
+            highlight = highlights,
+            char = "┊",
+        },
+
+        whitespace = {
+            highlight = highlights,
+            remove_blank_line_trail = false
+        },
+
+        scope = {
+            enabled = true,
+            char = "│",
+            highlight = highlights
+        }
+    })
 end
 
 return M
