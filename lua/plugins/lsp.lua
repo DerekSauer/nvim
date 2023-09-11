@@ -14,7 +14,10 @@ local M = {
         "simrat39/symbols-outline.nvim",
 
         -- Automatically format buffers if supported by an attached LSP
-        "lukas-reineke/lsp-format.nvim",
+        {
+            "lukas-reineke/lsp-format.nvim",
+            commit = "ca0df5c8544e51517209ea7b86ecc522c98d4f0a",
+        },
 
         -- Show function signature help
         "ray-x/lsp_signature.nvim",
@@ -97,7 +100,6 @@ local function lsp_keymaps(client, bufnr)
             { buffer = bufnr, desc = "Code actions" })
         has_mappings = true
     end
-
 
     if client.server_capabilities.signatureHelpProvider then
         vim.keymap.set("i", "<C-k>", function() vim.lsp.buf.signature_help() end,

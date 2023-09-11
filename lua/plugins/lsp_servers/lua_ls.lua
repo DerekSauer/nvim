@@ -11,7 +11,7 @@ function M.setup(lsp_config, lsp_capabilities)
         settings = {
             Lua = {
                 format = {
-                    enable = false,
+                    enable = true,
 
                     -- Values must be strings!
                     defaultConfig = {
