@@ -36,13 +36,15 @@ local function lsp_keymaps(client, bufnr)
     end
 
     if client.server_capabilities.definitionProvider then
-        vim.keymap.set("n", "<leader>ld", function() vim.lsp.buf.definition() end,
+        vim.keymap.set("n", "<leader>ld",
+            function() require("telescope.builtin").lsp_definitions() end,
             { buffer = bufnr, desc = "Jump symbol definition" })
         has_mappings = true
     end
 
     if client.server_capabilities.typeDefinitionProvider then
-        vim.keymap.set("n", "<leader>lt", function() vim.lsp.buf.type_definition() end,
+        vim.keymap.set("n", "<leader>lt",
+            function() require("telescope.builtin").lsp_type_definitions() end,
             { buffer = bufnr, desc = "Jump type definition" })
         has_mappings = true
     end
@@ -54,7 +56,8 @@ local function lsp_keymaps(client, bufnr)
     end
 
     if client.server_capabilities.implementationProvider then
-        vim.keymap.set("n", "<leader>li", function() vim.lsp.buf.implementation() end,
+        vim.keymap.set("n", "<leader>li",
+            function() require("telescope.builtin").lsp_implementations() end,
             { buffer = bufnr, desc = "List symbol implementations" })
         has_mappings = true
     end
@@ -74,7 +77,8 @@ local function lsp_keymaps(client, bufnr)
     end
 
     if client.server_capabilities.referencesProvider then
-        vim.keymap.set("n", "<leader>lr", function() vim.lsp.buf.references() end,
+        vim.keymap.set("n", "<leader>lr",
+            function() require("telescope.builtin").lsp_references() end,
             { buffer = bufnr, desc = "List symbol references" })
         has_mappings = true
     end
