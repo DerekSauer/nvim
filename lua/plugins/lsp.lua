@@ -13,12 +13,6 @@ local M = {
         -- Code symbols outline window
         "simrat39/symbols-outline.nvim",
 
-        -- Automatically format buffers if supported by an attached LSP
-        {
-            "lukas-reineke/lsp-format.nvim",
-            commit = "ca0df5c8544e51517209ea7b86ecc522c98d4f0a",
-        },
-
         -- Show function signature help
         "ray-x/lsp_signature.nvim",
     },
@@ -167,10 +161,6 @@ function M.config()
         end,
     })
 
-    -- Initialize buffer auto-formatting utility
-    local lsp_format = require("lsp-format")
-    lsp_format.setup()
-
     -- Initialize code symbols outline utility
     require("symbols-outline").setup()
 
@@ -193,7 +183,13 @@ function M.config()
 
             -- Auto-format buffers on save
             if client.server_capabilities.documentFormattingProvider then
-                lsp_format.on_attach(client, buffer_number)
+                vim.api.nvim_create_autocmd("BufWritePre", {
+                    buffer = buffer_number,
+                    desc = "Auto format buffer with LSP on save.",
+                    callback = function()
+                        vim.lsp.buf.format({ bufnr = buffer_number })
+                    end,
+                })
             end
 
             -- Show function signature help
