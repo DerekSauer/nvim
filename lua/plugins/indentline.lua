@@ -2,10 +2,13 @@ local M = {
     -- Indent guides
     -- https://github.com/lukas-reineke/indent-blankline.nvim
     "lukas-reineke/indent-blankline.nvim",
-    branch = "v3"
+    main = "ibl",
+    opts = {},
+    event = "BufEnter",
 }
 
 function M.config()
+    -- Highlight names from our color scheme
     local highlights = {
         "IndentBlanklineIndent1",
         "IndentBlanklineIndent2",
@@ -24,14 +27,13 @@ function M.config()
 
         whitespace = {
             highlight = highlights,
-            remove_blank_line_trail = false
         },
 
         scope = {
             enabled = true,
             char = "│",
-            highlight = highlights
-        }
+            highlight = highlights,
+        },
     })
 end
 
