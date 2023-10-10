@@ -8,7 +8,6 @@ local M = {
         "nvim-telescope/telescope-project.nvim",
         "nvim-telescope/telescope-dap.nvim",
         "nvim-tree/nvim-web-devicons",
-        "kkharji/sqlite.lua",
     },
 }
 
@@ -28,9 +27,7 @@ function M.config()
     telescope.setup(config)
     telescope.load_extension("project")
     telescope.load_extension("dap")
-
-    -- Having trouble making the sqlite3 dev libs available for this extension on windows
-    if vim.fn.has("win32") == 0 then telescope.load_extension("frecency") end
+    telescope.load_extension("frecency")
 
     -- Key mappings
     vim.keymap.set(
