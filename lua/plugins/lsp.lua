@@ -200,6 +200,13 @@ function M.config()
             if client.server_capabilities.signatureHelpProvider then
                 require("lsp_signature").on_attach(lsp_sig_config, buffer_number)
             end
+
+            -- Enable LSP inlay hints (upcoming Neovim 10.0 feature)
+            if vim.fn.has("nvim-0.10") == 1 then
+                if client.server_capabilities.inlayHintProvider then
+                    vim.lsp.inlay_hint(buffer_number, true)
+                end
+            end
         end,
     })
 end
