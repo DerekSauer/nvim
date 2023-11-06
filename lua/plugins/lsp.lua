@@ -15,6 +15,9 @@ local M = {
 
         -- Show function signature help
         "ray-x/lsp_signature.nvim",
+
+        -- Plugin to manage global and project-local settings.
+        "folke/neoconf.nvim",
     },
 }
 
@@ -130,6 +133,10 @@ local function lsp_keymaps(client, bufnr)
 end
 
 function M.config()
+    -- Setup `neoconf` before `lspconfig` per neoconf's docs
+    -- The default configuration is fine
+    require("neoconf").setup({})
+
     local lsp_config = require("lspconfig")
 
     -- Extend nvim's LSP client capabilities with those provided by 'nvim-cmp'
