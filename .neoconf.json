@@ -11,9 +11,7 @@
             "Lua.completion.enable": true,
             "Lua.format.enable": true,
             "Lua.hint.enable": true,
-            "Lua.hint.paramName": "All",
-            "Lua.hint.setType": true,
-            "Lua.hint.paramType": true
+            "Lua.hint.arrayIndex": "Disable"
         }
     }
 }

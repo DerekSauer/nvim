@@ -44,9 +44,7 @@ vim.opt.writebackup = false
 vim.opt.winbar = " "
 vim.opt.linebreak = true
 vim.opt.pumheight = 20
-
--- Use the new zero command line height when available
-if vim.fn.has("nvim-0.8") == 1 then vim.opt.cmdheight = 0 end
+vim.opt.cmdheight = 0
 
 -- Use ripgrep if available
 if vim.fn.executable("rg") == 1 then
@@ -71,9 +69,6 @@ vim.g.loaded_ruby_provider = 0
 vim.g.loaded_perl_provider = 0
 vim.g.loaded_node_provider = 0
 
--- Set LSP logging level to errors only
-local lsp_log = require("vim.lsp.log")
-lsp_log.set_level(lsp_log.levels.ERROR)
 
 -- Setup my own auto commands
 require("functions").setup_autocmds()
@@ -121,7 +116,6 @@ else
         string.format("Failed to load `Lazy.nvim` plugin manager.\nError message: %s", lazy),
         vim.log.levels.ERROR
     )
-    lazy = nil
 end
 
 -- Set colorscheme

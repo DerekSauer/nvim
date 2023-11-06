@@ -1,4 +1,6 @@
 local M = {
+    -- A high-performance color highlighter for Neovim.
+    -- https://github.com/NvChad/nvim-colorizer.lua
     "NvChad/nvim-colorizer.lua",
 }
 

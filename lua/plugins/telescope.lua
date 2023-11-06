@@ -4,8 +4,6 @@ local M = {
     "nvim-telescope/telescope.nvim",
     dependencies = {
         "nvim-lua/plenary.nvim",
-        "nvim-telescope/telescope-frecency.nvim",
-        "nvim-telescope/telescope-project.nvim",
         "nvim-telescope/telescope-dap.nvim",
         "nvim-tree/nvim-web-devicons",
     },
@@ -25,9 +23,7 @@ function M.config()
     }
 
     telescope.setup(config)
-    telescope.load_extension("project")
     telescope.load_extension("dap")
-    telescope.load_extension("frecency")
 
     -- Key mappings
     vim.keymap.set(
@@ -77,19 +73,6 @@ function M.config()
         "<leader>f/",
         function() require("telescope.builtin").keymaps() end,
         { silent = true, desc = "Keymap help" }
-    )
-
-    vim.keymap.set(
-        "n",
-        "<leader>fr",
-        function() require("telescope").extensions.frecency.frecency() end,
-        { silent = true, desc = "Recent files" }
-    )
-    vim.keymap.set(
-        "n",
-        "<leader>fp",
-        function() require("telescope").extensions.project.project() end,
-        { silent = true, desc = "Projects" }
     )
 
     -- Add to which-key categories
