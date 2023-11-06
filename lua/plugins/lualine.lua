@@ -4,86 +4,13 @@ local M = {
     "nvim-lualine/lualine.nvim",
     dependencies = {
         "nvim-tree/nvim-web-devicons",
+        "linrongbin16/lsp-progress.nvim",
     },
 }
 
 ---Gets the current time.
 ---@return string #Returns the current time in HH:MM format.
 local function time() return "  " .. os.date("%H:%M") end
-
----Determines if the current buffer has any LSP clients attached.
----@return boolean #Returns true if there is one or more LSP clients attached to this buffer.
-local function has_lsp_clients()
-    -- TODO: Remove version check when nvim 0.10 is stable
-    if vim.fn.has("nvim-0.10") == 1 then
-        return #vim.lsp.get_clients({ bufnr = 0 }) > 0
-    else
-        return #vim.lsp.get_active_clients({ bufnr = 0 }) > 0
-    end
-end
-
----Get the names of LSP clients attached to this buffer
----@return string #Returns a string with a comma separated list of LSP client names.
-local function lsp_clients()
-    local buf_client_names = {}
-
-    -- For each client attached to the current buffer
-    -- TODO: Remove version check when nvim 0.10 is stable
-    if vim.fn.has("nvim-0.10") == 1 then
-        for _, client in pairs(vim.lsp.get_clients({ bufnr = 0 })) do
-            -- Insert the client name into the list of names
-            table.insert(buf_client_names, client.name)
-        end
-    else
-        for _, client in pairs(vim.lsp.get_active_clients({ bufnr = 0 })) do
-            -- Insert the client name into the list of names
-            table.insert(buf_client_names, client.name)
-        end
-    end
-
-    -- Concat the list of names into a comma separated string
-    return table.concat(buf_client_names, ", ")
-end
-
----Determines if an attached LSP client has any status messages to display.
----@return boolean #Returns true if there are any LSP messages to display.
-local function has_lsp_progress()
-    -- TODO: Remove version check when nvim 0.10 is stable
-    if vim.fn.has("nvim-0.10") == 1 then
-        return has_lsp_clients() and #vim.lsp.status() > 0
-    else
-        -- Don't bother checking for messages if there are no attached clients
-        return has_lsp_clients()
-            and #vim.lsp.util.get_progress_messages() > 0
-    end
-end
-
----Report the processing progress of busy LSPs attached to the buffer.
----@return string #Returns a formatted string with the name and completion
----percentage (when available) of the operation the LSP is performing.
-local function lsp_progress()
-    -- Grab the first LSP message off the queue
-    -- TODO: Remove version check when nvim 0.10 is stable
-    local lsp_message = {}
-    if vim.fn.has("nvim-0.10") == 1 then
-        lsp_message = vim.lsp.status()[1]
-    else
-        lsp_message = vim.lsp.util.get_progress_messages()[1]
-    end
-
-    -- If the message has a completion percentage,
-    -- add the percentage to the resulting message
-    if lsp_message.percentage then
-        return string.format(
-            "LSP: %s %s (%s%%%%)",
-            lsp_message.title or "",
-            lsp_message.message or "",
-            lsp_message.percentage or ""
-        )
-    else
-        return string.format("LSP: %s %s", lsp_message.title or "", lsp_message.message or "")
-    end
-end
 
 ---Get the file encoding of the current buffer, ignoring UTF-8.
 ---@return string #Returns the file encoding of the current buffer or an empty string if the file is UTF-8.
@@ -117,7 +44,25 @@ local function combined_location()
 end
 
 function M.config()
-    local lualine = require("lualine")
+    -- Enable LSP progress indicator
+    require("lsp-progress").setup({
+        max_size = 80,
+        format = function(messages)
+            if #messages > 0 then
+                return messages[1] .. "  LSP"
+            else
+                return "  LSP"
+            end
+        end,
+    })
+
+    -- Create an autocommand to refresh the status line when the LSP has new messages
+    vim.api.nvim_create_augroup("lualine_augroup", { clear = true })
+    vim.api.nvim_create_autocmd("User", {
+        group = "lualine_augroup",
+        pattern = "LspProgressStatusUpdated",
+        callback = require("lualine").refresh,
+    })
 
     local config = {
         options = {
@@ -143,8 +88,7 @@ function M.config()
                 "filename",
             },
             lualine_x = {
-                { lsp_progress, cond = has_lsp_progress },
-                { lsp_clients,  cond = has_lsp_clients },
+                require("lsp-progress").progress,
             },
             lualine_y = { encoding_override, "fileformat", "filetype", time },
             lualine_z = { combined_location },
@@ -165,7 +109,7 @@ function M.config()
         },
     }
 
-    lualine.setup(config)
+    require("lualine").setup(config)
 end
 
 return M
