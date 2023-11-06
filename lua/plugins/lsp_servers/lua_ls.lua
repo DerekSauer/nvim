@@ -26,6 +26,9 @@ function M.setup(lsp_config, lsp_capabilities)
                         max_line_length = "100",
                     },
                 },
+                hint = {
+                    enable = true,
+                },
                 runtime = {
                     version = "LuaJIT",
                     path = runtime_path,
@@ -35,7 +38,7 @@ function M.setup(lsp_config, lsp_capabilities)
                 },
                 workspace = {
                     checkThirdParty = false,
-                    library = vim.api.nvim_get_runtime_file("*.lua", true),
+                    library = vim.api.nvim_get_runtime_file("", true),
                 },
                 telemetry = {
                     enable = false,

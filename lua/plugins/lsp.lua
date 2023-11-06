@@ -21,6 +21,38 @@ local M = {
     },
 }
 
+vim.g.inlay_hints_visible = false
+
+---Toggle inlay hints (supported in nvim-0.10 or greater).
+---@param client number ID of the LSP client.
+---@param bufnr number ID of the buffer.
+local function toggle_inlay_hints(client, bufnr)
+    if vim.g.inlay_hints_visible then
+        vim.g.inlay_hints_visible = false
+        vim.lsp.inlay_hint(bufnr, false)
+    else
+        if client.server_capabilities.inlayHintProvider then
+            vim.g.inlay_hints_visible = true
+            vim.lsp.inlay_hint(bufnr, true)
+        else
+            print("Inlay hints unavailable.")
+        end
+    end
+end
+
+vim.g.diagnostics_visible = true
+
+--- Toggle diagnostics.
+local function toggle_diagnostics()
+    if vim.g.diagnostics_visible then
+        vim.g.diagnostics_visible = false
+        vim.diagnostic.disable()
+    else
+        vim.g.diagnostics_visible = true
+        vim.diagnostic.enable()
+    end
+end
+
 ---Creates LSP keymaps for a buffer when an LSP is attached.
 ---The function will only create maps for functionality the LSP supports.
 ---@param client number ID of the LSP client.
@@ -117,9 +149,23 @@ local function lsp_keymaps(client, bufnr)
         has_mappings = true
     end
 
+    if client.server_capabilities.inlayHintProvider then
+        vim.keymap.set("n", "<leader>ly", function()
+            toggle_inlay_hints(client, bufnr)
+        end
+        , { buffer = bufnr, desc = "Toggle inlay hints" })
+        has_mappings = true
+    end
+
     if client.supports_method("textDocument/publishDiagnostics") then
+        -- Show a list of diagnostics in a Telescope window.
         vim.keymap.set("n", "<leader>lp", function() require("telescope.builtin").diagnostics() end,
             { buffer = bufnr, desc = "List diagnostics" })
+
+        -- Toggle displaying diagnostics.
+        vim.keymap.set("n", "<leader>lg", function() toggle_diagnostics() end,
+            { buffer = bufnr, desc = "Toggle diagnostics" })
+
         has_mappings = true
     end
 
@@ -140,9 +186,8 @@ function M.config()
     local lsp_config = require("lspconfig")
 
     -- Extend nvim's LSP client capabilities with those provided by 'nvim-cmp'
-    local lsp_capabilities = vim.deepcopy(lsp_config.util.default_config.capabilities)
-    lsp_capabilities = vim.tbl_deep_extend("force", lsp_capabilities,
-        require("cmp_nvim_lsp").default_capabilities())
+    local lsp_capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol
+        .make_client_capabilities())
 
     -- Initialize 'mason'
     require("mason").setup()
@@ -183,13 +228,13 @@ function M.config()
         },
     }
 
-    -- Create an autocommand that will execute additional configuration when an LSP is attached to a buffer
+    -- Create an autocommand that will execute additional configuration when an LSP is attached to a buffer.
     vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(args)
             local client = vim.lsp.get_client_by_id(args.data.client_id)
             local buffer_number = args.buf
 
-            -- Add LSP keymaps
+            -- Add keymaps for LSP features supported by this client.
             lsp_keymaps(client, buffer_number)
 
             -- Auto-format buffers on save
@@ -208,9 +253,10 @@ function M.config()
                 require("lsp_signature").on_attach(lsp_sig_config, buffer_number)
             end
 
-            -- Enable LSP inlay hints (upcoming Neovim 10.0 feature)
+            -- Enable LSP inlay hints
             if vim.fn.has("nvim-0.10") == 1 then
                 if client.server_capabilities.inlayHintProvider then
+                    vim.g.inlay_hints_visible = true
                     vim.lsp.inlay_hint(buffer_number, true)
                 end
             end

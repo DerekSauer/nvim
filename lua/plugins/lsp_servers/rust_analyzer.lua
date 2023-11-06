@@ -12,6 +12,9 @@ function M.setup(lsp_config, lsp_capabilities)
                 lens = {
                     enable = false,
                 },
+                inlayHints = {
+                    enable = true,
+                },
             },
         },
     })
