@@ -90,8 +90,27 @@ end
 
 function M.config()
     local cmp = require("cmp")
+    local types = require("cmp.types")
     local luasnip = require("luasnip")
     local globals = require("globals")
+
+    -- Completion sorting function to place LSP snippets (Not Luasnip snippets)
+    -- At the end of the list. Some LSPs like Rust-Analyzer return many LSP
+    -- snippets with every operation; I'd rather see the type's members and
+    -- functions first.
+    local lsp_snippet_sort = function(entry1, entry2)
+        local kind1 = entry1:get_kind()
+        local kind2 = entry2:get_kind()
+
+        if kind1 ~= kind2 then
+            if kind1 == types.lsp.CompletionItemKind.Snippet then
+                return false
+            end
+            if kind2 == types.lsp.CompletionItemKind.Snippet then
+                return true
+            end
+        end
+    end
 
     -- Default completion selection behaviour
     local select_opts = { behavior = cmp.SelectBehavior.Select }
@@ -136,7 +155,7 @@ function M.config()
             -- Misc completion group
             { name = "crates",   priority = 5 },
             { name = "path",     priority = 4 },
-            { name = "buffer",   priority = 3, option = { keyword_length = 4 } },
+            { name = "buffer",   priority = 3, option = { keyword_length = 4 }, max_item_count = 5 },
         }),
         sorting = {
             priority_weight = 1.0,
@@ -146,7 +165,11 @@ function M.config()
                 cmp.config.compare.score,
                 cmp.config.compare.recently_used,
                 require("cmp-under-comparator").under,
-                cmp.config.compare.kind },
+                lsp_snippet_sort,
+                cmp.config.compare.sort_text,
+                cmp.config.compare.length,
+                cmp.config.compare.order,
+            },
         },
         -- Modify completion menu to show an icon for the completion, followed
         -- by the completion item itself and source name.
