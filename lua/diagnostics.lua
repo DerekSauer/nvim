@@ -5,7 +5,10 @@ function M.setup()
 
     vim.diagnostic.config({
         underline = true,
-        virtual_text = true,
+        virtual_text = {
+            source = "if_many",
+            prefix = "●",
+        },
         signs = true,
         update_in_insert = false,
         severity_sort = true,
