@@ -118,7 +118,6 @@ else
         string.format("Failed to load `Lazy.nvim` plugin manager.\nError message: %s", lazy),
         vim.log.levels.ERROR
     )
-    lazy = nil
 end
 
 -- Set colorscheme
