@@ -44,9 +44,7 @@ vim.opt.writebackup = false
 vim.opt.winbar = " "
 vim.opt.linebreak = true
 vim.opt.pumheight = 20
-
--- Use the new zero command line height when available
-if vim.fn.has("nvim-0.8") == 1 then vim.opt.cmdheight = 0 end
+vim.opt.cmdheight = 0
 
 -- Use ripgrep if available
 if vim.fn.executable("rg") == 1 then
