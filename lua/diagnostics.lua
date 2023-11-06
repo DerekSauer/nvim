@@ -71,17 +71,6 @@ function M.setup()
         pattern = { "*" },
         callback = open_diag_float,
     })
-
-    -- Keymap to toggle diagnostic visibility
-    local diagnostics_active = true
-    vim.keymap.set("n", "<leader>D", function()
-        diagnostics_active = not diagnostics_active
-        if diagnostics_active then
-            vim.diagnostic.show()
-        else
-            vim.diagnostic.hide()
-        end
-    end, { desc = "Toggle diagnostics" })
 end
 
 return M
