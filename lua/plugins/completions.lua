@@ -5,7 +5,7 @@ local M = {
         -- Snippets engine
         "L3MON4D3/LuaSnip",
 
-        -- Large library of premade snippets
+        -- Large library of pre-made snippets
         { "rafamadriz/friendly-snippets", dependencies = "L3MON4D3/LuaSnip" },
 
         -- Snippet completions
@@ -33,6 +33,9 @@ local M = {
 
         -- Dap REPL and Dap-UI as completion sources
         { "rcarriga/cmp-dap", ft = { "dap-repl", "dapui_watches", "dapui_hover" } },
+
+        -- Comparator for words starting with and underscore
+        "lukas-reineke/cmp-under-comparator",
     },
 }
 
@@ -90,13 +93,13 @@ function M.config()
     local luasnip = require("luasnip")
     local globals = require("globals")
 
-    -- Default completion selection behavior
+    -- Default completion selection behaviour
     local select_opts = { behavior = cmp.SelectBehavior.Select }
 
     local config = {
         -- Display the matching completion inline
         experimental = {
-            ghost_text = { enabled = true },
+            ghost_text = true,
         },
         -- Use LuaSnip as cmp's snippet engine
         snippet = {
@@ -104,9 +107,9 @@ function M.config()
                 luasnip.lsp_expand(args.body)
             end,
         },
-        -- Open the menu immediately when matches are available
+        -- Open the menu after matching at least two characters
         completion = {
-            keyword_length = 1,
+            keyword_length = 2,
         },
         -- Add our borders and style the completion and documentation windows
         window = {
@@ -123,24 +126,28 @@ function M.config()
                 scrollbar = true,
             },
         },
-        sources = cmp.config.sources(
-        -- LSP completion group
-            {
-                { name = "nvim_lsp" },
-            },
+        sources = cmp.config.sources({
+            -- LSP completion group
+            { name = "nvim_lsp", priority = 8, option = { keyword_length = 2 } },
 
             -- Snippets completion group
-            {
-                { name = "luasnip" },
-            },
+            { name = "luasnip",  priority = 7 },
 
             -- Misc completion group
-            {
-                { name = "crates" },
-                { name = "path" },
-                { name = "buffer", option = { keyword_length = 3 } },
-            }
-        ),
+            { name = "crates",   priority = 5 },
+            { name = "path",     priority = 4 },
+            { name = "buffer",   priority = 3, option = { keyword_length = 4 } },
+        }),
+        sorting = {
+            priority_weight = 1.0,
+            comparators = {
+                cmp.config.compare.offset,
+                cmp.config.compare.exact,
+                cmp.config.compare.score,
+                cmp.config.compare.recently_used,
+                require("cmp-under-comparator").under,
+                cmp.config.compare.kind },
+        },
         -- Modify completion menu to show an icon for the completion, followed
         -- by the completion item itself and source name.
         formatting = {
