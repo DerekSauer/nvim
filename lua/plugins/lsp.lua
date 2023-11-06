@@ -24,7 +24,7 @@ local M = {
 vim.g.inlay_hints_visible = false
 
 ---Toggle inlay hints (supported in nvim-0.10 or greater).
----@param client number ID of the LSP client.
+---@param client table ID of the LSP client.
 ---@param bufnr number ID of the buffer.
 local function toggle_inlay_hints(client, bufnr)
     if vim.g.inlay_hints_visible then
@@ -55,7 +55,7 @@ end
 
 ---Creates LSP keymaps for a buffer when an LSP is attached.
 ---The function will only create maps for functionality the LSP supports.
----@param client number ID of the LSP client.
+---@param client table ID of the LSP client.
 ---@param bufnr number ID of the buffer.
 local function lsp_keymaps(client, bufnr)
     -- Tracks if any mappings were created to control if the
@@ -235,32 +235,38 @@ function M.config()
     vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(args)
             local client = vim.lsp.get_client_by_id(args.data.client_id)
-            local buffer_number = args.buf
 
-            -- Add keymaps for LSP features supported by this client.
-            lsp_keymaps(client, buffer_number)
+            -- Nil check to keep `lua_ls` happy.
+            -- LspAttach will never be called if there's no LSP client to attach to.
+            if client then
+                local buffer_number = args.buf
 
-            -- Auto-format buffers on save
-            if client.server_capabilities.documentFormattingProvider then
-                vim.api.nvim_create_autocmd("BufWritePre", {
-                    buffer = buffer_number,
-                    desc = "Auto format buffer with LSP on save.",
-                    callback = function()
-                        vim.lsp.buf.format({ bufnr = buffer_number })
-                    end,
-                })
-            end
+                -- Add keymaps for LSP features supported by this client.
+                lsp_keymaps(client, buffer_number)
 
-            -- Show function signature help
-            if client.server_capabilities.signatureHelpProvider then
-                require("lsp_signature").on_attach(lsp_sig_config, buffer_number)
-            end
+                -- Auto-format buffers on save
+                if client.server_capabilities.documentFormattingProvider then
+                    vim.api.nvim_create_autocmd("BufWritePre", {
+                        buffer = buffer_number,
+                        desc = "Auto format buffer with LSP on save.",
+                        callback = function()
+                            vim.lsp.buf.format({ bufnr = buffer_number })
+                        end,
+                    })
+                end
 
-            -- Enable LSP inlay hints
-            if vim.fn.has("nvim-0.10") == 1 then
-                if client.server_capabilities.inlayHintProvider then
-                    vim.g.inlay_hints_visible = true
-                    vim.lsp.inlay_hint(buffer_number, vim.g.inlay_hints_visible)
+                -- Show function signature help
+                if client.server_capabilities.signatureHelpProvider then
+                    require("lsp_signature").on_attach(lsp_sig_config, buffer_number)
+                end
+
+                -- Enable LSP inlay hints
+                -- TODO: Remove version check when nvim 0.10 is stable
+                if vim.fn.has("nvim-0.10") == 1 then
+                    if client.server_capabilities.inlayHintProvider then
+                        vim.g.inlay_hints_visible = true
+                        vim.lsp.inlay_hint(buffer_number, vim.g.inlay_hints_visible)
+                    end
                 end
             end
         end,
