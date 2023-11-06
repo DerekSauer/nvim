@@ -217,6 +217,9 @@ function M.config()
         end,
     })
 
+    -- Disable logging LSP errors.
+    vim.lsp.set_log_level("OFF")
+
     -- Initialize code symbols outline utility
     require("symbols-outline").setup()
 
@@ -257,7 +260,7 @@ function M.config()
             if vim.fn.has("nvim-0.10") == 1 then
                 if client.server_capabilities.inlayHintProvider then
                     vim.g.inlay_hints_visible = true
-                    vim.lsp.inlay_hint(buffer_number, true)
+                    vim.lsp.inlay_hint(buffer_number, vim.g.inlay_hints_visible)
                 end
             end
         end,

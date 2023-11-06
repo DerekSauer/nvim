@@ -71,9 +71,6 @@ vim.g.loaded_ruby_provider = 0
 vim.g.loaded_perl_provider = 0
 vim.g.loaded_node_provider = 0
 
--- Set LSP logging level to errors only
-local lsp_log = require("vim.lsp.log")
-lsp_log.set_level(lsp_log.levels.ERROR)
 
 -- Setup my own auto commands
 require("functions").setup_autocmds()
