@@ -10,9 +10,6 @@ local M = {
         -- Improved interop between 'nvim-lspconfig' and 'Mason'
         { "williamboman/mason-lspconfig.nvim", dependencies = "williamboman/mason.nvim" },
 
-        -- Code symbols outline window
-        "simrat39/symbols-outline.nvim",
-
         -- Show function signature help
         "ray-x/lsp_signature.nvim",
 
@@ -140,15 +137,6 @@ local function lsp_keymaps(client, bufnr)
         has_mappings = true
     end
 
-    if client.server_capabilities.documentSymbolProvider then
-        vim.keymap.set("n", "<leader>lo", function()
-            vim.cmd("SymbolsOutline")
-            vim.cmd("redraw")
-        end
-        , { buffer = bufnr, desc = "Toggle symbol outline" })
-        has_mappings = true
-    end
-
     if client.server_capabilities.inlayHintProvider then
         vim.keymap.set("n", "<leader>ly", function()
             toggle_inlay_hints(client, bufnr)
@@ -219,9 +207,6 @@ function M.config()
 
     -- Disable logging LSP errors.
     vim.lsp.set_log_level("OFF")
-
-    -- Initialize code symbols outline utility
-    require("symbols-outline").setup()
 
     -- Config options for lsp_signature
     local lsp_sig_config = {
