@@ -1,14 +1,14 @@
 local M = {
-    -- Smart code commenting
-    -- https://github.com/numToStr/Comment.nvim
+    -- Smart code commenting.
     "numToStr/Comment.nvim",
+    event = "VeryLazy",
 }
 
 function M.config()
-    -- Disable Comment's default keymaps, we'll define our own below
+    -- Disable Comment's default keymaps, we'll define our own below.
     require("Comment").setup({ mappings = { basic = false, extra = false } })
 
-    -- <leader>+/ in normal mode to toggle comment on current line
+    -- <leader>+/ in normal mode to toggle comment on current line.
     vim.keymap.set(
         "n",
         "<leader>/",
@@ -16,7 +16,7 @@ function M.config()
         { desc = "Toggle comment" }
     )
 
-    -- <leader>+/ in visual mode to toggle comment on a selection
+    -- <leader>+/ in visual mode to toggle comment on a selection.
     vim.keymap.set(
         "v",
         "<leader>/",

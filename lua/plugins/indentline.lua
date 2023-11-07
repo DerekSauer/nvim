@@ -1,10 +1,8 @@
 local M = {
     -- Indent guides
-    -- https://github.com/lukas-reineke/indent-blankline.nvim
     "lukas-reineke/indent-blankline.nvim",
     main = "ibl",
-    opts = {},
-    event = "BufEnter",
+    event = "VeryLazy",
 }
 
 function M.config()

@@ -1,29 +1,24 @@
 local M = {
-    -- Text/code completion engine
+    -- Code & text completion engine.
     "hrsh7th/nvim-cmp",
+
     dependencies = {
-        -- Snippets engine
-        "L3MON4D3/LuaSnip",
+        -- Snippet completion source.
+        "saadparwaiz1/cmp_luasnip",
 
-        -- Large library of pre-made snippets
-        { "rafamadriz/friendly-snippets", dependencies = "L3MON4D3/LuaSnip" },
-
-        -- Snippet completions
-        { "saadparwaiz1/cmp_luasnip",     dependencies = "L3MON4D3/LuaSnip" },
-
-        -- File path completions
+        -- File path completions.
         "hrsh7th/cmp-path",
 
-        -- Buffer text completion source
+        -- Buffer text completion source.
         "hrsh7th/cmp-buffer",
 
-        -- Attached LSP as a completion source
+        -- Attached LSP as a completion source.
         "hrsh7th/cmp-nvim-lsp",
 
-        -- Nvim's command line as a source
+        -- Nvim's command line as a source.
         "hrsh7th/cmp-cmdline",
 
-        -- Crates.io as a completion source
+        -- Crates.io as a completion source.
         {
             "Saecki/crates.nvim",
             event = { "Bufread Cargo.toml" },
@@ -31,12 +26,15 @@ local M = {
             config = function() require("crates").setup() end,
         },
 
-        -- Dap REPL and Dap-UI as completion sources
+        -- Dap REPL and Dap-UI as completion sources>
         { "rcarriga/cmp-dap", ft = { "dap-repl", "dapui_watches", "dapui_hover" } },
 
-        -- Comparator for words starting with and underscore
+        -- Comparator for words starting with an underscore.
         "lukas-reineke/cmp-under-comparator",
     },
+
+    -- Enable completions when entering insert mode in a buffer or the command line.
+    event = { "InsertEnter", "CmdlineEnter" },
 }
 
 -- Abbreviated names for sources
@@ -110,26 +108,31 @@ function M.config()
                 return true
             end
         end
+
+        return false
     end
 
-    -- Default completion selection behaviour
+    -- Select the first valid completion.
     local select_opts = { behavior = cmp.SelectBehavior.Select }
 
     local config = {
-        -- Display the matching completion inline
+        -- Display the matching completions inline.
         experimental = {
             ghost_text = true,
         },
-        -- Use LuaSnip as cmp's snippet engine
+
+        -- Use LuaSnip as cmp's snippet engine.
         snippet = {
             expand = function(args)
                 luasnip.lsp_expand(args.body)
             end,
         },
-        -- Open the menu after matching at least two characters
+
+        -- Open the completion menu after matching at least two characters.
         completion = {
             keyword_length = 2,
         },
+
         -- Add our borders and style the completion and documentation windows
         window = {
             completion = {
@@ -145,18 +148,17 @@ function M.config()
                 scrollbar = true,
             },
         },
+
+        -- Configure the ordering of completion sources.
         sources = cmp.config.sources({
-            -- LSP completion group
-            { name = "nvim_lsp", priority = 8, option = { keyword_length = 2 } },
-
-            -- Snippets completion group
-            { name = "luasnip",  priority = 7 },
-
-            -- Misc completion group
-            { name = "crates",   priority = 5 },
-            { name = "path",     priority = 4 },
-            { name = "buffer",   priority = 3, option = { keyword_length = 4 }, max_item_count = 5 },
+            { name = "nvim_lsp", option = { keyword_length = 2 } },
+            { name = "luasnip" },
+            { name = "crates" },
+            { name = "path" },
+            { name = "buffer",   option = { keyword_length = 4 }, max_item_count = 5 },
         }),
+
+        -- Sorting priorities for completions.
         sorting = {
             priority_weight = 1.0,
             comparators = {
@@ -171,6 +173,7 @@ function M.config()
                 cmp.config.compare.order,
             },
         },
+
         -- Modify completion menu to show an icon for the completion, followed
         -- by the completion item itself and source name.
         formatting = {
@@ -185,7 +188,8 @@ function M.config()
                 return vim_item
             end,
         },
-        -- Disable completions when in a comment
+
+        -- Disable completions when in a comment block.
         enabled = function()
             local context = require("cmp.config.context")
             if vim.api.nvim_get_mode().mode == "c" then
@@ -195,6 +199,7 @@ function M.config()
                     and not context.in_syntax_group("Comment")
             end
         end,
+
         -- Keymaps
         mapping = cmp.mapping.preset.insert({
             -- Accept selected completion
@@ -278,18 +283,6 @@ function M.config()
             }
         ),
     })
-
-    -- Load snippets from 'friendly-snippets'.
-    require("luasnip.loaders.from_vscode").lazy_load()
-
-    -- Load my own snippets
-    require("luasnip.loaders.from_lua").lazy_load({ paths = "./snippets" })
-
-    -- Create snippet navigation keymaps
-    vim.keymap.set({ "s", "n" }, "]n", function() require("luasnip").jump(1) end,
-        { desc = "Next snippet placeholder" })
-    vim.keymap.set({ "s", "n" }, "[n", function() require("luasnip").jump(-1) end,
-        { desc = "Previous snippet placeholder" })
 end
 
 return M

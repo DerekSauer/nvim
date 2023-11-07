@@ -1,6 +1,5 @@
 local M = {
-    -- Keybinding hint popup window
-    -- https://github.com/folke/which-key.nvim
+    -- Keybinding hint popup window.
     "folke/which-key.nvim",
 }
 

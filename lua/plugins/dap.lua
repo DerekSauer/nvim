@@ -1,16 +1,19 @@
 local M = {
-    -- Debug adapter protocol support
+    -- Debug adapter protocol support.
     "mfussenegger/nvim-dap",
 
     dependencies = {
-        -- User interface for the DAP
+        -- User interface for the DAP.
         "rcarriga/nvim-dap-ui",
 
-        -- Show variable values inline while debugging
+        -- Show variable values inline while debugging.
         "theHamsta/nvim-dap-virtual-text",
 
-        -- Better interop between DAP and Mason
-        { "jay-babu/mason-nvim-dap.nvim", dependencies = { "williamboman/mason.nvim" } },
+        -- Mason installs debug adapters.
+        "williamboman/mason.nvim",
+
+        -- Better interop between DAP and Mason.
+        "jay-babu/mason-nvim-dap.nvim",
     },
 }
 
@@ -108,7 +111,6 @@ function M.config()
 
     -- Initialize the 'mason' & 'nvim-dap' interop helper
     require("mason-nvim-dap").setup({
-        ensure_installed = { "codelldb" },
         handlers = {
             -- Default handler will automatically setup any DAP without a custom
             -- setup below. Automatic setup will enable an adapter with default settings.

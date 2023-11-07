@@ -1,7 +1,7 @@
 local M = {
-    -- Git diffs and signs in gutter
-    -- https://github.com/lewis6991/gitsigns.nvim
+    -- Git diffs and signs in gutter.
     "lewis6991/gitsigns.nvim",
+    event = "VeryLazy",
 }
 
 function M.config()

@@ -1,6 +1,5 @@
 local M = {
-    -- Neo-tree file drawer
-    -- https://github.com/nvim-neo-tree/neo-tree.nvim
+    -- Neo-tree file drawer.
     "nvim-neo-tree/neo-tree.nvim",
     branch = "v3.x",
     dependencies = {
@@ -15,11 +14,13 @@ function M.config()
 
     local config = {
         close_if_last_window = true,
+
         popup_border_style = require("globals").border_style,
         window = {
             position = "left",
             width = 32,
         },
+
         default_component_configs = {
             icon = {
                 folder_closed = "",
@@ -40,6 +41,7 @@ function M.config()
                 },
             },
         },
+
         document_symbols = {
             kinds = {
                 File = { icon = "󰈙", hl = "Tag" },
@@ -62,7 +64,7 @@ function M.config()
         },
         filesystem = {
             use_libuv_file_watcher = true,
-        }
+        },
     }
 
     neo_tree.setup(config)

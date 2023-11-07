@@ -12,7 +12,23 @@ function M.setup(lsp_config, lsp_capabilities)
         capabilities = lsp_capabilities,
         filetypes = { "wgsl" },
 
-        settings = {},
+        settings = {
+            ["wgsl-analyzer"] = {
+                diagnostics = {
+                    typeErrors = true,
+                    nagaParsing = true,
+                    nagaValidation = true,
+                    nagaVersion = "main",
+                },
+                inlayHints = {
+                    enabled = true,
+                    typeHints = true,
+                    parameterHints = true,
+                    structLayoutHints = true,
+                    typeVerbosity = "compact",
+                },
+            },
+        },
     })
 end
 

@@ -1,12 +1,12 @@
 local M = {
     -- A high-performance color highlighter for Neovim.
-    -- https://github.com/NvChad/nvim-colorizer.lua
     "NvChad/nvim-colorizer.lua",
+    event = "VeryLazy",
 }
 
 function M.config()
     require("colorizer").setup({
-        filetypes = { "*" },
+        filetypes = { "css", "sass", "scss", "html", "htm", "wgsl", "conf" },
         user_default_options = {
             mode = "virtualtext",
             virtualtext = "",

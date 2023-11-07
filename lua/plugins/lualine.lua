@@ -1,10 +1,9 @@
 local M = {
     -- Fast and easy to configure neovim statusline plugin
-    -- https://github.com/nvim-lualine/lualine.nvim
     "nvim-lualine/lualine.nvim",
+
     dependencies = {
         "nvim-tree/nvim-web-devicons",
-        "linrongbin16/lsp-progress.nvim",
     },
 }
 
@@ -44,26 +43,6 @@ local function combined_location()
 end
 
 function M.config()
-    -- Enable LSP progress indicator
-    require("lsp-progress").setup({
-        max_size = 80,
-        format = function(messages)
-            if #messages > 0 then
-                return messages[1] .. "  LSP"
-            else
-                return "  LSP"
-            end
-        end,
-    })
-
-    -- Create an autocommand to refresh the status line when the LSP has new messages
-    vim.api.nvim_create_augroup("lualine_augroup", { clear = true })
-    vim.api.nvim_create_autocmd("User", {
-        group = "lualine_augroup",
-        pattern = "LspProgressStatusUpdated",
-        callback = require("lualine").refresh,
-    })
-
     local config = {
         options = {
             icons_enabled = true,
@@ -88,7 +67,6 @@ function M.config()
                 "filename",
             },
             lualine_x = {
-                require("lsp-progress").progress,
             },
             lualine_y = { encoding_override, "fileformat", "filetype", time },
             lualine_z = { combined_location },
