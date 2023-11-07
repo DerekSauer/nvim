@@ -59,7 +59,7 @@ function M.setup(lsp_config, lsp_capabilities)
                     globals = { "vim", "s", "i", "fmt", "rep", "conds", "f", "c", "t" },
                 },
                 workspace = {
-                    checkThirdParty = false,
+                    checkThirdParty = "Disable",
                     library = get_lua_runtime(),
                     maxPreload = 10000,
                     preloadFileSize = 10000,

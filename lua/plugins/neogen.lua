@@ -1,8 +1,8 @@
 local M = {
     -- Easy code annotations.
-    -- https://github.com/danymat/neogen/
     "danymat/neogen",
     dependencies = "nvim-treesitter/nvim-treesitter",
+    event = "VeryLazy",
 }
 
 function M.config()

@@ -1,18 +1,18 @@
 local M = {
-    -- Debug adapter protocol support
+    -- Debug adapter protocol support.
     "mfussenegger/nvim-dap",
 
     dependencies = {
-        -- User interface for the DAP
+        -- User interface for the DAP.
         "rcarriga/nvim-dap-ui",
 
-        -- Show variable values inline while debugging
+        -- Show variable values inline while debugging.
         "theHamsta/nvim-dap-virtual-text",
 
-        -- Mason installs debug adapters
+        -- Mason installs debug adapters.
         "williamboman/mason.nvim",
 
-        -- Better interop between DAP and Mason
+        -- Better interop between DAP and Mason.
         "jay-babu/mason-nvim-dap.nvim",
     },
 }

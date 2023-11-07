@@ -1,6 +1,5 @@
 local M = {
-    -- Colorscheme inspired by the colors of the famous painting by Katsushika Hokusai
-    -- https://github.com/rebelot/kanagawa.nvim
+    -- Colorscheme inspired by the colors of the famous painting by Katsushika Hokusai.
     "rebelot/kanagawa.nvim",
     lazy = false,
     priority = 1000,

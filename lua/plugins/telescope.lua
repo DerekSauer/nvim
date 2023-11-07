@@ -1,6 +1,5 @@
 local M = {
-    -- Telescope fuzzy finder
-    -- https://github.com/nvim-telescope/telescope.nvim
+    -- Telescope fuzzy finder.
     "nvim-telescope/telescope.nvim",
     dependencies = {
         "nvim-lua/plenary.nvim",

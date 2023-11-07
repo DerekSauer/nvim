@@ -1,14 +1,13 @@
 local M = {
     -- LSP configuration helper
     "neovim/nvim-lspconfig",
-    lazy = false,
-    priority = 999,
+
     dependencies = {
         -- LSP installation and management tool
         "williamboman/mason.nvim",
 
         -- Improved interop between 'nvim-lspconfig' and 'Mason'
-        { "williamboman/mason-lspconfig.nvim", dependencies = "williamboman/mason.nvim" },
+        "williamboman/mason-lspconfig.nvim",
 
         -- Show function signature help
         "ray-x/lsp_signature.nvim",
@@ -18,10 +17,11 @@ local M = {
     },
 }
 
+-- Default to LSP inlay hints being off, they're useful but distracting.
 vim.g.inlay_hints_visible = false
 
 ---Toggle inlay hints (supported in nvim-0.10 or greater).
----@param client table ID of the LSP client.
+---@param client table The LSP client providing inlays.
 ---@param bufnr number ID of the buffer.
 local function toggle_inlay_hints(client, bufnr)
     if vim.g.inlay_hints_visible then
@@ -59,6 +59,8 @@ local function lsp_keymaps(client, bufnr)
     -- LSP group appears in Whichkey for this buffer
     local has_mappings = false
 
+    -- Get additional information about the symbol under the cursor.
+    -- SHIFT-K quick shortcut.
     if client.server_capabilities.hoverProvider then
         vim.keymap.set("n", "<leader>lk", function() vim.lsp.buf.hover() end,
             { buffer = bufnr, desc = "Symbol hover info" })
@@ -67,6 +69,7 @@ local function lsp_keymaps(client, bufnr)
         has_mappings = true
     end
 
+    -- Jump to where the symbol is defined or display a list for multiple definitions.
     if client.server_capabilities.definitionProvider then
         vim.keymap.set("n", "<leader>ld",
             function() require("telescope.builtin").lsp_definitions() end,
@@ -74,6 +77,7 @@ local function lsp_keymaps(client, bufnr)
         has_mappings = true
     end
 
+    -- Jump to where the symbol's type is defined or display a list for multiple definitions.
     if client.server_capabilities.typeDefinitionProvider then
         vim.keymap.set("n", "<leader>lt",
             function() require("telescope.builtin").lsp_type_definitions() end,
@@ -81,12 +85,14 @@ local function lsp_keymaps(client, bufnr)
         has_mappings = true
     end
 
+    -- Jump to where the symbol is declared.
     if client.server_capabilities.declarationProvider then
         vim.keymap.set("n", "<leader>lD", function() vim.lsp.buf.declaration() end,
             { buffer = bufnr, desc = "Jump symbol declaration" })
         has_mappings = true
     end
 
+    -- Jump to the symbols implementation or display a list if more than one implementation.
     if client.server_capabilities.implementationProvider then
         vim.keymap.set("n", "<leader>li",
             function() require("telescope.builtin").lsp_implementations() end,
@@ -94,6 +100,7 @@ local function lsp_keymaps(client, bufnr)
         has_mappings = true
     end
 
+    -- Format the entire buffer.
     if client.server_capabilities.documentFormattingProvider then
         vim.keymap.set("n", "<leader>lf",
             function() vim.lsp.buf.format({ bufnr = bufnr, id = client.id }) end,
@@ -101,6 +108,7 @@ local function lsp_keymaps(client, bufnr)
         has_mappings = true
     end
 
+    -- Format the selected range.
     if client.server_capabilities.documentRangeFormattingProvider then
         vim.keymap.set("v", "<leader>lf",
             function() vim.lsp.buf.format({ bufnr = bufnr, id = client.id }) end,
@@ -108,6 +116,7 @@ local function lsp_keymaps(client, bufnr)
         has_mappings = true
     end
 
+    -- Display a list of references to the symbol.
     if client.server_capabilities.referencesProvider then
         vim.keymap.set("n", "<leader>lr",
             function() require("telescope.builtin").lsp_references() end,
@@ -115,6 +124,8 @@ local function lsp_keymaps(client, bufnr)
         has_mappings = true
     end
 
+    -- Rename the symbol under the cursor.
+    -- F2 quick shortcut.
     if client.server_capabilities.renameProvider then
         vim.keymap.set("n", "<leader>l<F2>", function() vim.lsp.buf.rename() end,
             { buffer = bufnr, desc = "Rename symbol" })
@@ -123,6 +134,8 @@ local function lsp_keymaps(client, bufnr)
         has_mappings = true
     end
 
+    -- Display a list of code actions that may be performed at the cursor's position.
+    -- F4 quick shortcut.
     if client.server_capabilities.codeActionProvider then
         vim.keymap.set("n", "<leader>l<F4>", function() vim.lsp.buf.code_action() end,
             { buffer = bufnr, desc = "Code actions" })
@@ -131,12 +144,14 @@ local function lsp_keymaps(client, bufnr)
         has_mappings = true
     end
 
+    -- Open the signature help overlay.
     if client.server_capabilities.signatureHelpProvider then
         vim.keymap.set("i", "<C-k>", function() vim.lsp.buf.signature_help() end,
             { buffer = bufnr, desc = "Signature help" })
         has_mappings = true
     end
 
+    -- Toggle inlay hints on or off.
     if client.server_capabilities.inlayHintProvider then
         vim.keymap.set("n", "<leader>ly", function()
             toggle_inlay_hints(client, bufnr)
@@ -173,7 +188,7 @@ function M.config()
 
     local lsp_config = require("lspconfig")
 
-    -- Extend nvim's LSP client capabilities with those provided by 'nvim-cmp'
+    -- Retrieve nvim's native LSP capabilities and extend them with additional functionality provided by nvim-cmp.
     local lsp_capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol
         .make_client_capabilities())
 
@@ -182,23 +197,27 @@ function M.config()
     require("mason.settings").set({ ui = { border = require("globals").border_style } })
 
     -- Initialize the 'mason' & 'lspconfig' interop helper
-    require("mason-lspconfig").setup({ ensure_installed = { "lua_ls", "rust_analyzer", "taplo" } })
+    require("mason-lspconfig").setup()
 
     -- Setup installed LSPs
     require("mason-lspconfig").setup_handlers({
-        -- Default handler will automatically setup any server without a custom setup function
+        -- The default setup handler will automatically setup, with default settings, any LSP server
+        -- that does not have an override below.
         function(server_name)
             require("lspconfig")[server_name].setup({ capabilities = lsp_capabilities })
         end,
+
         -- Override the defaults with our own settings for select servers
         ["rust_analyzer"] = function()
             require("plugins/lsp_servers/rust_analyzer").setup(lsp_config
             , lsp_capabilities)
         end,
+
         ["lua_ls"] = function()
             require("plugins/lsp_servers/lua_ls").setup(lsp_config,
                 lsp_capabilities)
         end,
+
         ["wgsl_analyzer"] = function()
             require("plugins/lsp_servers/wgsl_analyzer").setup(lsp_config
             , lsp_capabilities)
@@ -245,13 +264,9 @@ function M.config()
                     require("lsp_signature").on_attach(lsp_sig_config, buffer_number)
                 end
 
-                -- Enable LSP inlay hints
-                -- TODO: Remove version check when nvim 0.10 is stable
-                if vim.fn.has("nvim-0.10") == 1 then
-                    if client.server_capabilities.inlayHintProvider then
-                        vim.g.inlay_hints_visible = true
-                        vim.lsp.inlay_hint(buffer_number, vim.g.inlay_hints_visible)
-                    end
+                -- Display inlay hints
+                if client.server_capabilities.inlayHintProvider then
+                    vim.lsp.inlay_hint(buffer_number, vim.g.inlay_hints_visible)
                 end
             end
         end,

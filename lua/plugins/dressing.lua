@@ -1,7 +1,7 @@
 local M = {
-    -- Dressing, improve default UI
-    -- https://github.com/stevearc/dressing.nvim
+    -- Dressing, improve default UI.
     "stevearc/dressing.nvim",
+    event = "VeryLazy",
 }
 
 function M.config()
