@@ -4,7 +4,6 @@ local M = {
     "nvim-lualine/lualine.nvim",
     dependencies = {
         "nvim-tree/nvim-web-devicons",
-        "linrongbin16/lsp-progress.nvim",
     },
 }
 
@@ -44,18 +43,6 @@ local function combined_location()
 end
 
 function M.config()
-    -- Enable LSP progress indicator
-    require("lsp-progress").setup({
-        max_size = 80,
-        format = function(messages)
-            if #messages > 0 then
-                return messages[1] .. "  LSP"
-            else
-                return "  LSP"
-            end
-        end,
-    })
-
     local config = {
         options = {
             icons_enabled = true,
@@ -80,7 +67,6 @@ function M.config()
                 "filename",
             },
             lualine_x = {
-                require("lsp-progress").progress,
             },
             lualine_y = { encoding_override, "fileformat", "filetype", time },
             lualine_z = { combined_location },
