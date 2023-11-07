@@ -49,9 +49,7 @@ function M.config()
         max_size = 80,
         format = function(messages)
             if #messages > 0 then
-                if #messages[1] > 0 then
-                    return messages[1] .. "  LSP"
-                end
+                return messages[1] .. "  LSP"
             else
                 return "  LSP"
             end
