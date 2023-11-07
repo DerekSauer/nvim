@@ -49,19 +49,13 @@ function M.config()
         max_size = 80,
         format = function(messages)
             if #messages > 0 then
-                return messages[1] .. "  LSP"
+                if #messages[1] > 0 then
+                    return messages[1] .. "  LSP"
+                end
             else
                 return "  LSP"
             end
         end,
-    })
-
-    -- Create an autocommand to refresh the status line when the LSP has new messages
-    vim.api.nvim_create_augroup("lualine_augroup", { clear = true })
-    vim.api.nvim_create_autocmd("User", {
-        group = "lualine_augroup",
-        pattern = "LspProgressStatusUpdated",
-        callback = require("lualine").refresh,
     })
 
     local config = {
