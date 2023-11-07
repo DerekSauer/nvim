@@ -1,3 +1,11 @@
+-- Let the user know that need at least Nvim v0.10.
+if vim.fn.has("nvim-0.10") == 0 then
+    vim.notify(
+        string.format("Nvim version 0.10 or greater required."),
+        vim.log.levels.ERROR
+    )
+end
+
 -- Map leader
 vim.g.mapleader = ","
 
