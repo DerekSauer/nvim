@@ -2,6 +2,12 @@ local M = {
     -- LSP configuration helper
     "neovim/nvim-lspconfig",
 
+    -- Force LSP configuration to load early so that debuggers are
+    -- available for DAP configuration and it stops complaining
+    -- about `codelldb` not being found.
+    lazy = false,
+    priority = 1000,
+
     dependencies = {
         -- LSP installation and management tool
         "williamboman/mason.nvim",
