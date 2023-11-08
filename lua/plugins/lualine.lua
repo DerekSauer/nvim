@@ -66,8 +66,7 @@ function M.config()
             lualine_c = {
                 "filename",
             },
-            lualine_x = {
-            },
+            lualine_x = {},
             lualine_y = { encoding_override, "fileformat", "filetype", time },
             lualine_z = { combined_location },
         },

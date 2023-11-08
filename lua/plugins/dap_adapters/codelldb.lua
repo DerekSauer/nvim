@@ -4,8 +4,7 @@ local M = {}
 ---@param dap table Reference to a `nvim-dap` instance.
 function M.setup(dap)
     -- Get the path to `codelldb` installed by Mason.nvim
-    local lldb_path = require("mason-registry").get_package("codelldb"):get_install_path() ..
-        "/extension"
+    local lldb_path = require("mason-registry").get_package("codelldb"):get_install_path() .. "/extension"
     local lldb_bin = lldb_path .. "/adapter/codelldb"
 
     if vim.fn.executable(lldb_bin) == 1 then

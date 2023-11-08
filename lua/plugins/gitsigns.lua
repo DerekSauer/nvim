@@ -42,9 +42,9 @@ function M.config()
         },
 
         signcolumn = false, -- Toggle with `:Gitsigns toggle_signs`
-        numhl = true,       -- Toggle with `:Gitsigns toggle_numhl`
-        linehl = false,     -- Toggle with `:Gitsigns toggle_linehl`
-        word_diff = false,  -- Toggle with `:Gitsigns toggle_word_diff`
+        numhl = true, -- Toggle with `:Gitsigns toggle_numhl`
+        linehl = false, -- Toggle with `:Gitsigns toggle_linehl`
+        word_diff = false, -- Toggle with `:Gitsigns toggle_word_diff`
 
         watch_gitdir = {
             interval = 1000,
@@ -64,7 +64,7 @@ function M.config()
 
         sign_priority = 6,
         update_debounce = 100,
-        status_formatter = nil,  -- Use default
+        status_formatter = nil, -- Use default
         max_file_length = 10000, -- Disable if file is longer than this (in lines)
 
         preview_config = {
@@ -89,7 +89,9 @@ function M.config()
 
             -- Jump to next hunk with ]g
             map("n", "]g", function()
-                if vim.wo.diff then return "]g" end
+                if vim.wo.diff then
+                    return "]g"
+                end
 
                 vim.schedule(function() gitsigns.next_hunk() end)
 
@@ -98,7 +100,9 @@ function M.config()
 
             -- Jump to previous hunk with [g
             map("n", "[g", function()
-                if vim.wo.diff then return "[g" end
+                if vim.wo.diff then
+                    return "[g"
+                end
 
                 vim.schedule(function() gitsigns.prev_hunk() end)
 
@@ -119,19 +123,9 @@ function M.config()
                 { desc = "Blame this line" }
             )
             map("n", "<leader>gd", gitsigns.diffthis, { desc = "Show diff" })
-            map(
-                "n",
-                "<leader>gD",
-                function() gitsigns.diffthis("~") end,
-                { desc = "Diff last commit" }
-            )
+            map("n", "<leader>gD", function() gitsigns.diffthis("~") end, { desc = "Diff last commit" })
 
-            map(
-                "n",
-                "<leader>gtb",
-                gitsigns.toggle_current_line_blame,
-                { desc = "Toggle line blames" }
-            )
+            map("n", "<leader>gtb", gitsigns.toggle_current_line_blame, { desc = "Toggle line blames" })
             map("n", "<leader>gtd", gitsigns.toggle_deleted, { desc = "Toggle deleted indicators" })
             map("n", "<leader>gtn", gitsigns.toggle_numhl, { desc = "Toggle number highlighting" })
             map("n", "<leader>gtl", gitsigns.toggle_linehl, { desc = "Toggle line highlighting" })

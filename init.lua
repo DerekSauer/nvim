@@ -1,9 +1,6 @@
 -- Let the user know that need at least Nvim v0.10.
 if vim.fn.has("nvim-0.10") == 0 then
-    vim.notify(
-        string.format("Nvim version 0.10 or greater required."),
-        vim.log.levels.ERROR
-    )
+    vim.notify(string.format("Nvim version 0.10 or greater required."), vim.log.levels.ERROR)
 end
 
 -- Map leader
@@ -77,7 +74,6 @@ vim.g.loaded_ruby_provider = 0
 vim.g.loaded_perl_provider = 0
 vim.g.loaded_node_provider = 0
 
-
 -- Setup my own auto commands
 require("functions").setup_autocmds()
 
@@ -109,8 +105,7 @@ if lazy_ok then
                 disable_events = { "VimEnter", "BufReadPre" },
             },
             rtp = {
-                disabled_plugins = {
-                },
+                disabled_plugins = {},
             },
         },
         ui = {

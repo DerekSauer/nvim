@@ -55,7 +55,9 @@ function M.setup()
     -- https://www.reddit.com/r/neovim/comments/tvy18v/comment/i3cfsr5/?utm_source=share&utm_medium=web2x&context=3
     local function open_diag_float()
         for _, winid in pairs(vim.api.nvim_tabpage_list_wins(0)) do
-            if vim.api.nvim_win_get_config(winid).zindex then return end
+            if vim.api.nvim_win_get_config(winid).zindex then
+                return
+            end
         end
         vim.diagnostic.open_float({
             focusable = false,

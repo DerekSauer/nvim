@@ -18,8 +18,7 @@ function M.config()
             css = true,
             sass = { enable = true, parsers = { "css" } },
         },
-    }
-    )
+    })
 end
 
 return M

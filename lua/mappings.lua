@@ -38,18 +38,8 @@ vim.keymap.set("n", "<BS>", "<C-^>", { silent = true, desc = "Toggle current & p
 vim.keymap.set("n", "<leader>bb", ":ls<CR>:b<space>", { desc = "Pick buffer" })
 vim.keymap.set("n", "<leader>b]", ":bnext<CR>", { silent = true, desc = "Switch next buffer" })
 vim.keymap.set("n", "<leader>b[", ":bprev<CR>", { silent = true, desc = "Switch previous buffer" })
-vim.keymap.set(
-    "n",
-    "<leader>bv",
-    ":ls<CR>:vertical sb<space>",
-    { desc = "Pick & vert. split buffer" }
-)
-vim.keymap.set(
-    "n",
-    "<leader>bh",
-    ":ls<CR>:horizontal sb<space>",
-    { desc = "Pick & horz. split buffer" }
-)
+vim.keymap.set("n", "<leader>bv", ":ls<CR>:vertical sb<space>", { desc = "Pick & vert. split buffer" })
+vim.keymap.set("n", "<leader>bh", ":ls<CR>:horizontal sb<space>", { desc = "Pick & horz. split buffer" })
 
 -- If which-key is present add a Buffers category
 local loaded, whichkey = pcall(require, "which-key")
@@ -60,12 +50,7 @@ if loaded then
 end
 
 -- Selections
-vim.keymap.set(
-    "n",
-    "<leader><C-a>",
-    ":keepjumps normal! ggVG<CR>",
-    { silent = true, desc = "Select all" }
-)
+vim.keymap.set("n", "<leader><C-a>", ":keepjumps normal! ggVG<CR>", { silent = true, desc = "Select all" })
 vim.keymap.set("n", "<C-a>", ":keepjumps normal! ggVG<CR>", { silent = true, desc = "Select all" })
 
 -- Toggle spelling

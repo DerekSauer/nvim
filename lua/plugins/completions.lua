@@ -82,8 +82,8 @@ local kind_icons = {
 
 local has_words_before = function()
     local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-    return col ~= 0 and
-        vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+    return col ~= 0
+        and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
 end
 
 function M.config()
@@ -123,9 +123,7 @@ function M.config()
 
         -- Use LuaSnip as cmp's snippet engine.
         snippet = {
-            expand = function(args)
-                luasnip.lsp_expand(args.body)
-            end,
+            expand = function(args) luasnip.lsp_expand(args.body) end,
         },
 
         -- Open the completion menu after matching at least two characters.
@@ -155,7 +153,7 @@ function M.config()
             { name = "luasnip" },
             { name = "crates" },
             { name = "path" },
-            { name = "buffer",   option = { keyword_length = 4 }, max_item_count = 5 },
+            { name = "buffer", option = { keyword_length = 4 }, max_item_count = 5 },
         }),
 
         -- Sorting priorities for completions.
@@ -195,8 +193,7 @@ function M.config()
             if vim.api.nvim_get_mode().mode == "c" then
                 return true
             else
-                return not context.in_treesitter_capture("comment")
-                    and not context.in_syntax_group("Comment")
+                return not context.in_treesitter_capture("comment") and not context.in_syntax_group("Comment")
             end
         end,
 
@@ -266,22 +263,18 @@ function M.config()
     -- Enable search completions on the command line
     cmp.setup.cmdline({ "/", "?" }, {
         mapping = cmp.mapping.preset.cmdline(),
-        sources = cmp.config.sources(
-            {
-                { name = "buffer" },
-            }
-        ),
+        sources = cmp.config.sources({
+            { name = "buffer" },
+        }),
     })
 
     -- Enable command completions on the command line
     cmp.setup.cmdline(":", {
         mapping = cmp.mapping.preset.cmdline(),
-        sources = cmp.config.sources(
-            {
-                { name = "path" },
-                { name = "cmdline" },
-            }
-        ),
+        sources = cmp.config.sources({
+            { name = "path" },
+            { name = "cmdline" },
+        }),
     })
 end
 

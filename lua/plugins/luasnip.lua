@@ -19,7 +19,7 @@ function M.config()
     require("luasnip.loaders.from_lua").lazy_load({ paths = "./snippets" })
 
     -- Set additional configuration options for Luasnip.
-    require("luasnip").config.set_config {
+    require("luasnip").config.set_config({
         history = true,
         enable_autosnippets = true,
         updateevents = "TextChanged,TextChangedI",
@@ -31,13 +31,21 @@ function M.config()
                 },
             },
         },
-    }
+    })
 
     -- Create snippet navigation keymaps.
-    vim.keymap.set({ "s", "n" }, "]n", function() require("luasnip").jump(1) end,
-        { desc = "Next snippet placeholder" })
-    vim.keymap.set({ "s", "n" }, "[n", function() require("luasnip").jump(-1) end,
-        { desc = "Previous snippet placeholder" })
+    vim.keymap.set(
+        { "s", "n" },
+        "]n",
+        function() require("luasnip").jump(1) end,
+        { desc = "Next snippet placeholder" }
+    )
+    vim.keymap.set(
+        { "s", "n" },
+        "[n",
+        function() require("luasnip").jump(-1) end,
+        { desc = "Previous snippet placeholder" }
+    )
 end
 
 return M
