@@ -62,8 +62,9 @@ function M.config()
                 StaticMethod = { icon = "󰠄 ", hl = "Function" },
             },
         },
+        -- Disable file system watching on Windows. Really bad perf.
         filesystem = {
-            use_libuv_file_watcher = true,
+            use_libuv_file_watcher = vim.fn.has("win32") == 1 and false or true,
         },
     }
 
