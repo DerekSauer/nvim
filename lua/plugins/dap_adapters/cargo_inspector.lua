@@ -16,9 +16,7 @@ local function parse_cargo_metadata(cargo_metadata)
             json_table = vim.fn.json_decode(json_table)
 
             -- Our binary will be the compiler artifact with an executable defined
-            if json_table["reason"] == "compiler-artifact"
-                and json_table["executable"] ~= vim.NIL
-            then
+            if json_table["reason"] == "compiler-artifact" and json_table["executable"] ~= vim.NIL then
                 return json_table["executable"]
             end
         end
@@ -46,11 +44,11 @@ local function create_window(configuration_name, window_options)
         relative = "editor",
         width = window_width,
         height = window_height,
-        col = vim.api.nvim_get_option("columns") - window_width - 2,
-        row = vim.api.nvim_get_option("lines")
-        - vim.api.nvim_get_option("cmdheight")
-        - window_options.height
-        - 3,
+        col = vim.api.nvim_get_option_value("columns", {}) - window_width - 2,
+        row = vim.api.nvim_get_option_value("lines", {})
+            - vim.api.nvim_get_option_value("cmdheight", {})
+            - window_options.height
+            - 3,
         border = window_options.border,
         style = "minimal",
     })
@@ -81,7 +79,7 @@ local function destroy_window(window_objects)
     end
 
     if window_objects.window ~= 0 then
-        vim.api.nvim_win_close(window_objects.window, { force = true })
+        vim.api.nvim_win_close(window_objects.window, true)
         window_objects.window = nil
     end
 
@@ -98,54 +96,63 @@ end
 ---@param progress_window {buffer: number, window: number, channel: number}|nil Window objects used to display build progress (nil if the user doesn't want a progress window).
 ---@param final_config table A debug configuration received from nvim-dap (which loaded it from .vscode/launch.json).
 local function run_cargo_task(progress_window, final_config)
-    require("plenary.job"):new({
-        command = "cargo",
-        args = final_config.cargo.args,
-        cwd = final_config.cwd,
-        env = final_config.cargo.env,
-        -- Cargo emits build progress messages to `stderr`
-        -- We can send that output directly to the progress window
-        on_stderr = progress_window and function(error, data)
-            if not error then
-                vim.schedule(function()
-                    vim.api.nvim_chan_send(progress_window.channel, data .. "\r\n")
-                    vim.api.nvim_win_set_cursor(progress_window.window,
-                        { vim.api.nvim_buf_line_count(progress_window.buffer), 1 })
-                end)
-            else
-                vim.schedule(function()
-                    vim.api.nvim_err_writeln("Cargo Inspector Error:\n" .. error)
-                end)
-            end
-        end or nil,
-        -- Cargo emits build metadata to `stdout`
-        -- We buffer that data and process it here after the Cargo process terminates
-        on_exit = function(job, exit_code)
-            if exit_code == 0 then
-                vim.schedule(function()
-                    local executable_name = parse_cargo_metadata(job:result())
-                    if executable_name ~= nil then
-                        final_config.program = executable_name
-                    else
-                        final_config.program = ""
-                        vim.schedule(function()
+    require("plenary.job")
+        :new({
+            command = "cargo",
+            args = final_config.cargo.args,
+            cwd = final_config.cwd,
+            env = final_config.cargo.env,
+            -- Cargo emits build progress messages to `stderr`
+            -- We can send that output directly to the progress window
+            on_stderr = progress_window and function(error, data)
+                if not error then
+                    vim.schedule(function()
+                        vim.api.nvim_chan_send(progress_window.channel, data .. "\r\n")
+                        vim.api.nvim_win_set_cursor(
+                            progress_window.window,
+                            { vim.api.nvim_buf_line_count(progress_window.buffer), 1 }
+                        )
+                    end)
+                else
+                    vim.schedule(function() vim.api.nvim_err_writeln("Cargo Inspector Error:\n" .. error) end)
+                end
+            end or nil,
+            -- Cargo emits build metadata to `stdout`
+            -- We buffer that data and process it here after the Cargo process terminates
+            on_exit = function(job, exit_code)
+                if exit_code == 0 then
+                    vim.schedule(function()
+                        local executable_name = parse_cargo_metadata(job:result())
+                        if executable_name ~= nil then
+                            final_config.program = executable_name
+                        else
+                            final_config.program = ""
+                            vim.schedule(
+                                function()
+                                    vim.notify(
+                                        "Cargo could not find an executable for debug configuration:\n"
+                                            .. final_config.name,
+                                        vim.log.levels.ERROR
+                                    )
+                                end
+                            )
+                        end
+                    end)
+                else
+                    vim.schedule(
+                        function()
                             vim.notify(
-                                "Cargo could not find an executable for debug configuration:\n" ..
-                                final_config.name,
-                                vim.log.levels.ERROR)
-                        end)
-                    end
-                end)
-            else
-                vim.schedule(function()
-                    vim.notify("Cargo failed to build debug configuration:\n" .. final_config.name,
-                        vim.log.levels.ERROR)
-                end)
+                                "Cargo failed to build debug configuration:\n" .. final_config.name,
+                                vim.log.levels.ERROR
+                            )
+                        end
+                    )
 
-                final_config.program = ""
-            end
-        end,
-    }):start()
+                    final_config.program = ""
+                end
+            end,
+        })
+        :start()
 end
 
 ---Determine the Rust compiler's commit hash for the source map.
@@ -153,19 +160,23 @@ end
 local function get_commit_hash()
     local rust_hash = nil
 
-    require("plenary.job"):new({
-        command = "rustc",
-        args = { "--version", "--verbose" },
-        on_exit = function(job, exit_code)
-            if exit_code == 0 then
-                for _, line in pairs(job:result()) do
-                    local start, finish = string.find(line, "commit-hash: ", 1, true)
+    require("plenary.job")
+        :new({
+            command = "rustc",
+            args = { "--version", "--verbose" },
+            on_exit = function(job, exit_code)
+                if exit_code == 0 then
+                    for _, line in pairs(job:result()) do
+                        local start, finish = string.find(line, "commit-hash: ", 1, true)
 
-                    if start ~= nil then rust_hash = string.sub(line, finish + 1) end
+                        if start ~= nil then
+                            rust_hash = string.sub(line, finish + 1)
+                        end
+                    end
                 end
-            end
-        end,
-    }):sync()
+            end,
+        })
+        :sync()
 
     return rust_hash
 end
@@ -175,19 +186,21 @@ end
 local function get_source_path()
     local source_path = nil
 
-    require("plenary.job"):new({
-        command = "rustc",
-        args = { "--print", "sysroot" },
-        on_exit = function(job, exit_code)
-            if exit_code == 0 then
-                local result = job:result()
+    require("plenary.job")
+        :new({
+            command = "rustc",
+            args = { "--print", "sysroot" },
+            on_exit = function(job, exit_code)
+                if exit_code == 0 then
+                    local result = job:result()
 
-                if #result > 0 then
-                    source_path = job:result()[1]
+                    if #result > 0 then
+                        source_path = job:result()[1]
+                    end
                 end
-            end
-        end,
-    }):sync()
+            end,
+        })
+        :sync()
 
     return source_path
 end
@@ -224,8 +237,7 @@ function M.inspect(dap_config, user_options)
 
     -- Verify that the rust compiler exists
     if vim.fn.exepath("rustc") == "" then
-        vim.notify("Cargo Inspector Error:\nRust compiler (rustc) cannot be found.",
-            vim.log.levels.ERROR)
+        vim.notify("Cargo Inspector Error:\nRust compiler (rustc) cannot be found.", vim.log.levels.ERROR)
         return final_config
     end
 
@@ -256,9 +268,10 @@ function M.inspect(dap_config, user_options)
     -- Build a source map so that the user can step into Rust's standard
     -- library while debugging instead of getting a screen full of ASM
     if rust_source_path and rust_hash then
-        if final_config.sourceMap == nil then final_config["sourceMap"] = {} end
-        final_config.sourceMap["/rustc/" .. rust_hash .. "/"] = rust_source_path ..
-            "/lib/rustlib/src/rust/"
+        if final_config.sourceMap == nil then
+            final_config["sourceMap"] = {}
+        end
+        final_config.sourceMap["/rustc/" .. rust_hash .. "/"] = rust_source_path .. "/lib/rustlib/src/rust/"
     end
 
     -- Enable LLDB's support for Rust's builtin datatypes (vec, str, etc...)
