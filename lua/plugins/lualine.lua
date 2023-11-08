@@ -25,6 +25,7 @@ local function combined_location()
     local total_lines = vim.fn.line("$")
     local current_col = vim.fn.virtcol(".")
 
+    -- If the cursor is on the first line, force the position to be zero percent.
     if current_line == 1 then
         return string.format(
             "󰓾 %d:%d  0%%%%",
@@ -41,6 +42,10 @@ local function combined_location()
         )
     end
 end
+
+--- Determine if any LSPs are attached to the current buffer.
+---@return boolean #Returns true if any LSP is attached to the current buffer.
+local function is_lsp_attached() return #vim.lsp.get_clients({ bufnr = 0 }) > 0 end
 
 function M.config()
     local config = {
