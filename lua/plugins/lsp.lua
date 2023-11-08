@@ -62,112 +62,161 @@ local function lsp_keymaps(client, bufnr)
     -- Get additional information about the symbol under the cursor.
     -- SHIFT-K quick shortcut.
     if client.server_capabilities.hoverProvider then
-        vim.keymap.set("n", "<leader>lk", function() vim.lsp.buf.hover() end,
-            { buffer = bufnr, desc = "Symbol hover info" })
-        vim.keymap.set("n", "K", function() vim.lsp.buf.hover() end,
-            { buffer = bufnr, desc = "Symbol hover info" })
+        vim.keymap.set(
+            "n",
+            "<leader>lk",
+            function() vim.lsp.buf.hover() end,
+            { buffer = bufnr, desc = "Symbol hover info" }
+        )
+        vim.keymap.set(
+            "n",
+            "K",
+            function() vim.lsp.buf.hover() end,
+            { buffer = bufnr, desc = "Symbol hover info" }
+        )
         has_mappings = true
     end
 
     -- Jump to where the symbol is defined or display a list for multiple definitions.
     if client.server_capabilities.definitionProvider then
-        vim.keymap.set("n", "<leader>ld",
+        vim.keymap.set(
+            "n",
+            "<leader>ld",
             function() require("telescope.builtin").lsp_definitions() end,
-            { buffer = bufnr, desc = "Jump symbol definition" })
+            { buffer = bufnr, desc = "Jump symbol definition" }
+        )
         has_mappings = true
     end
 
     -- Jump to where the symbol's type is defined or display a list for multiple definitions.
     if client.server_capabilities.typeDefinitionProvider then
-        vim.keymap.set("n", "<leader>lt",
+        vim.keymap.set(
+            "n",
+            "<leader>lt",
             function() require("telescope.builtin").lsp_type_definitions() end,
-            { buffer = bufnr, desc = "Jump type definition" })
+            { buffer = bufnr, desc = "Jump type definition" }
+        )
         has_mappings = true
     end
 
     -- Jump to where the symbol is declared.
     if client.server_capabilities.declarationProvider then
-        vim.keymap.set("n", "<leader>lD", function() vim.lsp.buf.declaration() end,
-            { buffer = bufnr, desc = "Jump symbol declaration" })
+        vim.keymap.set(
+            "n",
+            "<leader>lD",
+            function() vim.lsp.buf.declaration() end,
+            { buffer = bufnr, desc = "Jump symbol declaration" }
+        )
         has_mappings = true
     end
 
     -- Jump to the symbols implementation or display a list if more than one implementation.
     if client.server_capabilities.implementationProvider then
-        vim.keymap.set("n", "<leader>li",
+        vim.keymap.set(
+            "n",
+            "<leader>li",
             function() require("telescope.builtin").lsp_implementations() end,
-            { buffer = bufnr, desc = "List symbol implementations" })
+            { buffer = bufnr, desc = "List symbol implementations" }
+        )
         has_mappings = true
     end
 
     -- Format the entire buffer.
     if client.server_capabilities.documentFormattingProvider then
-        vim.keymap.set("n", "<leader>lf",
-            function() vim.lsp.buf.format({ bufnr = bufnr, id = client.id }) end,
-            { buffer = bufnr, desc = "Format buffer" })
-        has_mappings = true
-    end
-
-    -- Format the selected range.
-    if client.server_capabilities.documentRangeFormattingProvider then
-        vim.keymap.set("v", "<leader>lf",
-            function() vim.lsp.buf.format({ bufnr = bufnr, id = client.id }) end,
-            { buffer = bufnr, desc = "Format selection" })
+        vim.keymap.set(
+            "n",
+            "<leader>lf",
+            function() require("conform").format({ async = true, lsp_fallback = true }) end,
+            { buffer = bufnr, desc = "Format buffer" }
+        )
         has_mappings = true
     end
 
     -- Display a list of references to the symbol.
     if client.server_capabilities.referencesProvider then
-        vim.keymap.set("n", "<leader>lr",
+        vim.keymap.set(
+            "n",
+            "<leader>lr",
             function() require("telescope.builtin").lsp_references() end,
-            { buffer = bufnr, desc = "List symbol references" })
+            { buffer = bufnr, desc = "List symbol references" }
+        )
         has_mappings = true
     end
 
     -- Rename the symbol under the cursor.
     -- F2 quick shortcut.
     if client.server_capabilities.renameProvider then
-        vim.keymap.set("n", "<leader>l<F2>", function() vim.lsp.buf.rename() end,
-            { buffer = bufnr, desc = "Rename symbol" })
-        vim.keymap.set("n", "<F2>", function() vim.lsp.buf.rename() end,
-            { buffer = bufnr, desc = "Rename symbol" })
+        vim.keymap.set(
+            "n",
+            "<leader>l<F2>",
+            function() vim.lsp.buf.rename() end,
+            { buffer = bufnr, desc = "Rename symbol" }
+        )
+        vim.keymap.set(
+            "n",
+            "<F2>",
+            function() vim.lsp.buf.rename() end,
+            { buffer = bufnr, desc = "Rename symbol" }
+        )
         has_mappings = true
     end
 
     -- Display a list of code actions that may be performed at the cursor's position.
     -- F4 quick shortcut.
     if client.server_capabilities.codeActionProvider then
-        vim.keymap.set("n", "<leader>l<F4>", function() vim.lsp.buf.code_action() end,
-            { buffer = bufnr, desc = "Code actions" })
-        vim.keymap.set("n", "<F4>", function() vim.lsp.buf.code_action() end,
-            { buffer = bufnr, desc = "Code actions" })
+        vim.keymap.set(
+            "n",
+            "<leader>l<F4>",
+            function() vim.lsp.buf.code_action() end,
+            { buffer = bufnr, desc = "Code actions" }
+        )
+        vim.keymap.set(
+            "n",
+            "<F4>",
+            function() vim.lsp.buf.code_action() end,
+            { buffer = bufnr, desc = "Code actions" }
+        )
         has_mappings = true
     end
 
     -- Open the signature help overlay.
     if client.server_capabilities.signatureHelpProvider then
-        vim.keymap.set("i", "<C-k>", function() vim.lsp.buf.signature_help() end,
-            { buffer = bufnr, desc = "Signature help" })
+        vim.keymap.set(
+            "i",
+            "<C-k>",
+            function() vim.lsp.buf.signature_help() end,
+            { buffer = bufnr, desc = "Signature help" }
+        )
         has_mappings = true
     end
 
     -- Toggle inlay hints on or off.
     if client.server_capabilities.inlayHintProvider then
-        vim.keymap.set("n", "<leader>ly", function()
-            toggle_inlay_hints(client, bufnr)
-        end
-        , { buffer = bufnr, desc = "Toggle inlay hints" })
+        vim.keymap.set(
+            "n",
+            "<leader>ly",
+            function() toggle_inlay_hints(client, bufnr) end,
+            { buffer = bufnr, desc = "Toggle inlay hints" }
+        )
         has_mappings = true
     end
 
     if client.supports_method("textDocument/publishDiagnostics") then
         -- Show a list of diagnostics in a Telescope window.
-        vim.keymap.set("n", "<leader>lp", function() require("telescope.builtin").diagnostics() end,
-            { buffer = bufnr, desc = "List diagnostics" })
+        vim.keymap.set(
+            "n",
+            "<leader>lp",
+            function() require("telescope.builtin").diagnostics() end,
+            { buffer = bufnr, desc = "List diagnostics" }
+        )
 
         -- Toggle displaying diagnostics.
-        vim.keymap.set("n", "<leader>lg", function() toggle_diagnostics() end,
-            { buffer = bufnr, desc = "Toggle diagnostics" })
+        vim.keymap.set(
+            "n",
+            "<leader>lg",
+            function() toggle_diagnostics() end,
+            { buffer = bufnr, desc = "Toggle diagnostics" }
+        )
 
         has_mappings = true
     end
@@ -189,8 +238,8 @@ function M.config()
     local lsp_config = require("lspconfig")
 
     -- Retrieve nvim's native LSP capabilities and extend them with additional functionality provided by nvim-cmp.
-    local lsp_capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol
-        .make_client_capabilities())
+    local lsp_capabilities =
+        require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
 
     -- Initialize 'mason'
     require("mason").setup()
@@ -203,24 +252,17 @@ function M.config()
     require("mason-lspconfig").setup_handlers({
         -- The default setup handler will automatically setup, with default settings, any LSP server
         -- that does not have an override below.
-        function(server_name)
-            require("lspconfig")[server_name].setup({ capabilities = lsp_capabilities })
-        end,
+        function(server_name) require("lspconfig")[server_name].setup({ capabilities = lsp_capabilities }) end,
 
         -- Override the defaults with our own settings for select servers
         ["rust_analyzer"] = function()
-            require("plugins/lsp_servers/rust_analyzer").setup(lsp_config
-            , lsp_capabilities)
+            require("plugins/lsp_servers/rust_analyzer").setup(lsp_config, lsp_capabilities)
         end,
 
-        ["lua_ls"] = function()
-            require("plugins/lsp_servers/lua_ls").setup(lsp_config,
-                lsp_capabilities)
-        end,
+        ["lua_ls"] = function() require("plugins/lsp_servers/lua_ls").setup(lsp_config, lsp_capabilities) end,
 
         ["wgsl_analyzer"] = function()
-            require("plugins/lsp_servers/wgsl_analyzer").setup(lsp_config
-            , lsp_capabilities)
+            require("plugins/lsp_servers/wgsl_analyzer").setup(lsp_config, lsp_capabilities)
         end,
     })
 
@@ -247,17 +289,6 @@ function M.config()
 
                 -- Add keymaps for LSP features supported by this client.
                 lsp_keymaps(client, buffer_number)
-
-                -- Auto-format buffers on save
-                if client.server_capabilities.documentFormattingProvider then
-                    vim.api.nvim_create_autocmd("BufWritePre", {
-                        buffer = buffer_number,
-                        desc = "Auto format buffer with LSP on save.",
-                        callback = function()
-                            vim.lsp.buf.format({ bufnr = buffer_number })
-                        end,
-                    })
-                end
 
                 -- Show function signature help
                 if client.server_capabilities.signatureHelpProvider then

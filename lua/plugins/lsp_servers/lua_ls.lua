@@ -1,6 +1,5 @@
 local M = {}
 
-
 --- Find the path(s) of Neovim's Lua Runtime.
 ---@return string[]
 local function get_lua_runtime()
@@ -26,20 +25,7 @@ function M.setup(lsp_config, lsp_capabilities)
         settings = {
             Lua = {
                 format = {
-                    enable = true,
-
-                    -- Values must be strings!
-                    defaultConfig = {
-                        indent_style = "space",
-                        indent_size = "4",
-                        tab_width = "4",
-                        quote_style = "double",
-                        end_of_line = "unset",
-                        call_arg_parentheses = "keep",
-                        table_separator_style = "comma",
-                        trailing_table_separator = "smart",
-                        max_line_length = "100",
-                    },
+                    enable = false,
                 },
                 hint = {
                     enable = true,
