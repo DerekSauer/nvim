@@ -93,7 +93,7 @@ function M.config()
         options = {
             icons_enabled = true,
             theme = "kanagawa",
-            disabled_filetypes = { "telescope", "mason", "lazy" },
+            disabled_filetypes = { "telescope" },
             section_separators = { left = "", right = "" },
             component_separators = { left = "", right = "" },
         },
@@ -127,14 +127,23 @@ function M.config()
         },
 
         extensions = {
+            "mason",
+            "lazy",
             "neo-tree",
             "quickfix",
-            "symbols-outline",
             "nvim-dap-ui",
         },
     }
 
     require("lualine").setup(config)
+
+    -- Listen for LSP progress messages and update the status bar.
+    vim.api.nvim_create_autocmd({ "LspProgress" }, {
+        callback = function()
+            require("lualine").refresh({ scope = "window", place = { "statusline" } })
+        end,
+        desc = "Listen for new LSP progress messages.",
+    })
 end
 
 return M
