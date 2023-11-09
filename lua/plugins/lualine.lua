@@ -119,13 +119,6 @@ function M.config()
             lualine_z = { combined_location },
         },
 
-        winbar = {
-            lualine_y = { { "filename", path = 1, newfile_status = true } },
-        },
-        inactive_winbar = {
-            lualine_y = { { "filename", path = 1, newfile_status = true } },
-        },
-
         extensions = {
             "mason",
             "lazy",
