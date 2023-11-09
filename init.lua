@@ -110,6 +110,7 @@ if lazy_ok then
         },
         ui = {
             border = require("globals").border_style,
+            size = { width = 0.75, height = 0.75 },
         },
     }
 
