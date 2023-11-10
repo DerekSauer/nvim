@@ -74,59 +74,20 @@ vim.g.loaded_ruby_provider = 0
 vim.g.loaded_perl_provider = 0
 vim.g.loaded_node_provider = 0
 
--- Setup my own functions
+-- Setup my own functions.
 require("functions").setup()
 
--- Setup my own auto commands
+-- Setup my own auto comma.nds
 require("autocmds").setup()
 
--- Setup the diagnostics interface
+-- Setup the diagnostics interface.
 require("diagnostics").setup()
 
--- Bootstrap Lazy.nvim if it is not installed
-require("bootstrap").setup()
+-- Load key mappings not handled by Which-key
+require("mappings").setup()
 
--- Setup Lazy.nvim to manage my plugins
-local lazy_ok, lazy = pcall(require, "lazy")
-if lazy_ok then
-    local config = {
-        change_detection = {
-            enabled = false,
-            notify = false,
-        },
-        checker = {
-            enabled = true,
-            notify = false,
-            frequency = 14400,
-        },
-        install = {
-            colorscheme = { "kanagawa" },
-        },
-        performance = {
-            cache = {
-                enabled = true,
-                disable_events = { "VimEnter", "BufReadPre" },
-            },
-            rtp = {
-                disabled_plugins = {},
-            },
-        },
-        ui = {
-            border = require("globals").border_style,
-            size = { width = 0.75, height = 0.75 },
-        },
-    }
-
-    lazy.setup("plugins", config)
-else
-    vim.notify(
-        string.format("Failed to load `Lazy.nvim` plugin manager.\nError message: %s", lazy),
-        vim.log.levels.ERROR
-    )
-end
+-- Setup Lazy to manage plugin installation and configuration.
+require("plugin_manager").setup()
 
 -- Set colorscheme
 vim.cmd("colorscheme kanagawa")
-
--- Load key mappings not handled by Which-key
-require("mappings")
