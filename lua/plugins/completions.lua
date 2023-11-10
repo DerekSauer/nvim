@@ -18,16 +18,6 @@ local M = {
         -- Nvim's command line as a source.
         "hrsh7th/cmp-cmdline",
 
-        -- Crates.io as a completion source.
-        {
-            "Saecki/crates.nvim",
-            event = { "Bufread Cargo.toml" },
-            dependencies = "nvim-lua/plenary.nvim",
-            config = function()
-                require("crates").setup()
-            end,
-        },
-
         -- Dap REPL and Dap-UI as completion sources>
         { "rcarriga/cmp-dap", ft = { "dap-repl", "dapui_watches", "dapui_hover" } },
 
@@ -43,7 +33,6 @@ local M = {
 local menu_items = {
     nvim_lsp = "[LSP]",
     luasnip = "[SNIP]",
-    crates = "[CRATE]",
     buffer = "[BUF]",
     path = "[PATH]",
     dap = "[DAP]",
@@ -150,7 +139,6 @@ function M.config()
         sources = cmp.config.sources({
             { name = "nvim_lsp", option = { keyword_length = 2 } },
             { name = "luasnip" },
-            { name = "crates" },
             { name = "path" },
             { name = "buffer", option = { keyword_length = 4 }, max_item_count = 5 },
         }),
