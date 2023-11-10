@@ -23,7 +23,9 @@ local M = {
             "Saecki/crates.nvim",
             event = { "Bufread Cargo.toml" },
             dependencies = "nvim-lua/plenary.nvim",
-            config = function() require("crates").setup() end,
+            config = function()
+                require("crates").setup()
+            end,
         },
 
         -- Dap REPL and Dap-UI as completion sources>
@@ -116,14 +118,11 @@ function M.config()
     local select_opts = { behavior = cmp.SelectBehavior.Select }
 
     local config = {
-        -- Display the matching completions inline.
-        experimental = {
-            ghost_text = true,
-        },
-
         -- Use LuaSnip as cmp's snippet engine.
         snippet = {
-            expand = function(args) luasnip.lsp_expand(args.body) end,
+            expand = function(args)
+                luasnip.lsp_expand(args.body)
+            end,
         },
 
         -- Open the completion menu after matching at least two characters.
