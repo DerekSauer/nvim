@@ -52,7 +52,7 @@ function M.setup()
     -- Round indents to nearest `shiftwidth`.
     vim.opt.shiftround = true
 
-    -- Soft wrap lines that are longer than the window width.
+    -- Do not soft wrap lines that are longer than the window width.
     vim.opt.wrap = false
 
     -- Indent soft wrapped lines.
