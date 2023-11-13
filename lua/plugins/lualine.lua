@@ -67,7 +67,6 @@ local function get_lsp_status()
 
         -- We're interested in `report` messages that are not about file loading.
         if progress and string.find(progress.token, "Loading") == nil and progress.value.kind == "report" then
-            print(vim.inspect(progress))
             -- Some messages have a percentage complete indicator, some don't.
             local status_message = progress.value.percentage
                     and string.format(
