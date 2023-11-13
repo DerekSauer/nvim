@@ -32,6 +32,12 @@ function M.config()
         },
     })
 
+    -- Rust Formatter specific options.
+    require("conform").formatters.rustfmt = {
+        -- Assume Rust 2021.
+        args = { "--edition", "2021" },
+    }
+
     -- Define a user command to run conform on the current buffer or selection.
     vim.api.nvim_create_user_command("Format", function(args)
         local range = nil
