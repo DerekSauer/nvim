@@ -62,20 +62,16 @@ function M.config()
                 StaticMethod = { icon = "󰠄 ", hl = "Function" },
             },
         },
-        -- Disable file system watching on Windows. Really bad perf.
         filesystem = {
-            use_libuv_file_watcher = vim.fn.has("win32") == 1 and false or true,
+            use_libuv_file_watcher = true,
         },
     }
 
     neo_tree.setup(config)
 
-    vim.keymap.set(
-        "n",
-        "<leader>e",
-        function() vim.cmd("Neotree toggle") end,
-        { silent = true, desc = "Toggle file explorer" }
-    )
+    vim.keymap.set("n", "<leader>e", function()
+        vim.cmd("Neotree toggle")
+    end, { silent = true, desc = "Toggle file explorer" })
 end
 
 return M
