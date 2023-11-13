@@ -17,7 +17,7 @@ function M.setup()
     vim.opt.updatetime = 300
 
     -- Time to wait for key mapped sequences to complete.
-    vim.opt.timeoutlen = 1000
+    vim.opt.timeoutlen = 250
 
     -- Suppress showing the mode, our status line already does it.
     vim.opt.showmode = false
