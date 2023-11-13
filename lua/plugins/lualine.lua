@@ -65,8 +65,9 @@ local function get_lsp_status()
         -- Grab this LSP's next progress message, returns nil if none.
         local progress = lsp_client.progress:pop()
 
-        -- We're interested in `report` messages.
-        if progress and progress.value.kind == "report" then
+        -- We're interested in `report` messages that are not about file loading.
+        if progress and string.find(progress.token, "Loading") == nil and progress.value.kind == "report" then
+            print(vim.inspect(progress))
             -- Some messages have a percentage complete indicator, some don't.
             local status_message = progress.value.percentage
                     and string.format(
