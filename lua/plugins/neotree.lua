@@ -63,7 +63,8 @@ function M.config()
             },
         },
         filesystem = {
-            use_libuv_file_watcher = true,
+            -- Disable file watcher on Windows.
+            use_libuv_file_watcher = vim.fn.has("win32") == 0 and true or false,
         },
     }
 
