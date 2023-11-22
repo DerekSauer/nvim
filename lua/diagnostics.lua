@@ -14,14 +14,7 @@ function M.setup()
         severity_sort = true,
         float = {
             border = globals.border_style,
-            format = function(diagnostic)
-                return string.format(
-                    "%s (%s) [%s]",
-                    diagnostic.message,
-                    diagnostic.source,
-                    diagnostic.code or diagnostic.user_data.lsp.code
-                )
-            end,
+            source = "if_many",
         },
     })
 
@@ -38,18 +31,12 @@ function M.setup()
     vim.fn.sign_define("DiagnosticSignHint", { text = "󰌵", texthl = "DiagnosticSignHint" })
 
     -- Add key maps for jumping to diagnostics
-    vim.keymap.set(
-        "n",
-        "]d",
-        function() vim.diagnostic.goto_next() end,
-        { silent = true, desc = "Jump to next diagnostic" }
-    )
-    vim.keymap.set(
-        "n",
-        "[d",
-        function() vim.diagnostic.goto_prev() end,
-        { silent = true, desc = "Jump to previous diagnostic" }
-    )
+    vim.keymap.set("n", "]d", function()
+        vim.diagnostic.goto_next()
+    end, { silent = true, desc = "Jump to next diagnostic" })
+    vim.keymap.set("n", "[d", function()
+        vim.diagnostic.goto_prev()
+    end, { silent = true, desc = "Jump to previous diagnostic" })
 
     -- Open a diagnostic floating window if no other float is open
     -- https://www.reddit.com/r/neovim/comments/tvy18v/comment/i3cfsr5/?utm_source=share&utm_medium=web2x&context=3
@@ -67,7 +54,7 @@ function M.setup()
         })
     end
 
-    -- Create autocommand to show diagnostics window when hovering over an issue
+    -- Create auto command to show diagnostics window when hovering over an issue
     vim.api.nvim_create_autocmd({ "CursorHold" }, {
         group = require("globals").user_au_group,
         pattern = { "*" },
