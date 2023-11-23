@@ -1,5 +1,5 @@
 local M = {
-    -- A modern Vim and Neovim filetype and syntax plugin for LaTeX files.
+    -- A modern Vim and Neovim file type and syntax plugin for LaTeX files.
     "lervag/vimtex",
 }
 

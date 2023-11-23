@@ -1,5 +1,5 @@
 local M = {
-    -- A high-performance color highlighter for Neovim.
+    -- A high-performance colour highlighter for Neovim.
     "NvChad/nvim-colorizer.lua",
     event = "VeryLazy",
 }

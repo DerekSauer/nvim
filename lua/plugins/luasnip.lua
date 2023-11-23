@@ -33,19 +33,13 @@ function M.config()
         },
     })
 
-    -- Create snippet navigation keymaps.
-    vim.keymap.set(
-        { "s", "n" },
-        "]n",
-        function() require("luasnip").jump(1) end,
-        { desc = "Next snippet placeholder" }
-    )
-    vim.keymap.set(
-        { "s", "n" },
-        "[n",
-        function() require("luasnip").jump(-1) end,
-        { desc = "Previous snippet placeholder" }
-    )
+    -- Create snippet navigation key maps.
+    vim.keymap.set({ "s", "n" }, "]n", function()
+        require("luasnip").jump(1)
+    end, { desc = "Next snippet placeholder" })
+    vim.keymap.set({ "s", "n" }, "[n", function()
+        require("luasnip").jump(-1)
+    end, { desc = "Previous snippet placeholder" })
 end
 
 return M

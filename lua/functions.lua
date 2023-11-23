@@ -1,8 +1,7 @@
 local M = {}
 
----Setup my functions.
 function M.setup()
-    -- Function and keymap to swap light & dark color schemes.
+    -- Swap between light and dark colour schemes.
     local function swap_background()
         if vim.opt.background._value == "dark" then
             vim.cmd("set background=light")
@@ -11,7 +10,7 @@ function M.setup()
         end
     end
 
-    -- Keymap to swap light & dark color schemes.
+    -- Key map to swap between light and dark colour schemes (LEADER+c).
     vim.keymap.set("n", "<leader>c", function()
         swap_background()
     end, { silent = true, desc = "Swap light/dark theme" })

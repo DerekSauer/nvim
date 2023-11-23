@@ -1,7 +1,7 @@
 local M = {}
 
 function M.setup()
-    -- Map leader
+    -- Map leader to comma key.
     vim.g.mapleader = ","
 
     -- Use operating system's clipboard.
@@ -31,13 +31,13 @@ function M.setup()
     -- Override `ignorecase` if the search term contains an upper case character.
     vim.opt.smartcase = true
 
-    -- Convert <Tab> into spaces.
+    -- Convert tabs into spaces.
     vim.opt.expandtab = true
 
-    -- <Tab> counts as four spaces.
+    -- Tabs counts as four spaces.
     vim.opt.tabstop = 4
 
-    -- Behave as though <Tab> are still <Tab> instead of spaces.
+    -- Behave as though tabs are still tabs instead of spaces.
     vim.opt.softtabstop = 4
 
     -- Maintain current indent level when starting a new line.
@@ -46,7 +46,7 @@ function M.setup()
     -- Indent when starting a code block.
     vim.opt.smartindent = true
 
-    -- Indent by the same number of spaces as `tabstop`.`
+    -- Indent by the same number of spaces as `tabstop`.
     vim.opt.shiftwidth = 0
 
     -- Round indents to nearest `shiftwidth`.
@@ -59,7 +59,7 @@ function M.setup()
     vim.opt.breakindent = true
 
     -- Character to indicate soft wrapped lines.
-    vim.opt.showbreak = "↪ "
+    vim.opt.showbreak = "↪"
 
     -- Do not cut off words when soft wrapping lines.
     vim.opt.linebreak = true
@@ -91,7 +91,7 @@ function M.setup()
     -- Enable global status line instead of a status line per window.
     vim.opt.laststatus = 3
 
-    -- Use 24-bit colors in the built in terminal.
+    -- Use 24-bit colours in the built-in terminal.
     vim.opt.termguicolors = true
 
     -- Place new horizontal splits below the current window.
@@ -133,13 +133,13 @@ function M.setup()
     -- Disable automatically continuing comment blocks after hitting enter.
     vim.opt.formatoptions:remove({ "c", "r", "o" })
 
-    -- Use ripgrep if available
+    -- Use `Ripgrep` for searches if available.
     if vim.fn.executable("rg") == 1 then
         vim.opt.grepprg = "rg --vimgrep --no-heading --smart-case --hidden"
         vim.opt.grepformat = "%f:%l:%c:%m"
     end
 
-    -- On Windows use Powershell for terminal commands
+    -- On Windows, use PowerShell for terminal commands.
     if vim.fn.has("win32") == 1 then
         vim.opt.shell = "pwsh.exe"
         vim.opt.shellcmdflag = "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command "
@@ -149,7 +149,7 @@ function M.setup()
         vim.opt.shellpipe = "2>&1 | Out-File -Encoding UTF8 %s"
     end
 
-    -- Disable remote plugin providers we will probably never use
+    -- Disable remote plugin providers we will probably never use.
     vim.g.loaded_python3_provider = 0
     vim.g.loaded_python_provider = 0
     vim.g.loaded_ruby_provider = 0

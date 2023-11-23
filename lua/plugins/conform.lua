@@ -11,18 +11,12 @@ local M = {
 
 function M.config()
     require("conform").setup({
-        -- Specify formatters by filetype.
+        -- Specify formatters by file type.
         formatters_by_ft = {
             -- Language specific formatters.
             lua = { "stylua" },
             rust = { "rustfmt" },
             toml = { "taplo" },
-
-            -- Formatter for all filetypes.
-            -- ["*"] = {},
-
-            -- Formatter for filetypes without another formatter specified.
-            -- ["_"] = { "trim_whitespace" },
         },
 
         -- Automatically format the buffer when saving the file.

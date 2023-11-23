@@ -1,5 +1,5 @@
 local M = {
-    -- Automatic pair (parens, brackets, etc...) insertion.
+    -- Notification daemon.
     "rcarriga/nvim-notify",
 }
 

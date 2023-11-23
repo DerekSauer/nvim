@@ -1,12 +1,12 @@
 local M = {
-    -- Nvim Treesitter configurations and abstraction layer.
+    -- Neovim Tree sitter configurations and abstraction layer.
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
     dependencies = {
-        -- Autoclose HTML,CSS tags.
+        -- Auto close HTML, CSS tags.
         "windwp/nvim-ts-autotag",
 
-        -- Automatically add closing operators to textual languages (Lua, Ruby, etc...).
+        -- Automatically add closing operators to textual languages (Lua, Ruby, etc…).
         "RRethy/nvim-treesitter-endwise",
     },
 }
@@ -27,7 +27,7 @@ function M.config()
             enable = true,
         },
 
-        -- Enable auto-closing HTMl tags
+        -- Enable auto-closing HTML tags
         autotag = {
             enable = true,
         },

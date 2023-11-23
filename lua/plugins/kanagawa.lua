@@ -1,5 +1,5 @@
 local M = {
-    -- Colorscheme inspired by the colors of the famous painting by Katsushika Hokusai.
+    -- Color scheme inspired by the colours of the famous painting by Katsushika Hokusai.
     "rebelot/kanagawa.nvim",
     lazy = false,
     priority = 1000,
@@ -31,7 +31,7 @@ function M.config()
                 PmenuSbar = { bg = theme.ui.bg_m1 },
                 PmenuThumb = { bg = theme.ui.bg_p2 },
 
-                -- Indent Blankline indent colors
+                -- `Indent Blankline` indent colours
                 IndentBlanklineIndent1 = { fg = theme.term[17] },
                 IndentBlanklineIndent2 = { fg = theme.term[3] },
                 IndentBlanklineIndent3 = { fg = theme.term[4] },

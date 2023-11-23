@@ -1,6 +1,5 @@
 local M = {}
 
----Setup my auto commands.
 function M.setup()
     local yank_highlight_group = vim.api.nvim_create_augroup("yank_highlight", { clear = true })
 
@@ -24,7 +23,7 @@ function M.setup()
     })
 
     -- When yanking a block of text, vim moves the cursor to the start of the block after the yank.
-    -- Move cursor to end of block after yanking so the cursor doesn't actually move.
+    -- Move cursor to end of block after yanking, so the cursor doesn't actually move.
     vim.api.nvim_create_autocmd("TextYankPost", {
         pattern = "*",
         desc = "Move cursor to the end of a block of yanked text",

@@ -5,16 +5,13 @@ local M = {
 }
 
 function M.config()
-    -- Disable Comment's default keymaps, we'll define our own below.
+    -- Disable Comment's default key maps, we'll define our own below.
     require("Comment").setup({ mappings = { basic = false, extra = false } })
 
     -- <leader>+/ in normal mode to toggle comment on current line.
-    vim.keymap.set(
-        "n",
-        "<leader>/",
-        function() require("Comment.api").toggle.linewise.current() end,
-        { desc = "Toggle comment" }
-    )
+    vim.keymap.set("n", "<leader>/", function()
+        require("Comment.api").toggle.linewise.current()
+    end, { desc = "Toggle comment" })
 
     -- <leader>+/ in visual mode to toggle comment on a selection.
     vim.keymap.set(

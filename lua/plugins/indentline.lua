@@ -6,7 +6,7 @@ local M = {
 }
 
 function M.config()
-    -- Highlight names from our color scheme
+    -- Highlight names from our colour scheme.
     local highlights = {
         "IndentBlanklineIndent1",
         "IndentBlanklineIndent2",

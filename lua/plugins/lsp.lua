@@ -12,7 +12,7 @@ local M = {
         -- LSP installation and management tool
         "williamboman/mason.nvim",
 
-        -- Improved interop between 'nvim-lspconfig' and 'Mason'
+        -- Improved interoperation between `nvim-lspconfig` and `Mason`
         "williamboman/mason-lspconfig.nvim",
 
         -- Show function signature help
@@ -65,7 +65,7 @@ end
 ---@param bufnr number ID of the buffer.
 local function lsp_keymaps(client, bufnr)
     -- Tracks if any mappings were created to control if the
-    -- LSP group appears in Whichkey for this buffer
+    -- LSP group appears in Which-key for this buffer
     local has_mappings = false
 
     -- Get additional information about the symbol under the cursor.
@@ -192,13 +192,13 @@ local function lsp_keymaps(client, bufnr)
 end
 
 function M.config()
-    -- Setup `neoconf` before `lspconfig` per neoconf's docs
+    -- Setup `neoconf` before `lspconfig` per `neoconf's` docs
     -- The default configuration is fine
     require("neoconf").setup({})
 
     local lsp_config = require("lspconfig")
 
-    -- Retrieve nvim's native LSP capabilities and extend them with additional functionality provided by nvim-cmp.
+    -- Retrieve Neovim's native LSP capabilities and extend them with additional functionality provided by `nvim-cmp`.
     local lsp_capabilities =
         require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
 
@@ -208,12 +208,12 @@ function M.config()
         ui = { border = require("globals").border_style, width = 0.75, height = 0.75 },
     })
 
-    -- Initialize the 'mason' & 'lspconfig' interop helper
+    -- Initialize the `Mason` & `lspconfig` interoperation helper
     require("mason-lspconfig").setup()
 
     -- Setup installed LSPs
     require("mason-lspconfig").setup_handlers({
-        -- The default setup handler will automatically setup, with default settings, any LSP server
+        -- The default setup handler will automatically set up, with default settings, any LSP server
         -- that does not have an override below.
         function(server_name)
             require("lspconfig")[server_name].setup({ capabilities = lsp_capabilities })
@@ -240,7 +240,7 @@ function M.config()
     -- Disable logging LSP errors.
     vim.lsp.set_log_level("OFF")
 
-    -- Config options for lsp_signature
+    -- Config options for `LSP_signature`.
     local lsp_sig_config = {
         bind = true,
         handler_opts = {
@@ -248,17 +248,17 @@ function M.config()
         },
     }
 
-    -- Create an autocommand that will execute additional configuration when an LSP is attached to a buffer.
+    -- Create an auto command that will execute additional configuration when an LSP is attached to a buffer.
     vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(args)
             local client = vim.lsp.get_client_by_id(args.data.client_id)
 
             -- Nil check to keep `lua_ls` happy.
-            -- LspAttach will never be called if there's no LSP client to attach to.
+            -- `LspAttach` will never be called if there's no LSP client to attach to.
             if client then
                 local buffer_number = args.buf
 
-                -- Add keymaps for LSP features supported by this client.
+                -- Add key maps for LSP features supported by this client.
                 lsp_keymaps(client, buffer_number)
 
                 -- Show function signature help

@@ -11,7 +11,7 @@ local function parse_cargo_metadata(cargo_metadata)
 
         -- Some metadata lines may be blank, skip those
         if string.len(json_table) ~= 0 then
-            -- Each matadata line is a JSON table,
+            -- Each metadata line is a JSON table,
             -- parse it into a data structure we can work with
             json_table = vim.fn.json_decode(json_table)
 
@@ -31,7 +31,7 @@ end
 ---@return {buffer: number, window: number, channel: number}|nil #Returns the buffer that stores text for the window, the window itself, and a channel to communicate with the buffer. Returns nil on failure.
 ---@return string|nil #If an error occurs, return a string with the error message, otherwise returns nil.
 local function create_window(configuration_name, window_options)
-    -- Create the buffer the will receive Cargo's build messages
+    -- Create the buffer that will receive Cargo's build messages
     local new_buffer = vim.api.nvim_create_buf(false, true)
     if new_buffer == 0 then
         return nil, "Failed to create build progress message buffer."
@@ -56,7 +56,7 @@ local function create_window(configuration_name, window_options)
         return nil, "Failed to create build progress message window."
     end
 
-    -- Open a channel to the buffer so we can send build messages to it
+    -- Open a channel to the buffer, so we can send build messages to it
     local new_channel = vim.api.nvim_open_term(new_buffer, {})
     if new_channel == 0 then
         return nil, "Failed to create build progress message channel."
@@ -114,7 +114,9 @@ local function run_cargo_task(progress_window, final_config)
                         )
                     end)
                 else
-                    vim.schedule(function() vim.api.nvim_err_writeln("Cargo Inspector Error:\n" .. error) end)
+                    vim.schedule(function()
+                        vim.api.nvim_err_writeln("Cargo Inspector Error:\n" .. error)
+                    end)
                 end
             end or nil,
             -- Cargo emits build metadata to `stdout`
@@ -127,26 +129,22 @@ local function run_cargo_task(progress_window, final_config)
                             final_config.program = executable_name
                         else
                             final_config.program = ""
-                            vim.schedule(
-                                function()
-                                    vim.notify(
-                                        "Cargo could not find an executable for debug configuration:\n"
-                                            .. final_config.name,
-                                        vim.log.levels.ERROR
-                                    )
-                                end
-                            )
+                            vim.schedule(function()
+                                vim.notify(
+                                    "Cargo could not find an executable for debug configuration:\n"
+                                        .. final_config.name,
+                                    vim.log.levels.ERROR
+                                )
+                            end)
                         end
                     end)
                 else
-                    vim.schedule(
-                        function()
-                            vim.notify(
-                                "Cargo failed to build debug configuration:\n" .. final_config.name,
-                                vim.log.levels.ERROR
-                            )
-                        end
-                    )
+                    vim.schedule(function()
+                        vim.notify(
+                            "Cargo failed to build debug configuration:\n" .. final_config.name,
+                            vim.log.levels.ERROR
+                        )
+                    end)
 
                     final_config.program = ""
                 end
@@ -274,7 +272,7 @@ function M.inspect(dap_config, user_options)
         final_config.sourceMap["/rustc/" .. rust_hash .. "/"] = rust_source_path .. "/lib/rustlib/src/rust/"
     end
 
-    -- Enable LLDB's support for Rust's builtin datatypes (vec, str, etc...)
+    -- Enable LLDB's support for Rust's built-in data types.
     if final_config.sourceLanguages == nil then
         final_config.sourceLanguages = { "rust" }
     else
@@ -284,18 +282,11 @@ function M.inspect(dap_config, user_options)
     -- Run the Cargo task to get the path to the debuggable executable
     run_cargo_task(progress_window, final_config)
 
-    -- TODO: Revisit this and figure out a way to avoid blocking the UI while
-    --       Cargo is building the project. You can't use the debugger without
-    --       an executable but Rust builds can be quite long and I'd like
-    --       to keep working on other parts of the workspace while building.
-    --       There is probably some await() like functionality I am not aware of
-    --       that would let us `await` on run_cargo_task() so nvim can get back
-    --       to being a text editor while the task is running instead of spending
-    --       its time asking "Are you done yet? Are you done yet?".
-
     -- Spin our wheels until Cargo is done
     repeat
-        vim.wait(250, function() vim.cmd("redraw") end)
+        vim.wait(250, function()
+            vim.cmd("redraw")
+        end)
     until final_config.program ~= nil
 
     -- Destroy build progress window

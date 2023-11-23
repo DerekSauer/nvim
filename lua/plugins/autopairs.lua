@@ -1,5 +1,5 @@
 local M = {
-    -- Automatic pair (parens, brackets, etc...) insertion.
+    -- Automatic pair (parenthesis, brackets, etc…) insertion.
     "windwp/nvim-autopairs",
 
     -- Enable auto pairs when entering insert mode in a buffer.
@@ -9,7 +9,7 @@ local M = {
 function M.config()
     require("nvim-autopairs").setup()
 
-    -- Enable interop between `nvim-cmp` and `nvim-autopairs`.
+    -- Enable interoperation between `nvim-cmp` and `nvim-autopairs`.
     -- After selecting a completion it moves the cursor into the
     -- function parameters list automatically.
     local cmp = require("cmp")

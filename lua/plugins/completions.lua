@@ -15,10 +15,10 @@ local M = {
         -- Attached LSP as a completion source.
         "hrsh7th/cmp-nvim-lsp",
 
-        -- Nvim's command line as a source.
+        -- Neovim's command line as a source.
         "hrsh7th/cmp-cmdline",
 
-        -- Dap REPL and Dap-UI as completion sources>
+        -- `Dap` REPL and `Dap-UI` as completion sources>
         { "rcarriga/cmp-dap", ft = { "dap-repl", "dapui_watches", "dapui_hover" } },
 
         -- Comparator for words starting with an underscore.
@@ -29,7 +29,7 @@ local M = {
     event = { "InsertEnter", "CmdlineEnter" },
 }
 
--- Abbreviated names for sources
+-- Abbreviated names for sources.
 local menu_items = {
     nvim_lsp = "[LSP]",
     luasnip = "[SNIP]",
@@ -38,7 +38,7 @@ local menu_items = {
     dap = "[DAP]",
 }
 
--- Icons for the 'kind' of completion menu entry
+-- Icons for the 'kind' in completion menu entries.
 local kind_icons = {
     Text = "",
     Method = "󰆧",
@@ -107,7 +107,7 @@ function M.config()
     local select_opts = { behavior = cmp.SelectBehavior.Select }
 
     local config = {
-        -- Use LuaSnip as cmp's snippet engine.
+        -- Use Luasnip as Cmp's snippet engine.
         snippet = {
             expand = function(args)
                 luasnip.lsp_expand(args.body)
@@ -184,7 +184,7 @@ function M.config()
             end
         end,
 
-        -- Keymaps
+        -- Key maps
         mapping = cmp.mapping.preset.insert({
             -- Accept selected completion
             ["<CR>"] = cmp.mapping.confirm({ select = false }),
@@ -196,7 +196,7 @@ function M.config()
             ["<C-k>"] = cmp.mapping.select_prev_item(select_opts),
             ["<C-j>"] = cmp.mapping.select_next_item(select_opts),
 
-            -- Scroll through documention window
+            -- Scroll through the documentation window
             ["<Right>"] = cmp.mapping.scroll_docs(5),
             ["<Left>"] = cmp.mapping.scroll_docs(-5),
             ["<C-l>"] = cmp.mapping.scroll_docs(5),
@@ -237,10 +237,10 @@ function M.config()
         }),
     }
 
-    -- Initialize 'nvim-cmp'
+    -- Initialize `nvim-cmp`
     cmp.setup(config)
 
-    -- Enable completions in DAP repl or Dap-UI
+    -- Enable completions in DAP REPL or `Dap-UI`
     cmp.setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
         sources = {
             { name = "dap" },

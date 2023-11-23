@@ -87,24 +87,28 @@ function M.config()
                 vim.keymap.set(mode, l, r, map_opts)
             end
 
-            -- Jump to next hunk with ]g
+            -- Jump to next hunk.
             map("n", "]g", function()
                 if vim.wo.diff then
                     return "]g"
                 end
 
-                vim.schedule(function() gitsigns.next_hunk() end)
+                vim.schedule(function()
+                    gitsigns.next_hunk()
+                end)
 
                 return "<Ignore>"
             end, { expr = true, desc = "Jump to next hunk" })
 
-            -- Jump to previous hunk with [g
+            -- Jump to previous hunk.
             map("n", "[g", function()
                 if vim.wo.diff then
                     return "[g"
                 end
 
-                vim.schedule(function() gitsigns.prev_hunk() end)
+                vim.schedule(function()
+                    gitsigns.prev_hunk()
+                end)
 
                 return "<Ignore>"
             end, { expr = true, desc = "Jump to previous hunk" })
@@ -116,14 +120,13 @@ function M.config()
             map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", { desc = "Select hunk" })
             map("n", "<leader>gS", gitsigns.stage_buffer, { desc = "Stage buffer" })
             map("n", "<leader>gR", gitsigns.reset_buffer, { desc = "Reset stage buffer" })
-            map(
-                "n",
-                "<leader>gb",
-                function() gitsigns.blame_line({ full = true }) end,
-                { desc = "Blame this line" }
-            )
+            map("n", "<leader>gb", function()
+                gitsigns.blame_line({ full = true })
+            end, { desc = "Blame this line" })
             map("n", "<leader>gd", gitsigns.diffthis, { desc = "Show diff" })
-            map("n", "<leader>gD", function() gitsigns.diffthis("~") end, { desc = "Diff last commit" })
+            map("n", "<leader>gD", function()
+                gitsigns.diffthis("~")
+            end, { desc = "Diff last commit" })
 
             map("n", "<leader>gtb", gitsigns.toggle_current_line_blame, { desc = "Toggle line blames" })
             map("n", "<leader>gtd", gitsigns.toggle_deleted, { desc = "Toggle deleted indicators" })
@@ -133,30 +136,18 @@ function M.config()
 
             local telescope_loaded, _ = pcall(require, "telescope")
             if telescope_loaded then
-                vim.keymap.set(
-                    "n",
-                    "<leader>gb",
-                    function() require("telescope.builtin").git_branches() end,
-                    { silent = true, desc = "List branches" }
-                )
-                vim.keymap.set(
-                    "n",
-                    "<leader>gc",
-                    function() require("telescope.builtin").git_commits() end,
-                    { silent = true, desc = "List commits" }
-                )
-                vim.keymap.set(
-                    "n",
-                    "<leader>gC",
-                    function() require("telescope.builtin").git_bcommits() end,
-                    { silent = true, desc = "List buffer commits" }
-                )
-                vim.keymap.set(
-                    "n",
-                    "<leader>gg",
-                    function() require("telescope.builtin").git_status() end,
-                    { silent = true, desc = "Git status" }
-                )
+                vim.keymap.set("n", "<leader>gb", function()
+                    require("telescope.builtin").git_branches()
+                end, { silent = true, desc = "List branches" })
+                vim.keymap.set("n", "<leader>gc", function()
+                    require("telescope.builtin").git_commits()
+                end, { silent = true, desc = "List commits" })
+                vim.keymap.set("n", "<leader>gC", function()
+                    require("telescope.builtin").git_bcommits()
+                end, { silent = true, desc = "List buffer commits" })
+                vim.keymap.set("n", "<leader>gg", function()
+                    require("telescope.builtin").git_status()
+                end, { silent = true, desc = "Git status" })
             end
 
             -- Add which-key categories

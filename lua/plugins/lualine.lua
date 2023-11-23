@@ -1,5 +1,5 @@
 local M = {
-    -- Fast and easy to configure neovim statusline plugin
+    -- Fast and easy to configure Neovim status line plugin
     "nvim-lualine/lualine.nvim",
 
     dependencies = {
@@ -84,7 +84,7 @@ local function get_lsp_status()
         end
     end
 
-    -- Concat all LSP status messages into one string.
+    -- Merge all LSP status messages into one string.
     return table.concat(lsp_status_collection, " ")
 end
 
