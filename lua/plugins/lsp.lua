@@ -20,9 +20,6 @@ local M = {
 
         -- Plugin to manage global and project-local settings.
         "folke/neoconf.nvim",
-
-        -- Adds code actions and dictionary management for the `ltex` LSP.
-        "barreiroleo/ltex_extra.nvim",
     },
 }
 
@@ -230,10 +227,6 @@ function M.config()
 
         ["wgsl_analyzer"] = function()
             require("plugins/lsp_servers/wgsl_analyzer").setup(lsp_config, lsp_capabilities)
-        end,
-
-        ["ltex"] = function()
-            require("plugins/lsp_servers/ltex_ls").setup(lsp_config, lsp_capabilities)
         end,
     })
 

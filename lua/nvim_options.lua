@@ -133,6 +133,9 @@ function M.setup()
     -- Disable automatically continuing comment blocks after hitting enter.
     vim.opt.formatoptions:remove({ "c", "r", "o" })
 
+    -- Set languages for spelling dictionaries.
+    vim.opt.spelllang = { "en_ca", "fr" }
+
     -- Use `Ripgrep` for searches if available.
     if vim.fn.executable("rg") == 1 then
         vim.opt.grepprg = "rg --vimgrep --no-heading --smart-case --hidden"
