@@ -30,15 +30,6 @@ function M.config()
                 PmenuSel = { fg = "NONE", bg = theme.ui.bg_p2 },
                 PmenuSbar = { bg = theme.ui.bg_m1 },
                 PmenuThumb = { bg = theme.ui.bg_p2 },
-
-                -- `Indent Blankline` indent colours
-                IndentBlanklineIndent1 = { fg = theme.term[17] },
-                IndentBlanklineIndent2 = { fg = theme.term[3] },
-                IndentBlanklineIndent3 = { fg = theme.term[4] },
-                IndentBlanklineIndent4 = { fg = theme.term[5] },
-                IndentBlanklineIndent5 = { fg = theme.term[6] },
-                IndentBlanklineIndent6 = { fg = theme.term[7] },
-                IndentBlanklineIndent7 = { fg = theme.term[8] },
             }
         end,
         colors = {
