@@ -3,8 +3,8 @@ local M = {
 }
 
 function M.config()
-    -- Change the color of the indent line to match code comment color.
-    vim.api.nvim_set_hl(0, "MiniIndentscopeSymbol", { link = "Comment" })
+    -- Change the color of the indent line to match Neo-tree's indent lines.
+    vim.api.nvim_set_hl(0, "MiniIndentscopeSymbol", { link = "NonText" })
 
     require("mini.indentscope").setup({
         -- Indent line drawing options.
