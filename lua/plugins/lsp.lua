@@ -15,9 +15,6 @@ local M = {
         -- Improved interoperation between `nvim-lspconfig` and `Mason`
         "williamboman/mason-lspconfig.nvim",
 
-        -- Show function signature help
-        "ray-x/lsp_signature.nvim",
-
         -- Plugin to manage global and project-local settings.
         "folke/neoconf.nvim",
     },
@@ -195,9 +192,8 @@ function M.config()
 
     local lsp_config = require("lspconfig")
 
-    -- Retrieve Neovim's native LSP capabilities and extend them with additional functionality provided by `nvim-cmp`.
-    local lsp_capabilities =
-        require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
+    -- Retrieve Neovim's native LSP client capabilities.
+    local lsp_capabilities = vim.lsp.protocol.make_client_capabilities()
 
     -- Initialize 'mason'
     require("mason").setup()
@@ -233,14 +229,6 @@ function M.config()
     -- Disable logging LSP errors.
     vim.lsp.set_log_level("OFF")
 
-    -- Config options for `LSP_signature`.
-    local lsp_sig_config = {
-        bind = true,
-        handler_opts = {
-            border = require("globals").border_style,
-        },
-    }
-
     -- Create an auto command that will execute additional configuration when an LSP is attached to a buffer.
     vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(args)
@@ -253,11 +241,6 @@ function M.config()
 
                 -- Add key maps for LSP features supported by this client.
                 lsp_keymaps(client, buffer_number)
-
-                -- Show function signature help
-                if client.server_capabilities.signatureHelpProvider then
-                    require("lsp_signature").on_attach(lsp_sig_config, buffer_number)
-                end
 
                 -- Display inlay hints
                 if client.server_capabilities.inlayHintProvider then

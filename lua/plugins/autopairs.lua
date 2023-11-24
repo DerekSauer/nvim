@@ -8,13 +8,6 @@ local M = {
 
 function M.config()
     require("nvim-autopairs").setup()
-
-    -- Enable interoperation between `nvim-cmp` and `nvim-autopairs`.
-    -- After selecting a completion it moves the cursor into the
-    -- function parameters list automatically.
-    local cmp = require("cmp")
-    local cmp_autopairs = require("nvim-autopairs.completion.cmp")
-    cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
 end
 
 return M
