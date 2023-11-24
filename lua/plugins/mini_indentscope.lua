@@ -1,5 +1,6 @@
 local M = {
     "echasnovski/mini.indentscope",
+    version = false,
 }
 
 function M.config()
