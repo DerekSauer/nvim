@@ -136,6 +136,15 @@ function M.setup()
     -- Set languages for spelling dictionaries.
     vim.opt.spelllang = { "en_ca", "fr" }
 
+    -- Enable enhanced completions on the command line.
+    vim.opt.wildmenu = true
+
+    -- Complete longest common string then open the wild menu.
+    vim.opt.wildmode = { "longest:full", "full" }
+
+    -- Enable fuzzy matching and a popup window for the wild menu.
+    vim.opt.wildoptions = { "fuzzy", "pum" }
+
     -- Use `Ripgrep` for searches if available.
     if vim.fn.executable("rg") == 1 then
         vim.opt.grepprg = "rg --vimgrep --no-heading --smart-case --hidden"
