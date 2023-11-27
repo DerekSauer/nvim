@@ -59,7 +59,7 @@ function M.setup()
     vim.opt.breakindent = true
 
     -- Character to indicate soft wrapped lines.
-    vim.opt.showbreak = "↪"
+    vim.opt.showbreak = "↪ "
 
     -- Do not cut off words when soft wrapping lines.
     vim.opt.linebreak = true
