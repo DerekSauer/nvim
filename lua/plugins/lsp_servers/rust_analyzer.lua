@@ -6,14 +6,21 @@ function M.setup(lsp_config, lsp_capabilities)
 
         settings = {
             ["rust-analyzer"] = {
-                checkOnSave = {
+                checkOnSave = true,
+                check = {
                     command = "clippy",
                 },
-                lens = {
-                    enable = false,
+                imports = {
+                    granularity = {
+                        group = "module",
+                    },
+                    prefix = "self",
                 },
                 inlayHints = {
                     enable = true,
+                },
+                lens = {
+                    enable = false,
                 },
             },
         },
