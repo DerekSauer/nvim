@@ -45,6 +45,19 @@ local function combined_location()
     end
 end
 
+---Get a list of LSP clients attached to the current buffer.
+---@returns string #A comma separated list of LSP clients attached to the current buffer.
+local function attached_lsp()
+    local attached_clients = vim.lsp.get_clients({ bufnr = 0 })
+    local lsp_list = {}
+
+    for _, client in pairs(attached_clients) do
+        table.insert(lsp_list, client.name)
+    end
+
+    return table.concat(lsp_list, ",")
+end
+
 function M.config()
     local config = {
         options = {
@@ -69,7 +82,7 @@ function M.config()
                 },
             },
             lualine_c = { "filename" },
-            lualine_x = {},
+            lualine_x = { attached_lsp },
             lualine_y = { encoding_override, "fileformat", "filetype", time },
             lualine_z = { combined_location },
         },
