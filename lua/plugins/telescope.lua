@@ -23,7 +23,6 @@ function M.config()
 
     telescope.setup(config)
     telescope.load_extension("dap")
-    telescope.load_extension("notify")
 
     -- Key mappings
     vim.keymap.set("n", "<leader>ff", function()
