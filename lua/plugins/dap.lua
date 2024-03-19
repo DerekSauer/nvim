@@ -4,7 +4,7 @@ local M = {
 
     dependencies = {
         -- User interface for the DAP.
-        "rcarriga/nvim-dap-ui",
+        { "rcarriga/nvim-dap-ui", dependencies = { "nvim-neotest/nvim-nio" } },
 
         -- Show variable values inline while debugging.
         "theHamsta/nvim-dap-virtual-text",
