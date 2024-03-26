@@ -20,6 +20,12 @@ local M = {
 
         -- Plugin to manage global and project-local settings.
         "folke/neoconf.nvim",
+
+        -- Lsp diagnostics pointing to the problems
+        {
+            name = "lsp_lines",
+            url = "https://git.sr.ht/~whynothugo/lsp_lines.nvim"
+        }
     },
 }
 
@@ -44,17 +50,6 @@ local function toggle_inlay_hints(client, bufnr)
 end
 
 vim.g.diagnostics_visible = true
-
---- Toggle diagnostics.
-local function toggle_diagnostics()
-    if vim.g.diagnostics_visible then
-        vim.g.diagnostics_visible = false
-        vim.diagnostic.disable()
-    else
-        vim.g.diagnostics_visible = true
-        vim.diagnostic.enable()
-    end
-end
 
 ---Creates LSP keymaps for a buffer when an LSP is attached.
 ---The function will only create maps for functionality the LSP supports.
@@ -173,7 +168,7 @@ local function lsp_keymaps(client, bufnr)
 
         -- Toggle displaying diagnostics.
         vim.keymap.set("n", "<leader>lg", function()
-            toggle_diagnostics()
+            require("lsp_lines").toggle()
         end, { buffer = bufnr, desc = "Toggle diagnostics" })
 
         has_mappings = true
@@ -240,6 +235,10 @@ function M.config()
             border = require("globals").border_style,
         },
     }
+
+    -- Enable LSP diagnostic helper text, starts disabled
+    require("lsp_lines").setup()
+    vim.diagnostic.config({virtual_lines = false})
 
     -- Create an auto command that will execute additional configuration when an LSP is attached to a buffer.
     vim.api.nvim_create_autocmd("LspAttach", {
