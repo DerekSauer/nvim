@@ -8,7 +8,7 @@ function M.setup(dap)
     local lldb_bin = lldb_path .. "/adapter/codelldb"
 
     if vim.fn.executable(lldb_bin) == 1 then
-        dap.adapters.codelldb = {
+        dap.adapters.lldb = {
             type = "server",
             port = "${port}",
             executable = {

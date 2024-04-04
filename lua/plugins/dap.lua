@@ -154,7 +154,7 @@ function M.config()
 
     -- Map adapters to configurations for load_launchjs()
     local adapter_map = {
-        codelldb = { "c", "cpp", "rust" },
+        lldb = { "c", "cpp", "rust" },
     }
 
     -- Parse a `.vscode/launch.js` file if one is present in the workspace
