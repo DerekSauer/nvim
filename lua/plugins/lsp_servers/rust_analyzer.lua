@@ -10,12 +10,6 @@ function M.setup(lsp_config, lsp_capabilities)
                 check = {
                     command = "clippy",
                 },
-                imports = {
-                    granularity = {
-                        group = "module",
-                    },
-                    prefix = "self",
-                },
                 inlayHints = {
                     enable = true,
                 },
