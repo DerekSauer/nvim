@@ -2,6 +2,8 @@ local M = {
     -- Snippets engine.
     "L3MON4D3/LuaSnip",
 
+    build = "make install_jsregexp",
+
     dependencies = {
         -- Large library of pre-made snippets.
         "rafamadriz/friendly-snippets",
