@@ -24,8 +24,8 @@ local M = {
         -- Lsp diagnostics pointing to the problems
         {
             name = "lsp_lines",
-            url = "https://git.sr.ht/~whynothugo/lsp_lines.nvim"
-        }
+            url = "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
+        },
     },
 }
 
@@ -33,20 +33,9 @@ local M = {
 vim.g.inlay_hints_visible = false
 
 ---Toggle inlay hints (supported in nvim-0.10 or greater).
----@param client table The LSP client providing inlays.
 ---@param bufnr number ID of the buffer.
-local function toggle_inlay_hints(client, bufnr)
-    if vim.g.inlay_hints_visible then
-        vim.g.inlay_hints_visible = false
-        vim.lsp.inlay_hint.enable(bufnr, false)
-    else
-        if client.server_capabilities.inlayHintProvider then
-            vim.g.inlay_hints_visible = true
-            vim.lsp.inlay_hint.enable(bufnr, true)
-        else
-            print("Inlay hints unavailable.")
-        end
-    end
+local function toggle_inlay_hints(bufnr)
+    vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled(bufnr), { bufnr = bufnr })
 end
 
 vim.g.diagnostics_visible = true
@@ -155,7 +144,7 @@ local function lsp_keymaps(client, bufnr)
     -- Toggle inlay hints on or off.
     if client.server_capabilities.inlayHintProvider then
         vim.keymap.set("n", "<leader>ly", function()
-            toggle_inlay_hints(client, bufnr)
+            toggle_inlay_hints(bufnr)
         end, { buffer = bufnr, desc = "Toggle inlay hints" })
         has_mappings = true
     end
@@ -238,7 +227,7 @@ function M.config()
 
     -- Enable LSP diagnostic helper text, starts disabled
     require("lsp_lines").setup()
-    vim.diagnostic.config({virtual_lines = false})
+    vim.diagnostic.config({ virtual_lines = false })
 
     -- Create an auto command that will execute additional configuration when an LSP is attached to a buffer.
     vim.api.nvim_create_autocmd("LspAttach", {
@@ -260,7 +249,7 @@ function M.config()
 
                 -- Display inlay hints
                 if client.server_capabilities.inlayHintProvider then
-                    vim.lsp.inlay_hint.enable(buffer_number, vim.g.inlay_hints_visible)
+                    vim.lsp.inlay_hint.enable(vim.g.inlay_hints_visible)
                 end
             end
         end,
