@@ -4,7 +4,13 @@ local M = {
 }
 
 function M.config()
-    require("fidget").setup()
+    require("fidget").setup({
+        progress = {
+            lsp = {
+                progress_ringbuf_size = 2048,
+            },
+        },
+    })
 end
 
 return M
