@@ -1,8 +1,16 @@
+function BuildJSRegExp()
+    if vim.fn.has("win32") then
+        return nil
+    else
+        return "make install_jsregexp"
+    end
+end
+
 local M = {
     -- Snippets engine.
     "L3MON4D3/LuaSnip",
 
-    build = "make install_jsregexp",
+    build = BuildJSRegExp(),
 
     dependencies = {
         -- Large library of pre-made snippets.
