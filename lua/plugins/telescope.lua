@@ -15,7 +15,6 @@ function M.config()
         defaults = {
             layout_strategy = "flex",
             border = true,
-            borderchars = require("globals").telescope_border_style,
         },
 
         extensions = {},
