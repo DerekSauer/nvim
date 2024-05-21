@@ -6,7 +6,20 @@ function M.setup()
     vim.diagnostic.config({
         underline = true,
         virtual_text = false,
-        signs = true,
+        signs = {
+            text = {
+                [vim.diagnostic.severity.ERROR] = " ",
+                [vim.diagnostic.severity.WARN] = " ",
+                [vim.diagnostic.severity.INFO] = " ",
+                [vim.diagnostic.severity.HINT] = "󰌵",
+            },
+            numhl = {
+                [vim.diagnostic.severity.ERROR] = "DiagnosticSignError",
+                [vim.diagnostic.severity.WARN] = "DiagnosticSignWarn",
+                [vim.diagnostic.severity.INFO] = "DiagnosticSignInfo",
+                [vim.diagnostic.severity.HINT] = "DiagnosticHint",
+            },
+        },
         update_in_insert = false,
         severity_sort = true,
         float = {
@@ -14,6 +27,7 @@ function M.setup()
             source = "if_many",
         },
     })
+    local der = ""
 
     -- Add the global border style to the popup window providing LSP hover text.
     vim.lsp.handlers["textDocument/hover"] =
@@ -22,12 +36,6 @@ function M.setup()
     -- Add the global border style to the popup window showing function signature help.
     vim.lsp.handlers["textDocument/signatureHelp"] =
         vim.lsp.with(vim.lsp.handlers.signature_help, { border = globals.border_style })
-
-    -- Define the icons used for displaying diagnostics errors.
-    vim.fn.sign_define("DiagnosticSignError", { text = " ", texthl = "DiagnosticSignError" })
-    vim.fn.sign_define("DiagnosticSignWarn", { text = " ", texthl = "DiagnosticSignWarn" })
-    vim.fn.sign_define("DiagnosticSignInfo", { text = " ", texthl = "DiagnosticSignInfo" })
-    vim.fn.sign_define("DiagnosticSignHint", { text = "󰌵", texthl = "DiagnosticSignHint" })
 
     -- Jump to the next diagnostic issue in the buffer.
     vim.keymap.set("n", "]d", function()
