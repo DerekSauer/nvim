@@ -22,6 +22,47 @@ function M.config()
     local context = require("cmp.config.context")
     local globals = require("globals")
 
+    -- Abbreviated names for sources.
+    local completion_menu_abbr = {
+        nvim_lsp = "[LSP]",
+        luasnip = "[SNIP]",
+        buffer = "[BUF]",
+        path = "[PATH]",
+    }
+
+    -- Icons for the 'kind' in completion menu entries.
+    local completion_menu_icons = {
+        Text = " ",
+        Method = "󰆧 ",
+        Function = "󰊕 ",
+        Constructor = " ",
+        Field = " ",
+        Variable = " ",
+        Class = "󰠱 ",
+        Interface = " ",
+        Module = " ",
+        Property = "󰜢 ",
+        Unit = "󰑭 ",
+        Value = "󰎠 ",
+        Enum = " ",
+        EnumMember = " ",
+        Keyword = "󰌋 ",
+        Snippet = " ",
+        Color = "󰏘 ",
+        File = "󰈙 ",
+        Reference = " ",
+        Folder = "󰉋 ",
+        Constant = "󰏿 ",
+        Struct = " ",
+        Event = "",
+        Operator = " ",
+        TypeParameter = " ",
+        Misc = " ",
+        TabNine = "󰚩 ",
+        Copilot = " ",
+        Unknown = " ",
+    }
+
     -- Use cmp's recommended settings for Neovim's built-in completion menu.
     vim.opt.completeopt = { "menu", "menuone", "noselect" }
 
@@ -51,6 +92,18 @@ function M.config()
                 border = globals.border_style,
                 scrollbar = true,
             },
+        },
+
+        -- Modify completion menu to show an icon for the completion, followed
+        -- by the completion item itself and source name.
+        formatting = {
+            fields = { "kind", "abbr", "menu" },
+            format = function(entry, item)
+                item.kind = completion_menu_icons[item.kind] or "??"
+                item.menu = completion_menu_abbr[entry.source.name] or "??"
+
+                return item
+            end,
         },
 
         -- Configure the ordering of completion sources.
