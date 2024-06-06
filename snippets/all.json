@@ -1,0 +1,9 @@
+{
+    "Testing Snippet Support": {
+        "prefix": [
+            "snip_test",
+            "st"
+        ],
+        "body": "Snippets are working"
+    }
+}

@@ -10,6 +10,11 @@ function M.setup(lsp_config, lsp_capabilities)
                 check = {
                     command = "clippy",
                 },
+                completion = {
+                    postfix = {
+                        enable = false,
+                    },
+                },
                 inlayHints = {
                     enable = true,
                 },
