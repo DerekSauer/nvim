@@ -35,7 +35,7 @@ vim.g.inlay_hints_visible = false
 ---Toggle inlay hints (supported in nvim-0.10 or greater).
 ---@param bufnr number ID of the buffer.
 local function toggle_inlay_hints(bufnr)
-    vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled(bufnr), { bufnr = bufnr })
+    vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
 end
 
 vim.g.diagnostics_visible = true
