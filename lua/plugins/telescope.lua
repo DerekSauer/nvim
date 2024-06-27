@@ -48,9 +48,6 @@ function M.config()
     vim.keymap.set("n", "<leader>f/", function()
         require("telescope.builtin").keymaps()
     end, { silent = true, desc = "Keymap help" })
-    vim.keymap.set("n", "<leader>fn", function()
-        require("telescope").extensions.notify.notify()
-    end, { silent = true, desc = "Notification history" })
 
     -- Add to which-key categories
     require("which-key").register({
