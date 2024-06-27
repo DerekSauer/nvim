@@ -201,6 +201,10 @@ function M.config()
         end,
 
         -- Override the defaults with our own settings for select servers
+        ["clangd"] = function()
+            require("plugins/lsp_servers/clangd").setup(lsp_config, lsp_capabilities)
+        end,
+
         ["rust_analyzer"] = function()
             require("plugins/lsp_servers/rust_analyzer").setup(lsp_config, lsp_capabilities)
         end,
