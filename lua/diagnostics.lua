@@ -27,7 +27,6 @@ function M.setup()
             source = "if_many",
         },
     })
-    local der = ""
 
     -- Add the global border style to the popup window providing LSP hover text.
     vim.lsp.handlers["textDocument/hover"] =
